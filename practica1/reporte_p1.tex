@@ -1,0 +1,99 @@
+\documentclass[10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphics}
+\usepackage{graphicx}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\usepackage{imakeidx}
+\makeindex[columns=3, title=Alphabetical Index, intoc]
+\usepackage{listings}
+\usepackage{multicol}
+\usepackage{changepage}
+\usepackage{float}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{pdflscape}
+\usepackage[document]{ragged2e}
+\usepackage{xcolor,colortbl}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+}
+
+\definecolor{Red}{rgb}{0.7,0,0}
+\definecolor{LightCyan}{rgb}{0.88,1,1}
+\definecolor{AquaCyan}{rgb}{0.2,1,0.5}
+\definecolor{Gray}{gray}{0.85}
+\definecolor{DarkBlue}{rgb}{0.1,0.1,0.5}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,
+    breaklines=true,
+    captionpos=b,
+    keepspaces=true,
+    numbers=left,
+    numbersep=5pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    tabsize=3
+}
+\def\fillandplacepagenumber{%
+ \par\pagestyle{empty}%
+ \vbox to 0pt{\vss}\vfill
+ \vbox to 0pt{\baselineskip0pt
+   \hbox to\linewidth{\hss}%
+   \baselineskip\footskip
+   \hbox to\linewidth{%
+     \hfil\thepage\hfil}\vss}}
+\lstset{style=mystyle}
+
+\title{Escuela Superio de Cómputo\\Instituto Politécnico Nacional\\Administración de Servicios en Red\\Practica 1\\Curso impartido por: Ricardo Martinez Rosales}
+
+\author{Adrian González Pardo}
+
+\date{\today}
+
+\newcommand\tab[1][1cm]{\hspace*{#1}}
+
+\begin{document}
+\maketitle
+\section{Cuestionario}
+\begin{enumerate}
+  \item ¿Qué comandos se utilizan para cambiar al modo EXEC privilegiado y al modo de configuración global?
+  \item ¿Cuál es el comando utilizado para que el dispositivo muestre la tabla de enrutamiento?
+   ¿Cuál es la fuente de información o de qué tipo son las rutas mostradas por este comando?
+  \item Realice la configuración IP en cada una de las PCs. En el menú desplegable elija primeramente Start para iniciar el dispositivo, en el mismo menú elija consola. ¿Cómo se determina este parámetro (gateway) de la configuración IP en las PCs? Para poder realizar esto, en la consola hay que usar el comando IP de la forma $PC-1>\;\;ip\;\;address\;\;[mask]\;\;[gateway]$
+  \item Desde la PC de la red 2 ejecute un ping hacia la dirección IP de la PC1. Haga el mismo procedimiento desde la PC1 hacia la PC2. ¿Cuál es la capa del modelo OSI sobre la que se realizan principalmente estas funciones de comunicación? Si una PC requiere enviar paquetes hacia otra PC que se encuentra en una red distinta ¿hacia qué dispositivo son enviados estos paquetes?
+\end{enumerate}
+\section{Respuestas}
+\begin{itemize}
+  \item El modo EXEC es directamente en donde se puede definir como el modo de configuración de un router por el cual puede añadirse un nombre del router (hostname) hasta la configuración de enrutamiento, tipo de enrutamiento, configuración ip de una o más interfaces para su comunicación, este modo se accede cuando en el router tenemos el siguiente prompt $hosname\_router>$ y para acceder al modo EXEC debemos escribir $enable$ o como su escritura abreviada $ena$, por otro lado para acceder a la configuración global del router es necesario estar en el modo EXEC y ejecutar $configure\;terminal$ o su versión corta $conf\;t$.
+  \item Para mostrar la tabla de enrutamiento es necesario correr el comando $show\;ip\; route$ la cual despliega toda la información de la tabla de enrutamiento y el tipo de enrutamiento. Por otro lado el tipo de rutas en el caso de escribir este comando de esta forma te muestra las rutas directas que tiene el router de un punto a otro, así como en el caso de configurar enrutamiento estatico o dínamico se puede mostrar el enrutamiento de RIP, OSPF, IGRP.
+  \item La determinación de gateway depende mucho del administrador de red que esta implementando y configurando el dispositivo en el cual generalmente se usa la primer ip util de la red o subred que se esta trabajando o incluso algunos administradores usan la ultima ip disponible del conjunto de IPs, por ello generalmente hacemos las operaciones pertinentes para determinar:\\
+  \textit{Ejemplo}
+  Deseamos tener 20 host incluyendo el router, para ello primeramente necesitamos saber cuantos bits de mascara de red usaremos para utilizar y no desperdiciar tanto una red que comienza con 10.10.1.0, para ello inicialmente haremos la operacion: \(\displaystyle \log_{2}\left(host\right)=\log_{2}\left(20\right)\) en el cual obtendremos $4.3219...$ pero como sabemos no existen host que solo ocupen decimales de una ip, por lo que lo dejaremos con $5$ bits de uso para mascara, entonces definiremos a la red como $10.10.1.0/27$ donde esto que acabos de definir es nuestro identificador de red y podremos manejar $32$ hosts pero recordando en que la primer ip teorica es el identificador y la ultima ip es la dirección de broadcast por lo que nuestro rango util parte desde $10.10.1.1$ hasta la ip $10.10.1.31$ donde la primer IP puede ser el gateway o puede ser la ultima. Como nota importante es necesario sumar 2 hosts más a los equipos que desamos conectar para que así no nos falten bits para la determinación y diseño de nuestra topología de red.
+  \item Inicialmente partamos de otro modelo, TCP/IP este sabemos que trabaja a nivel de la capa de Internet y que trabaja con el protocolo ICMP el cual envia un mensaje de este mismo con un Echo reply, para esperar un mensaje de respuesta y ver si se puede intercomunicar dos hosts, ahora pensando en el modelo OSI este trabaja en la capa de red ya que se tiene conocimiento o un poco de conocimiento de en donde se encuentra el host al que queremos llegar.\\
+  Ahora explicando el proceso de como realizar este proceso de conexión y comunicación de datos es necesario, partir del protocolo ARP para inicialmente obtener la MAC y saber si el host al que deseamos llegar se encuentra o no en nuestra red, despues de esto se realiza toda la parte del trabajo de ICMP donde una vez ya conociendo si esta o no en nuestra red, la IP/Hostname a la que deseamos llegar enviamos un Echo reply de ICMP sin o con datos para ver si podemos establecer nuestra comunicación, finalmente en el caso de que no este dentro de la red los paquetes salen a traves de nuestro gateway con la esperanza de que el mismo pueda llegar hacia el otro destino y así exista una comunicación entre dispositivos.
+\end{itemize}
+\section{Parte de demostración}
+Para la demostración de como se desarrollo y una pequeña explicación se grabo un vídeo que se puede ver \underline{\href{https://youtu.be/L1AsCmvMhsc}{aquí.}}
+\end{document}
