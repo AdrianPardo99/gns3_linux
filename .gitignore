@@ -8,4 +8,7 @@
 *_mips*
 *_ppc*
 *.qcow2
-
+*.aux
+*.out
+*.idx
+*.log
