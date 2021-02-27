@@ -1,0 +1,11 @@
+*.ghost
+*_bootflash
+*_log.txt
+*_vars
+*_nvram
+*_lock
+*.txt
+*_mips*
+*_ppc*
+*.qcow2
+
