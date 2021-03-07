@@ -137,37 +137,6 @@
             },
             {
                 "filters": {},
-                "link_id": "a904a6b9-e794-4285-a64b-8eaf836bd5b4",
-                "nodes": [
-                    {
-                        "adapter_number": 0,
-                        "label": {
-                            "rotation": 0,
-                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                            "text": "e1",
-                            "x": 12,
-                            "y": 48
-                        },
-                        "node_id": "d483639b-2a93-4fe1-8339-942b0606eb74",
-                        "port_number": 1
-                    },
-                    {
-                        "adapter_number": 0,
-                        "label": {
-                            "rotation": 0,
-                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                            "text": "e0",
-                            "x": 55,
-                            "y": -2
-                        },
-                        "node_id": "5a264b94-b7e9-4b4a-9d05-21aabd360f14",
-                        "port_number": 0
-                    }
-                ],
-                "suspend": false
-            },
-            {
-                "filters": {},
                 "link_id": "0cdbda4a-282a-4dfa-9ef9-a4afb91e282b",
                 "nodes": [
                     {
@@ -193,6 +162,37 @@
                         },
                         "node_id": "80d1ae3f-bddd-4206-b882-f07d6113520b",
                         "port_number": 0
+                    }
+                ],
+                "suspend": false
+            },
+            {
+                "filters": {},
+                "link_id": "c54ed585-3f40-465d-aef3-cfffa1f8a5b8",
+                "nodes": [
+                    {
+                        "adapter_number": 0,
+                        "label": {
+                            "rotation": 0,
+                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                            "text": "e0",
+                            "x": 69,
+                            "y": -4
+                        },
+                        "node_id": "a2a2ad95-422b-4452-b1ee-77f328fb3be0",
+                        "port_number": 0
+                    },
+                    {
+                        "adapter_number": 0,
+                        "label": {
+                            "rotation": 0,
+                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                            "text": "e1",
+                            "x": 6,
+                            "y": 43
+                        },
+                        "node_id": "d483639b-2a93-4fe1-8339-942b0606eb74",
+                        "port_number": 1
                     }
                 ],
                 "suspend": false
@@ -417,6 +417,35 @@
             },
             {
                 "compute_id": "local",
+                "console": 5004,
+                "console_auto_start": false,
+                "console_type": "telnet",
+                "custom_adapters": [],
+                "first_port_name": null,
+                "height": 59,
+                "label": {
+                    "rotation": 0,
+                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                    "text": "PC2",
+                    "x": 14,
+                    "y": -25
+                },
+                "locked": false,
+                "name": "PC2",
+                "node_id": "80d1ae3f-bddd-4206-b882-f07d6113520b",
+                "node_type": "vpcs",
+                "port_name_format": "Ethernet{0}",
+                "port_segment_size": 0,
+                "properties": {},
+                "symbol": ":/symbols/vpcs_guest.svg",
+                "template_id": "19021f99-e36f-394d-b4a1-8aaa902ab9cc",
+                "width": 65,
+                "x": 257,
+                "y": 29,
+                "z": 1
+            },
+            {
+                "compute_id": "local",
                 "console": 5900,
                 "console_auto_start": false,
                 "console_type": "vnc",
@@ -432,7 +461,7 @@
                 },
                 "locked": false,
                 "name": "MV",
-                "node_id": "5a264b94-b7e9-4b4a-9d05-21aabd360f14",
+                "node_id": "a2a2ad95-422b-4452-b1ee-77f328fb3be0",
                 "node_type": "qemu",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -465,50 +494,21 @@
                     "kernel_image_md5sum": null,
                     "legacy_networking": false,
                     "linked_clone": true,
-                    "mac_address": "0c:85:96:0f:14:00",
+                    "mac_address": "0c:85:96:3b:e0:00",
                     "on_close": "power_off",
                     "options": "-nographic",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
-                    "ram": 1024,
+                    "ram": 256,
                     "replicate_network_connection_state": true,
                     "usage": ""
                 },
                 "symbol": ":/symbols/qemu_guest.svg",
-                "template_id": "d0cfa8b5-330b-4292-ae24-0c138f3ddb32",
+                "template_id": "8daef786-d0e8-4384-9ca8-21a8827ccd2d",
                 "width": 65,
-                "x": -230,
-                "y": 51,
-                "z": 1
-            },
-            {
-                "compute_id": "local",
-                "console": 5004,
-                "console_auto_start": false,
-                "console_type": "telnet",
-                "custom_adapters": [],
-                "first_port_name": null,
-                "height": 59,
-                "label": {
-                    "rotation": 0,
-                    "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                    "text": "PC2",
-                    "x": 14,
-                    "y": -25
-                },
-                "locked": false,
-                "name": "PC2",
-                "node_id": "80d1ae3f-bddd-4206-b882-f07d6113520b",
-                "node_type": "vpcs",
-                "port_name_format": "Ethernet{0}",
-                "port_segment_size": 0,
-                "properties": {},
-                "symbol": ":/symbols/vpcs_guest.svg",
-                "template_id": "19021f99-e36f-394d-b4a1-8aaa902ab9cc",
-                "width": 65,
-                "x": 257,
-                "y": 29,
+                "x": -231,
+                "y": 53,
                 "z": 1
             }
         ]
