@@ -201,7 +201,7 @@
         "nodes": [
             {
                 "compute_id": "local",
-                "console": 5000,
+                "console": 5011,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -257,7 +257,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5001,
+                "console": 5012,
                 "console_auto_start": false,
                 "console_type": "none",
                 "custom_adapters": [],
@@ -337,7 +337,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5002,
+                "console": 5013,
                 "console_auto_start": false,
                 "console_type": "none",
                 "custom_adapters": [],
@@ -417,7 +417,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5004,
+                "console": 5014,
                 "console_auto_start": false,
                 "console_type": "telnet",
                 "custom_adapters": [],
@@ -446,7 +446,7 @@
             },
             {
                 "compute_id": "local",
-                "console": 5900,
+                "console": 5901,
                 "console_auto_start": false,
                 "console_type": "vnc",
                 "custom_adapters": [],
@@ -496,7 +496,7 @@
                     "linked_clone": true,
                     "mac_address": "0c:85:96:3b:e0:00",
                     "on_close": "power_off",
-                    "options": "-nographic",
+                    "options": "-k es",
                     "platform": "x86_64",
                     "process_priority": "normal",
                     "qemu_path": "/usr/bin/qemu-system-x86_64",
