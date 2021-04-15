@@ -241,4 +241,108 @@ Con esto finalmente podemos resaltar y hacer que las instrucciones a seguir para
 ```
 Para el caso de que se configuren múltiples interfaces en 1 router cambiar la palabra __end__ por un __exit__ para no repetir sentencias de comandos innecesariamente
 ## Creando Enrutamientos
-Muchas veces
+Muchas veces necesitaremos el hacer uso de redireccionar el flujo de información hacia el exterior de nuestra red, por ello es que existe el enrutamiento  de la información, que no es pasar sencillamente de un punto a otro, en la cual el mismo dispositivo (Router) realiza una serie de operaciones para redireccionar el flujo de datos y de la misma manera conocer el como el mismo dispositivo conoce hacia donde mandar los datos sin necesidad de conocer todo el camino que recorre hasta llegar al destino.
+
+### Enrutamiento estático
+Este tipo de enrutamiento tiene una mayor prioridad sobre el resto de protocolos de enrutamiento, por lo cual es de suma utilidad y es muy rápido, una desventaja a su vez de este protocolo esta hecho para que su enrutamiento y configuración sea en redes pequeñas, por ello si existiese una topología muy grande este enrutamiento no sera una opción factible para trabajar.
+
+Para crear un enrutamiento pondremos el siguiente ejemplo:
+
+Tenemos 3 routers los cuales nombraremos:
+
+* R1:
+  * f0/0 cuya red es 192.168.0.0/25
+  * f0/1 cuya red es 10.10.0.128/30 que interconecta con f0/1 de R2 (10.10.0.129)
+* R2:
+  * f0/1 cuya red es 10.10.0.128/30 que interconecta a f0/1 de R1 (10.10.0.130)
+  * f1/0 cuya red es 10.10.0.132/30 que interconecta a f1/0 de R3 (10.10.0.133)
+* R3:
+  * f1/0 cuya red es 10.10.0.132/30 que interconecta a f1/0 de R2 (10.10.0.134)
+  * f0/0 cuya red es 192.168.0.128/25
+
+Para poder comunicar toda esta red solo haremos uso del comando _ip route_ descrito de la siguiente manera para enrutar el trafico de datos entre los dispositivos:
+
+```bash
+  # Para la tabla de enrutamiento de R1 seria:
+  conf t
+    ip route 192.168.0.128 255.255.255.128 10.10.0.130
+    # En este caso se hara un enrutamiento generalizado que engloba las subredes
+    #   que va del identificador 10.10.0.128/30 y 10.10.0.132/30 generalizado con
+    #   10.10.0.128/29
+    ip route 10.10.0.128 255.255.255.248 10.10.0.130
+    end
+  wr
+
+  # Para la tabla de enrutamiento de R2 seria:
+  conf t
+    ip route 192.168.0.0 255.255.255.128 10.10.0.129
+    ip route 192.168.0.128 255.255.255.128 10.10.0.134
+    ip route 10.10.0.128 255.255.255.248 10.10.0.129
+    ip route 10.10.0.128 255.255.255.248 10.10.0.134
+    end
+  wr
+
+  # Para la tabla de enrutamiento de R3 seria:
+  conf t
+    ip route 192.168.0.0 255.255.255.128 10.10.0.133
+    ip route 10.10.0.128 255.255.255.248 10.10.0.133
+    end
+  wr
+```
+
+Como podemos ver los pasos a seguir de forma general son:
+```bash
+  # Si alguna interfaz esta conectada a otra interfaz de red (router-router)
+  conf t
+    ip route <id_red_unknown> <netmask> <ip_de_donde_puedo_redireccionar>
+    # ip_de_donde_puedo_redireccionar es la ip del otro router por el cual
+    #   esta conectado de forma directa a nuestro router
+    #   y asi llegaran los paquetes
+    end
+  wr
+```
+
+### Enrutamiento dinamico
+Próximamente desarrollar...
+
+## Configurando para servicios de CLI remoto (Telnet/SSH)
+Muchas veces y en lo laboral, se verán con la necesidad de acceder a un equipo que aun este en otro lado del mundo, se necesitara acceder de forma remota a dicho equipo, con esto presentaremos los siguientes pasos para habilitar el acceso por ssh o por telnet al router.
+
+```bash
+  conf t
+
+    enable secret <escribir_aqui_la_contraseña_para_pasar_al_modo_exec>
+    # Se habilita el servicio de cifrado para que los password
+    #   no se vean en texto plano
+    service password-encryption
+    ip domain-name <escribir_aqui_el_nombre_de_dominio>
+    ip ssh rsa keypair-name <key_para_generar_las_llaves>
+    crypto key generate rsa usage-keys label <key_para_generar_las_llaves> modulus 1024
+
+    ip ssh v 2
+    ip ssh time-out 30
+    ip ssh authentication-retries 3
+    line vty 1 15
+      password <password_cuando_no_hay_user>
+      login local
+      # en transport se habilita para el uso de telnet y ssh
+      transport input ssh telnet
+      exit
+    # Aqui se crea el modelo para que entre al router y por default entra al modo >
+    aaa new-model
+    aaa authentication login default local
+    aaa authentication enable default enable
+  end
+  wr
+```
+
+Y de esta manera ya esta la configuración para ingresar de forma remota al router
+
+## Creación de usuarios administradores
+Ahora bien el poder habilitar una conexión remota se puede hacer uso de usuarios con distintos niveles de privilegio para configurar o conectarse sencillamente al router, por ello se seguirá la siguiente serie de instrucciones:
+```bash
+  conf t
+    username <user> privilege 15 password <pass>
+    end
+  wr
+```
