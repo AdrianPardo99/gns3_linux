@@ -346,3 +346,10 @@ Ahora bien el poder habilitar una conexión remota se puede hacer uso de usuario
     end
   wr
 ```
+
+Como podemos ver a lado de la sentencia _privilege_ vemos un 15 el cual representa el nivel máximo de acceso y configuración para acceso al router, pero por otro lado también existen los niveles de permiso como:
+
+* _0_ Predefinido para privilegios de acceso a nivel de usuario. Rara vez se usa, pero incluye cinco comandos: deshabilitar, habilitar, salir, ayudar y cerrar sesión.
+* _1_ El nivel predeterminado para iniciar sesión con el indicador del enrutador Router>. Un usuario no puede realizar ningún cambio ni ver el archivo de configuración en ejecución.
+* _2-14_ Puede personalizarse para privilegios de nivel de usuario. Los comandos de niveles inferiores se pueden mover a otro nivel superior, o los comandos de niveles superiores se pueden mover a un nivel inferior.
+* _15_ Reservado para los privilegios del modo de habilitación (comando de habilitación). Los usuarios pueden cambiar configuraciones y ver archivos de configuración.
