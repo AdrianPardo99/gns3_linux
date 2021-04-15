@@ -12,3 +12,4 @@
 *.out
 *.idx
 *.log
+*__pycache__
