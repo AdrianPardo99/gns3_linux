@@ -261,37 +261,6 @@
             },
             {
                 "filters": {},
-                "link_id": "f7d0d060-d0fd-4fed-8875-2bb44fa47411",
-                "nodes": [
-                    {
-                        "adapter_number": 0,
-                        "label": {
-                            "rotation": 0,
-                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                            "text": "e0",
-                            "x": 38,
-                            "y": -9
-                        },
-                        "node_id": "aec7b9f7-c358-49a4-b48a-7ef35b34be62",
-                        "port_number": 0
-                    },
-                    {
-                        "adapter_number": 0,
-                        "label": {
-                            "rotation": 0,
-                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                            "text": "e3",
-                            "x": 29,
-                            "y": 55
-                        },
-                        "node_id": "8e3489dd-2dbc-47ce-b9cc-23727e6962ca",
-                        "port_number": 3
-                    }
-                ],
-                "suspend": false
-            },
-            {
-                "filters": {},
                 "link_id": "73259d3e-220d-431a-a617-d76f6fe51034",
                 "nodes": [
                     {
@@ -317,6 +286,37 @@
                         },
                         "node_id": "8e3489dd-2dbc-47ce-b9cc-23727e6962ca",
                         "port_number": 1
+                    }
+                ],
+                "suspend": false
+            },
+            {
+                "filters": {},
+                "link_id": "567f21f2-b8c9-4601-83f6-73d2ebed55a2",
+                "nodes": [
+                    {
+                        "adapter_number": 0,
+                        "label": {
+                            "rotation": 0,
+                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                            "text": "e3",
+                            "x": 36,
+                            "y": 55
+                        },
+                        "node_id": "8e3489dd-2dbc-47ce-b9cc-23727e6962ca",
+                        "port_number": 3
+                    },
+                    {
+                        "adapter_number": 0,
+                        "label": {
+                            "rotation": 0,
+                            "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
+                            "text": "e0",
+                            "x": 31,
+                            "y": -10
+                        },
+                        "node_id": "91b44cc5-ffed-4665-8344-2d756fe0c171",
+                        "port_number": 0
                     }
                 ],
                 "suspend": false
@@ -840,13 +840,13 @@
                 "label": {
                     "rotation": 0,
                     "style": "font-family: TypeWriter;font-size: 10.0;font-weight: bold;fill: #000000;fill-opacity: 1.0;",
-                    "text": "debianflask-1",
-                    "x": -21,
+                    "text": "debian_vm-1",
+                    "x": -17,
                     "y": -25
                 },
                 "locked": false,
-                "name": "debianflask-1",
-                "node_id": "aec7b9f7-c358-49a4-b48a-7ef35b34be62",
+                "name": "debian_vm-1",
+                "node_id": "91b44cc5-ffed-4665-8344-2d756fe0c171",
                 "node_type": "qemu",
                 "port_name_format": "Ethernet{0}",
                 "port_segment_size": 0,
@@ -879,7 +879,7 @@
                     "kernel_image_md5sum": null,
                     "legacy_networking": false,
                     "linked_clone": true,
-                    "mac_address": "0c:6b:37:be:62:00",
+                    "mac_address": "0c:6b:37:c1:71:00",
                     "on_close": "power_off",
                     "options": "-k es",
                     "platform": "x86_64",
@@ -890,10 +890,10 @@
                     "usage": ""
                 },
                 "symbol": ":/symbols/qemu_guest.svg",
-                "template_id": "5d032039-2f1a-4c97-910d-0143b9ec6ca7",
+                "template_id": "a357935d-9b38-42ed-bb3b-e5cd672e41e7",
                 "width": 65,
-                "x": -249,
-                "y": 186,
+                "x": -221,
+                "y": 166,
                 "z": 1
             }
         ]
