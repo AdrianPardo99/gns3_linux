@@ -302,8 +302,58 @@ Como podemos ver los pasos a seguir de forma general son:
   wr
 ```
 
-### Enrutamiento dinamico
-Próximamente desarrollar...
+### Enrutamiento dinámico
+El enrutamiento dinámico muchas veces funciona a la hora de crear tablas dinámicas y que estas a su vez estas se intercambien con los routers vecinos para tener un conocimiento total de toda la topología de red aledaña, para ello existen varios protocolos que te ayudan a comunicar los dispositivos con el exterior, por ello te presento los siguientes.
+
+#### RIP
+Este protocolo funciona como es un protocolo para enrutamiento dinámico el cual tiene la característica de ser un protocolo de vector distancia, este protocolo trabaja con datagrama y bajo el puerto 520, de este protocolo existen tres versiones de este protocolo los cuales a groso modo se caracterizan por:
+
+* __RIPv1__: Es la primer versión de este protocolo, el cual tiene como característica el realizar enrutamiento por clases de IP's lo cual como ya vimos anteriormente el hacer uso de clases es útil cuando existe una cantidad extensa de equipos de cómputo a trabajar, pero en caso contrario esta versión no es tan funcional
+* __RIPv2__: A diferencia de la versión anterior esta versión funciona para hacer uso de VLSM el cual permite crear tablas de enrutamiento dinámicas con subneteo necesario para que los otros dispositivos puedan trabajar
+  * En este caso para habilitarlo en nuestro router solo haremos uso de lo siguiente:
+```bash
+  conf t
+    router rip
+    ver 2
+    net <id_red_de_las_interfaces_del_mismo_router>
+    # En caso de que se desee eliminar los posibles bucles de los routers
+    no auto-summary
+    end
+  wr
+```
+* __RIPng__: Este tipo funciona para direcciones IPv6
+
+#### OSPF
+Este protocolo funciona al igual que RIP como un protocolo de enrutamiento dinámico el cual tiene la característica de ser un protocolo de Enrutamiento de Estado de Enlace (LSR), pero con la diferencia de que este protocolo trabaja con wildcards y con áreas de red, de modo en que un conocimiento rapido de wildcards es como la escritura inversa de la mascara de red, pero a diferencia de todo en este se especifica la cantidad de hosts que cubre en el rango de IPs que van a poder ser enrutadas, un ejemplo de wildcard puede ser lo siguiente:
+
+* Tengamos dos subredes 192.168.1.0/25 y 192,168.0.0/25, en el cual encontramos el rango de IP de las subredes:
+  * 192.168.1.1 - 192.168.1.126 con Broadcast 192.168.1.127
+  * 192.168.0.1 - 192.168.0.126 con Broadcast 192.168.0.127
+  * La cual una wildcard se debe hacer lo siguiente:
+    * Convertir las IP's a nivel de bits
+      * 11000000.10101000.00000001.00000001 hasta 11000000.10101000.00000001.01111110 y Broadcast 11000000.10101000.00000001.01111111
+      * 11000000.10101000.00000000.00000001 hasta 11000000.10101000.00000000.01111110 y Broadcast 11000000.10101000.00000000.01111111
+    * Por lo cual podemos ver que los primeros dos octetos no cambian por tanto esa parte de la Wildcart va marcada con 0's, y del otros dos octetos es necesario ver cuales bits son los que cambian, y los que van marcados con 1's es lo que vamos a escribir en la Wildcard, por tanto quedaría como:
+    * 0.0.1.127 que esto puede enrutar ambas redes con el conjunto de direcciones disponibles incluyendo el Broadcast de ambos routers
+Al momento de escribir este ejemplo en el router considerando que ambas redes estan en el mismo router solo es necesario escribir lo siguiente:
+
+```bash
+  conf t
+    # Encender una interfaz de loopback para que el mismo protocolo no tenga
+    #   ningun problema y definir una IP que no se utilizara
+    int loop0
+      ip add 210.0.0.x 255.255.255.255
+      no sh
+      exit
+    # Asignar un identificador distinto en cada router
+    router ospf 1
+      v 2
+      # Al definir un area de red es necesario pensar que estos dispositivos
+      #   cercanos y pueden variar
+      net 192.168.0.0 0.0.1.127 area 0
+      end
+  wr
+```
 
 ## Configurando para servicios de CLI remoto (Telnet/SSH)
 Muchas veces y en lo laboral, se verán con la necesidad de acceder a un equipo que aun este en otro lado del mundo, se necesitara acceder de forma remota a dicho equipo, con esto presentaremos los siguientes pasos para habilitar el acceso por ssh o por telnet al router.
