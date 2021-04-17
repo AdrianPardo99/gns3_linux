@@ -355,6 +355,20 @@ Al momento de escribir este ejemplo en el router considerando que ambas redes es
   wr
 ```
 
+Entonces generalizando esto quedaria:
+```bash
+  conf t
+    int loop0
+      ip add <IP_no_utilizada> 255.255.255.255
+      no sh
+      exit
+    router ospf <x>
+      v 2
+      net <id_de_red_generalizado_normal> <wildcard> area <y>
+      end
+  wr
+```
+
 ## Configurando para servicios de CLI remoto (Telnet/SSH)
 Muchas veces y en lo laboral, se verán con la necesidad de acceder a un equipo que aun este en otro lado del mundo, se necesitara acceder de forma remota a dicho equipo, con esto presentaremos los siguientes pasos para habilitar el acceso por ssh o por telnet al router.
 
