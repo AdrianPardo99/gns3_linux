@@ -15,6 +15,7 @@ def ping(host,result):
     output=res.stdout.read().decode("utf-8")
     r="100% packet loss" not in output
     msg=""
+    res.terminate()
     if r:
         msg=f"{GREEN} with answer [✓]{END}"
     else:
@@ -99,14 +100,14 @@ def scan_range(ips,broadcast):
     responde=[]
     threads=[]
     positivos=[]
-    c=30
+    c=35
     i=0
     b=0
     while(True):
         if i%c==0 and i>0:
             for t in range(len(threads)):
                 threads[t].join()
-                print(responde[t][1])
+                #print(responde[t][1])
                 if responde[t][0]:
                     ttl=responde[t][3].split("ttl=")[1]
                     ttl=int(ttl.split(" ")[0])
@@ -133,7 +134,7 @@ def scan_range(ips,broadcast):
             break
     for t in range(len(threads)):
         threads[t].join()
-        print(responde[t][1])
+        #print(responde[t][1])
         if responde[t][0]:
             ttl=responde[t][3].split("ttl=")[1]
             ttl=int(ttl.split(" ")[0])

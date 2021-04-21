@@ -4,6 +4,7 @@ from ssh_connect import *
 import os
 import re
 import netifaces as ni
+import json
 cisco={
     "device_type":"cisco_xe",
     "ip":"",
@@ -39,7 +40,7 @@ print(f"Broadcast ip: {range_net}")
 # Se prepara para hacer is_host_up
 ips=[idnet[0],idnet[1],idnet[2],idnet[3]+1]
 responde=scan_range(ips,range_net)
-print(f"Host con respuesta: {responde}")
+
 
 # Se filtra por primera vez que solo los elementos que sean Cisco
 
@@ -48,14 +49,16 @@ for i in range(len(responde)):
     for k,v in responde[i].items():
         if "Cisco_Router_IOS" in v:
             ciscos.append(responde[i])
-print(f"Solo routers cisco: {ciscos}")
+#print(f"Solo routers cisco: {ciscos}")
 
 # Despues de todo lo que hace el modulo hay que conectarse por ssh o telnet
 #   a los dispositivos cisco
-cmd=["sh ip int | i Internet address","sh ip int br | include up"]
+cmd=["sh ip int | i Internet address","sh ip int br | include up","sh run | include hostname"]
 c=0
 red={}
+net_router={}
 for i in ciscos:
+    flag=False
     # Los datos del router (Interfaces)
     for k,v in i.items():
         print(f"Enviando comandos a router con ip: {k}")
@@ -63,6 +66,7 @@ for i in ciscos:
         output=conectar(cisco,cmd)
         dir=re.split("\n|  Internet address is | ",output[0])
         inte=re.split("\n|      YES NVRAM  up                    up      | ",output[1])
+        host_cmd=output[2].split("hostname ")[1]
         direcciones=[]
         interf=[]
         for j in dir:
@@ -71,25 +75,41 @@ for i in ciscos:
         for j in inte:
             if j!="":
                 interf.append(j)
-        red[f"Router {c}"]={}
-        iter=red[f"Router {c}"]
-        for j in range(len(direcciones)):
-            iter[interf[(j*2)]]=direcciones[j]
+        if host_cmd in red.keys():
+            flag=False
+        else:
+            flag=True
+        if flag:
+            iter={}
+            for j in range(len(direcciones)):
+                iter[interf[(j*2)]]=direcciones[j]
+            red[host_cmd]=iter
         dir.clear()
         inte.clear()
         direcciones.clear()
     # Scan de subredes del router
-    for k,v in red.items():
-        for j,l in v.items():
-            red=l.split("/")
-            if red[0] in i.keys():
-                print(f"Existe scan de red {red[0]}")
-            else:
-                net=create_masc_by_prefix(int(red[1]))
-                id=get_id_net(list(map(int,red[0].split("."))),net)
-                br=get_broadcast_ip(id,net)
-                ip=[id[0],id[1],id[2],id[3]+1]
-                resp_r=scan_range(ip,br)
-                responde=responde+resp_r
+    if flag:
+        for k,v in red.items():
+            if 0 not in v.values():
+                for j,l in v.items():
+                    red_e=l.split("/")
+                    if red_e[0] in i.keys():
+                        print(f"Exists the network scanning {red_e[0]}")
+                    else:
+                        net=create_masc_by_prefix(int(red_e[1]))
+                        id=get_id_net(list(map(int,red_e[0].split("."))),net)
+                        br=get_broadcast_ip(id,net)
+                        ip=[id[0],id[1],id[2],id[3]+1]
+                        print(f"Scan Network:\n\tID: {id}\n\tNetmask: {net}\n\tBroadcast: {br}")
+                        resp_r=scan_range(ip,br)
+                        responde=responde+resp_r
+                        # aca filtrar Equipos cisco
+                        for a in range(len(resp_r)):
+                            for b,d in resp_r[a].items():
+                                if "Cisco_Router_IOS" in d:
+                                    ciscos.append(resp_r[a])
+                net_router[k]=v
+            red[k]={0:0}
 
-    c+=1
+print(f"Host con respuesta:\n{json.dumps(responde,sort_keys=True,indent=4)}")
+print(f"Diccionario de routers:\n{json.dumps(net_router,sort_keys=True,indent=4)}")
