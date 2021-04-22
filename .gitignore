@@ -13,3 +13,4 @@
 *.idx
 *.log
 *__pycache__
+*iomem

@@ -8,6 +8,9 @@ from threading import Thread
 
 BLUE, RED, WHITE, YELLOW, MAGENTA, GREEN, END = '\33[94m', '\033[91m', '\33[97m', '\33[93m', '\033[1;35m', '\033[1;32m', '\033[0m'
 
+def arr_to_ip(ip):
+    return f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}"
+
 def ping(host,result):
     param = '-n' if platform.system().lower()=='windows' else '-c'
     command = ['ping', param, '1', host]

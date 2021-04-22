@@ -25,18 +25,18 @@ if 2 not in dic_data:
     exit(1)
 
 dic_data=dic_data[2][0]
-print(f"\n---------About---------\n{interfaces[read]}: {dic_data}")
+print(f"\n---------About---------\n{interfaces[read]}:{dic_data}")
 addr=list(map(int,dic_data["addr"].split(".")))
 net=list(map(int,dic_data["netmask"].split(".")))
 
 c=determinate_prefix(net)
+# Se obtiene el identificador de la subred
 idnet=get_id_net(addr,net)
+# Se obtiene la dirección de broadcast
 range_net=get_broadcast_ip(idnet,net)
 
-# Se obtiene el identificador de la subred:
-print(f"Identificador de red: {idnet}/{c}")
-# Se obtiene direccion de broadcast
-print(f"Broadcast ip: {range_net}")
+print(f"-------Scan Network:-------\n\tID: {arr_to_ip(idnet)}/{c}\n\tNetmask: {arr_to_ip(net)}\n\tBroadcast: {arr_to_ip(range_net)}")
+
 # Se prepara para hacer is_host_up
 ips=[idnet[0],idnet[1],idnet[2],idnet[3]+1]
 responde=scan_range(ips,range_net)
@@ -61,11 +61,11 @@ for i in ciscos:
     flag=False
     # Los datos del router (Interfaces)
     for k,v in i.items():
-        print(f"Enviando comandos a router con ip: {k}")
+        print(f"-------Enviando comandos a router con ip: {k}-------")
         cisco["ip"]=k
         output=conectar(cisco,cmd)
         dir=re.split("\n|  Internet address is | ",output[0])
-        inte=re.split("\n|      YES NVRAM  up                    up      | ",output[1])
+        inte=re.split("\n|      YES NVRAM  up                    up      |      YES manual up                    up  | ",output[1])
         host_cmd=output[2].split("hostname ")[1]
         direcciones=[]
         interf=[]
@@ -94,13 +94,13 @@ for i in ciscos:
                 for j,l in v.items():
                     red_e=l.split("/")
                     if red_e[0] in i.keys():
-                        print(f"Exists the network scanning {red_e[0]}")
+                        print(f"-------Exists the network scanning {red_e[0]}-------")
                     else:
                         net=create_masc_by_prefix(int(red_e[1]))
                         id=get_id_net(list(map(int,red_e[0].split("."))),net)
                         br=get_broadcast_ip(id,net)
                         ip=[id[0],id[1],id[2],id[3]+1]
-                        print(f"Scan Network:\n\tID: {id}\n\tNetmask: {net}\n\tBroadcast: {br}")
+                        print(f"-------Scan Network:-------\n\tID: {arr_to_ip(id)}\n\tNetmask: {arr_to_ip(net)}\n\tBroadcast: {arr_to_ip(br)}")
                         resp_r=scan_range(ip,br)
                         responde=responde+resp_r
                         # aca filtrar Equipos cisco
@@ -110,6 +110,7 @@ for i in ciscos:
                                     ciscos.append(resp_r[a])
                 net_router[k]=v
             red[k]={0:0}
+
 
 print(f"Host con respuesta:\n{json.dumps(responde,sort_keys=True,indent=4)}")
 print(f"Diccionario de routers:\n{json.dumps(net_router,sort_keys=True,indent=4)}")
