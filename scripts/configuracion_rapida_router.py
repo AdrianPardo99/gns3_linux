@@ -1,3 +1,4 @@
+#!/usr/bin/env  python3
 import time, pyautogui, pyperclip
 arr=["conf t","enable secret 1234","service password-encryption","ip domain-name la-pandilla-mantequilla","ip ssh rsa keypair-name 1234",
     "crypto key generate rsa usage-keys label 1234 modulus 1024","ip ssh v 2","ip ssh time-out 30",

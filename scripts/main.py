@@ -1,6 +1,12 @@
 #!/usr/bin/env python3
 from module_scan import *
 
+"""
+    @author:        Adrian González Pardo
+    @date_update:   23/04/2021
+    @github:        AdrianPardo99
+"""
+
 # Listamos las interfaces de red aqui
 interfaces=os.listdir("/sys/class/net/")
 c=0

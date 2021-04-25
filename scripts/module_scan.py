@@ -6,6 +6,20 @@ import re
 import netifaces as ni
 import json
 
+"""
+    @author:        Adrian González Pardo
+    @date_update:   23/04/2021
+    @github:        AdrianPardo99
+"""
+
+"""
+    @args:
+        <interface_name> Es el nombre de la interfaz que va a trabajar para escanear toda la red
+        Para comunicación SSH v2
+        <user> Es el usuario por defecto en los routers a la hora de realizar todos los escaners
+        <password> Es el password por defecto de los routers
+        <secret> Es la clave secret a la hora de conectarse al router
+"""
 def scan_by_interface(interface_name="tap0",user="admin",password="admin",secret="1234"):
     # Prototipo de conexión a router cisco
     cisco={

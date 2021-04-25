@@ -6,11 +6,26 @@ import subprocess
 from threading import Thread
 
 
+"""
+    @author:        Adrian González Pardo
+    @date_update:   23/04/2021
+    @github:        AdrianPardo99
+"""
+
 BLUE, RED, WHITE, YELLOW, MAGENTA, GREEN, END = '\33[94m', '\033[91m', '\33[97m', '\33[93m', '\033[1;35m', '\033[1;32m', '\033[0m'
 
+"""
+    @args:
+            <ip> Convierte una lista de enteros a un string para presentación
+"""
 def arr_to_ip(ip):
     return f"{ip[0]}.{ip[1]}.{ip[2]}.{ip[3]}"
 
+"""
+    @args:
+            <host> Es una dirección ip de tipo string
+            <result> Es una lista en la cual se almacenan los datos de la salida
+"""
 def ping(host,result):
     param = '-n' if platform.system().lower()=='windows' else '-c'
     command = ['ping', param, '1', host]
@@ -25,6 +40,10 @@ def ping(host,result):
         msg=f"{RED} without answer [x]{END}"
     result.append([r,f"{YELLOW} Send data to: {host.ljust(15)} {msg}",host,output.split("\n")[1]])
 
+"""
+    @args:
+            <prefix> Es un valor entero que va hasta 0-32 para generar una mascara de red
+"""
 def create_masc_by_prefix(prefix):
     net=[]
     for i in range(4):
@@ -50,7 +69,12 @@ def create_masc_by_prefix(prefix):
         net.append(0)
     return net
 
-
+"""
+    @args:
+            <srcs> Es nuestra dirección ip en forma de string
+            <host> Es la dirección ip en forma de string
+            <result> Es una lista la cual almacenara los resultados de la función
+"""
 def is_host_up(srcs,host,result):
     p=sr1(IP(src=srcs,dst=host)/ICMP()/"hola",timeout=15,verbose=False)
     if p is None:
@@ -58,6 +82,10 @@ def is_host_up(srcs,host,result):
     else:
         result.append([True,f"{YELLOW} Send data to: {host.ljust(15)} {GREEN} with answer [✓]{END}",host,p.getlayer(IP).ttl])
 
+"""
+    @args:
+            <net> Es la mascara de red en forma de lista y de tipo int
+"""
 def determinate_prefix(net):
     c=0
     for i in range(4):
@@ -79,18 +107,31 @@ def determinate_prefix(net):
             c+=(1)
     return c
 
+"""
+    @args:
+        <ip> Es una dirección ip la cual va a ser utilizada para generar el identificador de red en formato int
+        <net> Es nuestra mascara de red en formato int
+"""
 def get_id_net(ip,net):
     idnet=[]
     for i in range(4):
         idnet.append((ip[i]&net[i]))
     return idnet
 
+"""
+    @args:
+        <idnet> Es el identificador de la subred de tipo lista e int
+        <net> Es la mascara de red de tipo lista e int
+"""
 def get_broadcast_ip(idnet,net):
     ran=[]
     for i in range(4):
         ran.append((idnet[i]|((~net[i])&0xFF)))
     return ran
-
+"""
+    @args:
+        <ttl> Es un valor entero que va desde 0-255
+"""
 def check_os_by_ttl(ttl):
     if ttl<=64:
         return f"Unix-OS {64-ttl}"
@@ -99,6 +140,11 @@ def check_os_by_ttl(ttl):
     elif ttl>128:
         return f"Cisco_Router_IOS {255-ttl}"
 
+"""
+    @args:
+        <ips> Es la primer dirección ip de la subred en formato de lista e int
+        <broadcast> Es la dirección de Broadcast en formato de lista e int
+"""
 def scan_range(ips,broadcast):
     responde=[]
     threads=[]
