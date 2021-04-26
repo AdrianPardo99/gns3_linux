@@ -189,3 +189,26 @@ def scan_range(ips,broadcast):
             ttl=int(ttl.split(" ")[0])
             positivos.append({responde[t][2]:check_os_by_ttl(ttl)})
     return positivos
+
+"""
+    @args:
+        <dict> es el diccionario de routers para ver las interconexiones que hay entre ellos
+"""
+def verifica_conectividad(dict):
+    conexiones=[]
+    for i,j in dict.items():
+        for k,v in dict.items():
+            if k!=i:
+                for a,b in v.items():
+                    if b in j.values():
+                        if (f"{i}-{k}:{b}" not in conexiones) and (f"{k}-{i}:{b}" not in conexiones):
+                            conexiones.append(f"{i}-{k}:{b}")
+    return conexiones
+
+def verifica_index(arr,patern):
+    c=0
+    for i in arr:
+        if patern in i:
+            break
+        c+=1
+    return c
