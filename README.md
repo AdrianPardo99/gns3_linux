@@ -369,6 +369,28 @@ Entonces generalizando esto quedaria:
   wr
 ```
 
+## Compartiendo protocolos de enrutamiento dinámico
+En algunos casos o en modelos de desarrollo practico sera necesario el poder trabajar con distintos tipos de enrutamiento en nuestros dispositivos, los cuales al enfrentarse con otro protocolo, no prodran comunicarse, para ello solo es necesario, reconfigurar el protocolo principal e indicar que vamos a utilizar redireccionamiento con otros protocolos:
+
+### OSPF
+Para que el protocolo OSPF pueda detectar y trabajar con enrutamientos por RIP y estatico, se debe escribir lo siguiente:
+```bash
+  conf t
+    router ospf <id>
+      redistribute static metric 200 subnets
+      redistribute rip metric 200 subnets
+      end
+```
+### RIP
+Para que el protocolo RIP pueda detectar y trabajar con enrutamientos por OSPF y estatico, se debe escribir lo siguiente:
+```bash
+  conf t
+    router rip
+    redistribute static
+    redistribute ospf 1
+    default-metric 1
+    end
+```
 ## Configurando para servicios de CLI remoto (Telnet/SSH)
 Muchas veces y en lo laboral, se verán con la necesidad de acceder a un equipo que aun este en otro lado del mundo, se necesitara acceder de forma remota a dicho equipo, con esto presentaremos los siguientes pasos para habilitar el acceso por ssh o por telnet al router.
 
