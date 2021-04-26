@@ -145,6 +145,8 @@ def scan_by_interface(interface_name="tap0",user="admin",password="admin",secret
         for w,x in v.items():
             b=red_id[k][f"{w}-sub"]
             net=arr_to_ip(create_masc_by_prefix(int(x.split("/")[1])))
+            prefix=int(x.split("/")[1])
+            b=f"{b}/{prefix}"
             a={"name":w,
                 "ip":x.split("/")[0],
                 "netmask":net,
