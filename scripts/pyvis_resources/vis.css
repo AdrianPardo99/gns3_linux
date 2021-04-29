@@ -274,7 +274,7 @@ input.vis-configuration.vis-config-range:focus::-ms-fill-upper {
     position: absolute;
     background: rgba(57, 76, 89, 0.85);
     border: 2px solid #f2faff;
-    line-height:30p;
+    line-height:30px;
     height:30px;
     width:150px;
     text-align:center;
@@ -1321,4 +1321,4 @@ div.vis-color-picker input.vis-range-brightness {
 
 div.vis-color-picker input.vis-saturation-range {
   width: 289px !important;
-}*/x
+}*/
