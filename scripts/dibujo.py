@@ -6,14 +6,17 @@ def cambiarEnlaces(net, out_net):
     fp = open(net, "r")
     fo = open(out_net, "w")
     for i in enumerate(fp):
-        if i == 2: 
-            fo.write("<link rel='stylesheet' href='pyvis_resources/vis.css' type='text/css' />")
-        elif i == 3:
-            fo.write("<script type='text/javascript' src='pyvis_resources/vis-network.min.js'></script>")
+        if i[0] == 2: 
+            fo.write("<link rel='stylesheet' href='pyvis_resources/vis.css' type='text/css' />\n")
+        elif i[0] == 3:
+            fo.write("<script type='text/javascript' src='pyvis_resources/vis-network.min.js'></script>\n")
         else:
-            fo.write(i[1])
-    os.remove(net)
+        	fo.write(i[1])
+    fp.close()
     fo.close()
+
+def eliminarTemporal(file):
+	os.remove(file)
 
 def conexionesCli2edges(general_net, clients_dic, clients_id, routers_dic):
 	edges = [] 
