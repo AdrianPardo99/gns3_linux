@@ -26,3 +26,4 @@ devices = res[3]
 net = construirDibujoTopologia(routers, interconexiones, devices, general)
 net.save_graph("temp.html")
 cambiarEnlaces("temp.html", "net.html")
+eliminarTemporal("temp.html")
