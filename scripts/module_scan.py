@@ -159,4 +159,5 @@ def scan_by_interface(interface_name="tap0",user="admin",password="admin",secret
     # Posición 0 devuelve el json de todas las interfaces acomadado
     # Posición 1 devuelve el arreglo de interconexiones que hay entre routers
     # Posicion 2 devuelve todos los host que responsidieron al ping
-    return [json_conexiones,arr_conexiones,json_respond]
+    return [conexiones_r, arr_conexiones, net_router, responde]
+    #return [json_conexiones,arr_conexiones,json_respond]
