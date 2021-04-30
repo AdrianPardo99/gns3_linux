@@ -1,9 +1,12 @@
+<!-- 
+
+-->
 <!DOCTYPE html>
 <html lang="es">
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-	<title>Administrador</title>
+	<title>Usuario</title>
     <link rel="shortcut icon" href="img/lv.ico" type="image/x-icon">
     <link rel="icon" href="img/lv.ico" type="image/x-icon">
     
@@ -35,7 +38,7 @@
         <div class="NavLateral-content full-width">
 
             <header class="NavLateral-title full-width center-align">
-            	Proyecto<i class="zmdi zmdi-close NavLateral-title-btn ShowHideMenu"></i>
+                Proyecto<i class="zmdi zmdi-close NavLateral-title-btn ShowHideMenu"></i>
             </header>
 
             <figure class="full-width NavLateral-logo">
@@ -48,38 +51,19 @@
                 <ul class="full-width">
 
                     <li>
-                        <a href="Administrador1.html" class="waves-effect waves-light"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i> Administradores</a>
+                        <a href="Usuario1.html" class="waves-effect waves-light"><i class="zmdi zmdi-camera-add"></i> Enviar Postal</a>
                     </li>
                     <li class="NavLateralDivider"></li>
 
                     <li>
-                        <a href="Administrador2.html" class="waves-effect waves-light"><i class="zmdi zmdi-accounts-add zmdi-hc-fw"></i> Usuarios</a>
+                        <a href="Usuario2.html" class="waves-effect waves-light"><i class="zmdi zmdi-arrow-right-top"></i>  Postales Enviadas</a>
                     </li>
                     <li class="NavLateralDivider"></li>
 
                     <li>
-                        <a href="Administrador3.html" class="waves-effect waves-light"><i class="zmdi zmdi-file-text zmdi-hc-fw"></i> Topología</a>
+                        <a href="Usuario3.html" class="waves-effect waves-light"><i class="zmdi zmdi-arrow-left-bottom"></i> Postales Recibidas</a>
                     </li>
                     <li class="NavLateralDivider"></li>
-
-                    <li>
-                        <a href="Administrador.html" class="waves-effect waves-light"><i class="zmdi zmdi zmdi-badge-check zmdi-hc-fw"></i> Notificaciones</a>
-                    </li>
-                    <li class="NavLateralDivider"></li>
-
-                    <li>
-                        <a href="#" class="NavLateral-DropDown  waves-effect waves-light"><i class="zmdi zmdi-star-circle zmdi-hc-fw"></i> <i class="zmdi zmdi-chevron-down NavLateral-CaretDown"></i> Reportes </a>
-                        <ul class="full-width">
-
-                            <li><a href="Administrador41.html" class="waves-effect waves-light">Grafica Ejemplo</a></li>
-                            <li class="NavLateralDivider"></li>                        
-
-                            <li><a href="Administrador44.html" class="waves-effect waves-light">Historial Topologías</a></li>
-                            <li class="NavLateralDivider"></li>
-
-                        </ul>
-                    </li>
-                    <li class="NavLateralDivider"></li>                   
 
                 </ul><br><br><br>
 
@@ -99,7 +83,7 @@
                 <li class="btn-MobileMenu ShowHideMenu"><a href="#" class="tooltipped waves-effect waves-light" data-position="bottom" data-delay="50" data-tooltip="Menu"><i class="zmdi zmdi-menu"></i></a></li>
 
                 <a href="#" class="hola">
-                <li style="margin-top: 10px; margin-right: 10px;"><figure><img src="img/usr2.png" alt="UserImage"></figure></li>
+                <li style="margin-top: 10px; margin-right: 10px;"><figure><img src="img/usr1.png" alt="UserImage"></figure></li>
                 <li class="hola" style="padding:0 5px; margin-top: 10px;">Nombre de la persona</li>
             	</a>             
 
@@ -109,19 +93,55 @@
         </div>
         <!-- Termina Area de Campanita -->
         
-
 <!-- CONTENIDO -->
-        <div class="row">            
-            <!-- Timeline -->
-            <article class="col s12">
-
-                <p>
-                    <h2 class="center-align">Área para las notificaciones</h2>                    
-                    <br><br><br><br><br><br><br><br><br><br>
-                    <br><br><br><br><br><br><br><br><br><br>
-                </p>
-
-            </article>
+        <h2 class="center-align">Buscar Postal por Categoría</h2>
+        <div class="container" style="margin-bottom: 15%;">
+            <div class="row">
+                <div class="col s12">
+                    <table class="responsive-table highlight centered">
+                        <thead>
+                            <tr>
+                                <!-- <th data-field="Email">Email</th> -->
+                                <th data-field="Usuario">idCategoría</th>
+                                <th data-field="Nombre">Nombre Categoría</th>
+                                <th data-field="Modificar">Acceder</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <form class="col s12" id="BuscarPost" name="BuscarPost" method="POST" action="Usuario1-1.html">
+                                    <td>IdNumeroUno</td>
+                                    <td>NombreyNombresNumeroUno</td>
+                                    <td>                                    
+                                        <button class="btn waves-effect waves-light blue hola" type="submit" name="enviar" id="enviar"><i class="zmdi zmdi-forward"></i>
+                                        </button>
+                                    </td>
+                                </form>
+                            </tr>
+                            <tr>
+                                <form class="col s12" id="BuscarPost" name="BuscarPost" method="POST" action="Usuario1-1.html">
+                                    <td>IdNumeroDos</td>
+                                    <td>NombreyNombresNumeroDos</td>
+                                    <td>                                    
+                                        <button class="btn waves-effect waves-light blue hola" type="submit" name="enviar" id="enviar"><i class="zmdi zmdi-forward"></i>
+                                        </button>
+                                    </td>
+                                </form>
+                            </tr>
+                            <tr>
+                                <form class="col s12" id="BuscarPost" name="BuscarPost" method="POST" action="Usuario1-1.html">
+                                    <td>IdNumeroTres</td>
+                                    <td>NombreyNombresNumeroTres</td>
+                                    <td>                                    
+                                        <button class="btn waves-effect waves-light blue hola" type="submit" name="enviar" id="enviar"><i class="zmdi zmdi-forward"></i>
+                                        </button>
+                                    </td>
+                                </form>
+                            </tr>                        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
 <!-- CONTENIDO -->        
 
