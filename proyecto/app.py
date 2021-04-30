@@ -1,5 +1,6 @@
 from flask import Flask
 from flask import render_template, redirect
+from scripts import scanner
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '12345'
@@ -11,10 +12,16 @@ def index():
 
 @app.route('/network')
 def show_network():
-    #llamar cosas de scripts
+    mapeo = True
+    while mapeo:
+        try:
+            res = mapearRed("eth0")
+            dibujarRed(res)
+            mapeo = False
+        except Exception as e:
+            print("show_network(): error al mapear topologia")
+
     return render_template('net.html')
-
-
 
 
 @app.errorhandler(404)

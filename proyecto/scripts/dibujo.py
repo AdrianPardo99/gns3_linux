@@ -7,9 +7,9 @@ def cambiarEnlaces(net, out_net):
     fo = open(out_net, "w")
     for i in enumerate(fp):
         if i[0] == 2: 
-            fo.write("<link rel='stylesheet' href='pyvis_resources/vis.css' type='text/css' />\n")
+            fo.write("<link rel='stylesheet' href='static/css/vis.css' type='text/css' />\n")
         elif i[0] == 3:
-            fo.write("<script type='text/javascript' src='pyvis_resources/vis-network.min.js'></script>\n")
+            fo.write("<script type='text/javascript' src='static/js/vis-network.min.js'></script>\n")
         else:
         	fo.write(i[1])
     fp.close()

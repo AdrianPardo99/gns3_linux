@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-from detecta import *
-from ssh_connect import *
+from scripts.detecta import *
+from scripts.ssh_connect import *
 import os
 import re
 import netifaces as ni
