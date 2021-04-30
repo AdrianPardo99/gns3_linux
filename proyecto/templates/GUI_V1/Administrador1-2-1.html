@@ -1,0 +1,253 @@
+<!-- 
+
+-->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>Administrador</title>
+    <link rel="shortcut icon" href="img/lv.ico" type="image/x-icon">
+    <link rel="icon" href="img/lv.ico" type="image/x-icon">
+    
+     <!-- Normalize CSS -->
+	<link rel="stylesheet" href="css/normalize1.css">
+    
+     <!-- Materialize CSS -->
+	<link rel="stylesheet" href="css/materialize.min1.css">
+    
+     <!-- Material Design Iconic Font CSS -->
+	<link rel="stylesheet" href="css/material-design-iconic-font.min1.css">
+    
+    <!-- Malihu jQuery custom content scroller CSS -->
+	<link rel="stylesheet" href="css/jquery.mCustomScrollbar1.css">
+    
+    <!-- Sweet Alert CSS -->
+    <link rel="stylesheet" href="css/sweetalert1.css">
+    
+    <!-- MaterialDark CSS -->
+	<link rel="stylesheet" href="css/style1.css">    
+</head>
+
+<body oncopy="return false" oncut="return false" onpaste="return false" oncontextmenu="return false" onkeydown="return true" ondragstart='return false' onselectstart="return false">
+    <!-- Nav Lateral -->
+    <section class="NavLateral full-width">
+
+        <div class="NavLateral-FontMenu full-width ShowHideMenu"></div>
+
+        <div class="NavLateral-content full-width">
+
+            <header class="NavLateral-title full-width center-align">
+                Proyecto<i class="zmdi zmdi-close NavLateral-title-btn ShowHideMenu"></i>
+            </header>
+
+            <figure class="full-width NavLateral-logo">
+                <img src="img/logo.png" alt="material-logo" class="responsive-img center-box">
+                <figcaption class="center-align" style="padding: 1%;">La pandilla mantequilla</figcaption>
+            </figure> 
+
+            <div class="NavLateral-Nav">
+
+                <ul class="full-width">
+
+                    <li>
+                        <a href="Administrador1.html" class="waves-effect waves-light"><i class="zmdi zmdi-account-add zmdi-hc-fw"></i> Administradores</a>
+                    </li>
+                    <li class="NavLateralDivider"></li>
+
+                    <li>
+                        <a href="Administrador2.html" class="waves-effect waves-light"><i class="zmdi zmdi-accounts-add zmdi-hc-fw"></i> Usuarios</a>
+                    </li>
+                    <li class="NavLateralDivider"></li>
+
+                    <li>
+                        <a href="Administrador3.html" class="waves-effect waves-light"><i class="zmdi zmdi-file-text zmdi-hc-fw"></i> Topología</a>
+                    </li>
+                    <li class="NavLateralDivider"></li>
+
+                    <li>
+                        <a href="Administrador.html" class="waves-effect waves-light"><i class="zmdi zmdi zmdi-badge-check zmdi-hc-fw"></i> Notificaciones</a>
+                    </li>
+                    <li class="NavLateralDivider"></li>
+
+                    <li>
+                        <a href="#" class="NavLateral-DropDown  waves-effect waves-light"><i class="zmdi zmdi-star-circle zmdi-hc-fw"></i> <i class="zmdi zmdi-chevron-down NavLateral-CaretDown"></i> Reportes </a>
+                        <ul class="full-width">
+
+                            <li><a href="Administrador41.html" class="waves-effect waves-light">Grafica Ejemplo</a></li>
+                            <li class="NavLateralDivider"></li>                        
+
+                            <li><a href="Administrador44.html" class="waves-effect waves-light">Historial Topologías</a></li>
+                            <li class="NavLateralDivider"></li>
+
+                        </ul>
+                    </li>
+                    <li class="NavLateralDivider"></li>                   
+
+                </ul><br><br><br>
+
+            </div>  
+
+        </div>
+
+    </section>
+
+    <!-- Page content -->
+    <section class="ContentPage full-width">
+
+        <!-- Area de Campanita de Notificaciones -->
+        <div class="ContentPage-Nav full-width">
+            <ul class="full-width">
+
+                <li class="btn-MobileMenu ShowHideMenu"><a href="#" class="tooltipped waves-effect waves-light" data-position="bottom" data-delay="50" data-tooltip="Menu"><i class="zmdi zmdi-menu"></i></a></li>
+
+                <a href="#" class="hola">
+                <li style="margin-top: 10px; margin-right: 10px;"><figure><img src="img/usr2.png" alt="UserImage"></figure></li>
+                <li class="hola" style="padding:0 5px; margin-top: 10px;">Nombre de la persona</li>
+            	</a>             
+
+                <li style="margin-top: 10px; margin-right: 20px;"><a href="#" class="tooltipped waves-effect waves-light btn-ExitSystem" data-position="bottom" data-delay="50" data-tooltip="Cerrar Sesión"><i class="zmdi zmdi-power"></i></a></li>
+                                
+            </ul>   
+        </div>
+        <!-- Termina Area de Campanita -->
+
+        <div class="row">
+            <nav>
+                <div class="nav-wrapper grey darken-2">
+                    <div class="col s12" style="text-align: center;">
+                        <a href="Administrador1.html" class="rutaNavega">Gestón Administradores</a>
+                        <i class="zmdi zmdi-chevron-right rutaNavega" style="display: inline-block;"></i>
+                        <a href="Administrador1-2.html" class="rutaNavega">Buscar</a>
+                        <i class="zmdi zmdi-chevron-right rutaNavega" style="display: inline-block;"></i>
+                        <a href="#" class="rutaNavegaFinal">Modificar</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+<!-- CONTENIDO -->
+        <h2 class="center-align">Modificar Administrador</h2>
+        <div class="container" style="margin-bottom: 15%;">
+            <div class="row">
+                <form class="col s12" id="ModAdmin" name="ModAdmin" method="POST" action="#"><br>
+                    <div class="row">
+                        <div class="input-field col s8 offset-s2 m4">
+                            <i class="zmdi zmdi-account-circle prefix"></i>
+                            <input id="usur" name="usur" type="text" class="validate" length="64" maxlength="64" minlength="8" disabled value="UsuarioPrevio">
+                            <label for="usur">Usuario</label>
+                        </div>                              
+                        <div class="input-field col s8 offset-s2 m4">
+                            <i class="zmdi zmdi-lock-outline prefix"></i>
+                            <input id="pswd1" name="pswd1" type="password" class="validate" length="64" maxlength="64" minlength="8" required>
+                            <label for="pswd1">Nueva Contraseña</label>
+                        </div>
+                        <div class="input-field col s8 offset-s2 m4">
+                            <i class="zmdi zmdi-lock-outline prefix"></i>
+                            <input id="pswd2" name="pswd2" type="password" class="validate" length="64" maxlength="64" minlength="8" required>
+                            <label for="pswd2">Verificar Nueva Contraseña</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s8 offset-s2 m4">
+                            <i class="zmdi zmdi-account prefix"></i>
+                            <input id="nombre" name="nombre" type="text" class="validate" length="32" maxlength="32" minlength="3" required value="ValorPrevio">
+                            <label for="nombre">Nombre(s)</label>
+                        </div>                              
+                        <div class="input-field col s8 offset-s2 m4">
+                            <!-- <i class="zmdi zmdi-account-o prefix"></i> -->
+                            <input id="ape1" name="ape1" type="text" class="validate" length="32" maxlength="32" minlength="3" required value="ValorPrevio">
+                            <label for="ape1">Primer Apellido</label>
+                        </div>
+                        <div class="input-field col s8 offset-s2 m4">
+                            <input id="ape2" name="ape2" type="text" class="validate" length="32" maxlength="32" minlength="3" required value="ValorPrevio">
+                            <label for="ape2">Segundo Apellido</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s8 offset-s2 m6">
+                            <i class="zmdi zmdi-time prefix"></i>
+                            <input id="edad" name="edad" type="number" step="1" min="14" max="99" list="Edades" class="validate" length="2" maxlength="2" required value="18">
+                            <label for="edad">Edad</label>
+                        </div>
+                        <div class="input-field col s8 offset-s2 m6">
+                            <select class="icons" required>
+                                <option value="1" data-icon="img/01Fem.png" class="circle">Femenino</option>
+                                <option value="2" data-icon="img/02Mas.png" class="circle">Masculino</option>
+                                <option value="3" data-icon="img/03Otr.png" class="circle">Otro</option>
+                            </select>
+                            <label>Género</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s8 offset-s2 m12">
+                            <i class="zmdi zmdi-email prefix"></i>
+                            <input id="correo" name="correo" type="email" class="validate" length="128" maxlength="128" minlength="6" required disabled value="Correo@anterior.com">
+                            <label for="correo">Correo Electrónico</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-field col s5 offset-s4 m5 offset-m5">
+                            <button class="btn waves-effect waves-light" type="submit" name="enviar" id="enviar">Enviar&nbsp;&nbsp;<i class="zmdi zmdi-mail-send"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <datalist id="Edades">                       
+                    <option value="18">
+                    <option value="19">
+                    <option value="20">
+                    <option value="21">
+                </datalist>
+            </div>
+        </div><br><br>
+<!-- CONTENIDO -->        
+
+        <!-- Footer -->   
+        <footer class="footer-MaterialDark">
+            <div class="container">
+                <div class="row">
+                    <div class="col l6 s12">
+                        <h5 class="white-text">Pie de Pagina</h5>
+                        <p class="grey-text text-lighten-4">
+                            Informacion de Soporte Técnico
+                            <br>
+                            Para mejor soporte sobre los componentes CSS e iconos, por favor visite los sitios web oficiales de las tecnologias usadas
+                        </p>
+                    </div>
+                    <div class="col l4 offset-l2 s12">
+                        <h5 class="white-text">Tecnologia Utilizada</h5>
+                        <ul>
+                            <li><a class="grey-text text-lighten-3" href="http://materializecss.com/">Materialize</a></li>
+                            <li><a class="grey-text text-lighten-3" href="http://zavoloklom.github.io/material-design-iconic-font/icons.html">Material Design Iconic Font</a></li>
+                            <li><a class="grey-text text-lighten-3" href="http://t4t5.github.io/sweetalert/">Sweet Alert</a></li>
+                            <li><a class="grey-text text-lighten-3" href="http://manos.malihu.gr/jquery-custom-content-scroller/">jQuery custom content scroller</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="NavLateralDivider"></div>
+            <div class="footer-copyright">
+                <div class="container center-align">
+                    © La pandilla mantequilla , 2021
+                </div>
+            </div>
+        </footer>
+    </section>
+    
+    <!-- Sweet Alert JS -->
+    <script src="js/sweetalert.min1.js"></script>
+    
+    <!-- jQuery -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="js/jquery-2.2.0.min.js"><\/script>')</script>
+    
+    <!-- Materialize JS -->
+	<script src="js/materialize.min1.js"></script>
+    
+    <!-- Malihu jQuery custom content scroller JS -->
+	<script src="js/jquery.mCustomScrollbar.concat.min1.js"></script>
+    
+    <!-- MaterialDark JS -->
+	<script src="js/main1.js"></script>
+</body>
+</html>
