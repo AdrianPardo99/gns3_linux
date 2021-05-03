@@ -439,3 +439,9 @@ Como podemos ver a lado de la sentencia _privilege_ vemos un 15 el cual represen
 * _1_ El nivel predeterminado para iniciar sesión con el indicador del enrutador Router>. Un usuario no puede realizar ningún cambio ni ver el archivo de configuración en ejecución.
 * _2-14_ Puede personalizarse para privilegios de nivel de usuario. Los comandos de niveles inferiores se pueden mover a otro nivel superior, o los comandos de niveles superiores se pueden mover a un nivel inferior.
 * _15_ Reservado para los privilegios del modo de habilitación (comando de habilitación). Los usuarios pueden cambiar configuraciones y ver archivos de configuración.
+
+## Colaboradores
+
+[![Elias Muñoz Primero](https://avatars.githubusercontent.com/u/42790148?v=4&s=244)](https://github.com/elias160299)  | [![Nicolas Sanchez](https://avatars.githubusercontent.com/u/22784404?v=4&s=244)](https://github.com/NicolasSaG) | [![Adrian González Pardo](https://avatars.githubusercontent.com/u/33945793?v=4&s=244)](https://github.com/AdrianPardo99)
+---|---|---|
+[Elias Muñoz Primero](https://github.com/elias160299) |[Nicolas Sanchez](https://github.com/NicolasSaG) |[Adrian González Pardo](https://github.com/AdrianPardo99)
