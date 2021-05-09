@@ -206,20 +206,23 @@ def check_str_ip_in_arr_dict(arr,ip):
     @args:
         <dict> es el diccionario de routers para ver las interconexiones que hay entre ellos
 """
-def verifica_conectividad(dict,arr_resp):
+def verifica_conectividad(dict,arr_resp,dict_int):
     conexiones=[]
     for i,j in dict.items():
         for k,v in dict.items():
             if k!=i:
                 for a,b in v.items():
                     if b in j.values():
-                        ip_1=list(map(int,b.split(".")))
-                        ip_1[3]+=2
-                        ip_2=arr_to_ip(ip_1)
-                        ip_1[3]-=1
-                        ip_1=arr_to_ip(ip_1)
-                        if (f"{i}-{k}:{b}" not in conexiones) and (f"{k}-{i}:{b}" not in conexiones) and (check_str_ip_in_arr_dict(arr_resp,ip_1)) and (check_str_ip_in_arr_dict(arr_resp,ip_2)):
-                            conexiones.append(f"{i}-{k}:{b}")
+                        if (f"{i}-{k}:{b}" not in conexiones) and (f"{k}-{i}:{b}" not in conexiones):
+                            r1=a.split("-sub")[0]
+                            r2=""
+                            for c,d in j.items():
+                                if d==b:
+                                    r2=c.split("-sub")[0]
+                            ip_r1=dict_int[i][r2].split("/")[0]
+                            ip_r2=dict_int[k][r1].split("/")[0]
+                            if (check_str_ip_in_arr_dict(arr_resp,ip_r1) and check_str_ip_in_arr_dict(arr_resp,ip_r2)):
+                                conexiones.append(f"{i}-{k}:{b}")
     return conexiones
 
 def verifica_index(arr,patern):

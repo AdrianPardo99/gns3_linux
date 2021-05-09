@@ -132,7 +132,7 @@ def scan_by_interface(interface_name="tap0",user="admin",password="admin",secret
     json_respond=json.dumps(responde,sort_keys=True,indent=4)
     json_routers=json.dumps(net_router,sort_keys=True,indent=4)
     json_id=json.dumps(red_id,sort_keys=True,indent=4)
-    arr_conexiones=verifica_conectividad(red_id,responde)
+    arr_conexiones=verifica_conectividad(red_id,responde,net_router)
     print(f"Host con respuesta:\n{json_respond}\n"
         f"Diccionario de routers:\n{json_routers}\n"
         f"Identificadores de red de cada interfaz:\n{json_id}\n"
