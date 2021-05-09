@@ -229,3 +229,11 @@ def verifica_index(arr,patern):
             break
         c+=1
     return c
+
+def create_wildcard(net):
+    wildcard=[]
+    for i in range(4):
+        wildcard.append(net[i]-255)
+        if wildcard[i]<0:
+            wildcard[i]=-wildcard[i]
+    return wildcard
