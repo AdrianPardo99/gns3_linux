@@ -32,8 +32,6 @@ def init_configure(ip):
 	con.enable()
 	output=con.send_command_timing("show running-config | i hostname")
 	hostname=output.split()
-	if domain_name not in hostname[1]:
-		hostname[1]=f"{hostname[1]}.{domain_name}"
 	known_routers.append(hostname[1])
 	print(hostname[1]+":")
 	ospf(con)
@@ -47,9 +45,17 @@ def configure_router(router,hostname,con):
 	con.send_command_timing(password)
 	con.send_command_timing("ena")
 	con.send_command_timing(secret)
+	output=con.send_command_timing("show running-config | i hostname")
+	hostname=output.split()
+	if hostname[1] in known_routers:
+		con.send_command_timing('exit')
+		return None
+	print(hostname[1]+":")
+	known_routers.append(hostname[1])
 	ospf(con)
 	neighbors(router,con)
 	con.send_command_timing('exit')
+	return None
 
 def neighbors(hostname,con):
 	output = con.send_command_timing('show cdp neighbors')
@@ -58,8 +64,6 @@ def neighbors(hostname,con):
 	i = 35
 	while i < len(routers):
 		if routers[i] not in known_routers and ("R" in routers[i+4]):
-			print(routers[i]+":")
-			known_routers.append(routers[i])
 			configure_router(routers[i],hostname,con)
 		i = i + 8
 
