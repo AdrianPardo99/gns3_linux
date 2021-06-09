@@ -21,7 +21,7 @@ known_routers = []
     Llamar al modulo usando la ip y solo llamar a init_configure,
     modificar en cualquier caso el domain_name ya que si es recargar
     la topologia el cdp detecta el host con todo y domain_name
-
+    
     Funciona para el caso en que el acceso por ssh no entra en modo exec directo
     hay que configurar los routers para que accedan en modo normal y despues
     a modo exec
@@ -34,10 +34,10 @@ def init_configure(ip):
     hostname=output.split()
     known_routers.append(hostname[1])
     print(hostname[1]+":")
-    ospf(con)
+    eigrp(con)
     neighbors(con)
     con.disconnect()
-    
+
 def configure_router(router,con):
     output = con.send_command(f'show cdp entry {router}')
     resp = output.split()
@@ -52,7 +52,7 @@ def configure_router(router,con):
     	return None
     print(hostname[1]+":")
     known_routers.append(hostname[1])
-    ospf(con)
+    eigrp(con)
     neighbors(con)
     con.send_command_timing('exit',delay_factor=0.5)
     return None
@@ -74,28 +74,27 @@ def findNetworkID(ip,con):
     netmask=list(map(int,mask[3].split(".")))
     wildcard=create_wildcard(netmask)
     idnet=get_id_net(addr,netmask)
-    return [arr_to_ip(idnet),arr_to_ip(wildcard)]
+    return [arr_to_ip(idnet),arr_to_ip(wildcard),arr_to_ip(netmask)]
 
-def ospf(con):
+def eigrp(con):
     output=con.send_command_timing('show ip interface brief | i up',delay_factor=0.5)
     ip=output.split()
     ip_id = []
     wildcards=[]
+    netmasks=[]
     i = 1
     while i < len(ip):
-    	out=findNetworkID(ip[i],con)
-    	ip_id.append(out[0])
-    	wildcards.append(out[1])
-    	i = i + 6
+        out=findNetworkID(ip[i],con)
+        ip_id.append(out[0])
+        wildcards.append(out[1])
+        netmasks.append(out[2])
+        i = i + 6
     for i in range(len(ip_id)):
-    	print(f"\tID: {ip_id[i]} Wildcard: {wildcards[i]}")
-    ip_loop=f"220.0.0.{len(known_routers)} 255.255.255.255"
-    print(f"\tLoopback: {ip_loop}")
-    cmd=["conf t","int loop0",f"ip add {ip_loop}","no sh","exit",
-    	f"router ospf {len(known_routers)}"]
+        print(f"\tID: {ip_id[i]} Wildcard: {wildcards[i]} Netmask: {netmasks[i]}")
+    cmd=["conf t",f"router eigrp 20"]
     for i in range(len(ip_id)):
-    	cmd.append(f"net {ip_id[i]} {wildcards[i]} area 0")
-    cmd.append("ver 2")
+        cmd.append(f"net {ip_id[i]} {wildcards[i]}")
+        cmd.append(f"net {ip_id[i]} {netmasks[i]}")
     cmd.append("end")
     for i in cmd:
-    	out=con.send_command_timing(i,delay_factor=0.5)
+        out=con.send_command_timing(i,delay_factor=0.5)

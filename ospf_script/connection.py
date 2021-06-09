@@ -30,45 +30,45 @@ def init_configure(ip):
 	cisco['ip'] =ip
 	con=ConnectHandler(**cisco)
 	con.enable()
-	output=con.send_command_timing("show running-config | i hostname")
+	output=con.send_command_timing("sh run | i hostname",delay_factor=0.5)
 	hostname=output.split()
 	known_routers.append(hostname[1])
 	print(hostname[1]+":")
 	ospf(con)
-	neighbors(hostname[1],con)
+	neighbors(con)
 	con.disconnect()
 
-def configure_router(router,hostname,con):
+def configure_router(router,con):
 	output = con.send_command(f'show cdp entry {router}')
 	resp = output.split()
-	con.send_command_timing(f"ssh -l {user} {resp[8]}")
-	con.send_command_timing(password)
-	con.send_command_timing("ena")
-	con.send_command_timing(secret)
-	output=con.send_command_timing("show running-config | i hostname")
+	con.send_command_timing(f"ssh -l {user} {resp[8]}",delay_factor=0.5)
+	con.send_command_timing(password,delay_factor=0.5)
+	con.send_command_timing("ena",delay_factor=0.5)
+	con.send_command_timing(secret,delay_factor=0.5)
+	output=con.send_command_timing("sh run | i hostname",delay_factor=0.5)
 	hostname=output.split()
 	if hostname[1] in known_routers:
-		con.send_command_timing('exit')
+		con.send_command_timing('exit',delay_factor=0.5)
 		return None
 	print(hostname[1]+":")
 	known_routers.append(hostname[1])
 	ospf(con)
-	neighbors(router,con)
-	con.send_command_timing('exit')
+	neighbors(con)
+	con.send_command_timing('exit',delay_factor=0.5)
 	return None
 
-def neighbors(hostname,con):
-	output = con.send_command_timing('show cdp neighbors')
+def neighbors(con):
+	output = con.send_command_timing('show cdp neighbors',delay_factor=0.5)
 	routers = output.split()
 	routers.pop()
 	i = 35
 	while i < len(routers):
-		if routers[i] not in known_routers and ("R" in routers[i+4]):
-			configure_router(routers[i],hostname,con)
+		if ("R" in routers[i+4]):
+			configure_router(routers[i],con)
 		i = i + 8
 
 def findNetworkID(ip,con):
-	output = con.send_command_timing(f'show running-config | i {ip}')
+	output = con.send_command_timing(f'show running-config | i {ip}',delay_factor=0.5)
 	mask = output.split()
 	addr=list(map(int,mask[2].split(".")))
 	netmask=list(map(int,mask[3].split(".")))
@@ -77,7 +77,7 @@ def findNetworkID(ip,con):
 	return [arr_to_ip(idnet),arr_to_ip(wildcard)]
 
 def ospf(con):
-	output=con.send_command_timing('show ip interface brief | i up')
+	output=con.send_command_timing('show ip interface brief | i up',delay_factor=0.5)
 	ip=output.split()
 	ip_id = []
 	wildcards=[]
@@ -98,4 +98,5 @@ def ospf(con):
 	cmd.append("ver 2")
 	cmd.append("end")
 	for i in cmd:
-		out=con.send_command_timing(i)
+		out=con.send_command_timing(i,delay_factor=0.5)
+init_configure("10.0.1.254")

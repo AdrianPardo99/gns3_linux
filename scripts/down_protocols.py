@@ -34,10 +34,19 @@ def init_configure(ip):
     hostname=output.split()
     known_routers.append(hostname[1])
     print(hostname[1]+":")
-    ospf(con)
+    output=con.send_command_timing("sh ip ospf",delay_factor=0.5)
+    if output!="":
+        num_ospf=output.split("ospf ")[1].split("\" ")[0]
+        cmd=["","conf t","no int loop0",f"no router ospf {num_ospf}","end"]
+        for i in cmd:
+            con.send_command_timing(i,delay_factor=0.5)
+    cmd=["conf t","no router rip","no router eigrp 20","end"]
+    for i in cmd:
+        con.send_command_timing(i,delay_factor=0.5)
+    print("\tDown all dynamic routing protocols")
     neighbors(con)
     con.disconnect()
-    
+
 def configure_router(router,con):
     output = con.send_command(f'show cdp entry {router}')
     resp = output.split()
@@ -48,11 +57,21 @@ def configure_router(router,con):
     output=con.send_command_timing("sh run | i hostname",delay_factor=0.5)
     hostname=output.split()
     if hostname[1] in known_routers:
-    	con.send_command_timing('exit',delay_factor=0.5)
-    	return None
+        con.send_command_timing('exit',delay_factor=0.5)
+        return None
     print(hostname[1]+":")
     known_routers.append(hostname[1])
-    ospf(con)
+    output=con.send_command_timing("sh ip ospf",delay_factor=0.5)
+    output=output.split("\n")[0]
+    if output!="":
+        num_ospf=output.split("ospf ")[1].split("\" ")[0]
+        cmd=["","conf t","no int loop0",f"no router ospf {num_ospf}","end"]
+        for i in cmd:
+            con.send_command_timing(i,delay_factor=0.5)
+    cmd=["conf t","no router rip","no router eigrp 20","end"]
+    for i in cmd:
+        con.send_command_timing(i,delay_factor=0.5)
+    print("\tDown all dynamic routing protocols")
     neighbors(con)
     con.send_command_timing('exit',delay_factor=0.5)
     return None
@@ -66,36 +85,3 @@ def neighbors(con):
     	if ("R" in routers[i+4]):
     		configure_router(routers[i],con)
     	i = i + 8
-
-def findNetworkID(ip,con):
-    output = con.send_command_timing(f'show running-config | i {ip}',delay_factor=0.5)
-    mask = output.split()
-    addr=list(map(int,mask[2].split(".")))
-    netmask=list(map(int,mask[3].split(".")))
-    wildcard=create_wildcard(netmask)
-    idnet=get_id_net(addr,netmask)
-    return [arr_to_ip(idnet),arr_to_ip(wildcard)]
-
-def ospf(con):
-    output=con.send_command_timing('show ip interface brief | i up',delay_factor=0.5)
-    ip=output.split()
-    ip_id = []
-    wildcards=[]
-    i = 1
-    while i < len(ip):
-    	out=findNetworkID(ip[i],con)
-    	ip_id.append(out[0])
-    	wildcards.append(out[1])
-    	i = i + 6
-    for i in range(len(ip_id)):
-    	print(f"\tID: {ip_id[i]} Wildcard: {wildcards[i]}")
-    ip_loop=f"220.0.0.{len(known_routers)} 255.255.255.255"
-    print(f"\tLoopback: {ip_loop}")
-    cmd=["conf t","int loop0",f"ip add {ip_loop}","no sh","exit",
-    	f"router ospf {len(known_routers)}"]
-    for i in range(len(ip_id)):
-    	cmd.append(f"net {ip_id[i]} {wildcards[i]} area 0")
-    cmd.append("ver 2")
-    cmd.append("end")
-    for i in cmd:
-    	out=con.send_command_timing(i,delay_factor=0.5)

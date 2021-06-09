@@ -34,10 +34,10 @@ def init_configure(ip):
     hostname=output.split()
     known_routers.append(hostname[1])
     print(hostname[1]+":")
-    ospf(con)
+    rip(con)
     neighbors(con)
     con.disconnect()
-    
+
 def configure_router(router,con):
     output = con.send_command(f'show cdp entry {router}')
     resp = output.split()
@@ -52,7 +52,7 @@ def configure_router(router,con):
     	return None
     print(hostname[1]+":")
     known_routers.append(hostname[1])
-    ospf(con)
+    rip(con)
     neighbors(con)
     con.send_command_timing('exit',delay_factor=0.5)
     return None
@@ -72,30 +72,24 @@ def findNetworkID(ip,con):
     mask = output.split()
     addr=list(map(int,mask[2].split(".")))
     netmask=list(map(int,mask[3].split(".")))
-    wildcard=create_wildcard(netmask)
     idnet=get_id_net(addr,netmask)
-    return [arr_to_ip(idnet),arr_to_ip(wildcard)]
+    return [arr_to_ip(idnet)]
 
-def ospf(con):
+def rip(con):
     output=con.send_command_timing('show ip interface brief | i up',delay_factor=0.5)
     ip=output.split()
     ip_id = []
-    wildcards=[]
     i = 1
     while i < len(ip):
     	out=findNetworkID(ip[i],con)
     	ip_id.append(out[0])
-    	wildcards.append(out[1])
     	i = i + 6
     for i in range(len(ip_id)):
-    	print(f"\tID: {ip_id[i]} Wildcard: {wildcards[i]}")
-    ip_loop=f"220.0.0.{len(known_routers)} 255.255.255.255"
-    print(f"\tLoopback: {ip_loop}")
-    cmd=["conf t","int loop0",f"ip add {ip_loop}","no sh","exit",
-    	f"router ospf {len(known_routers)}"]
+    	print(f"\tID: {ip_id[i]}")
+    cmd=["conf t","router rip"]
     for i in range(len(ip_id)):
-    	cmd.append(f"net {ip_id[i]} {wildcards[i]} area 0")
+    	cmd.append(f"net {ip_id[i]}")
     cmd.append("ver 2")
     cmd.append("end")
     for i in cmd:
-    	out=con.send_command_timing(i,delay_factor=0.5)
+        out=con.send_command_timing(i,delay_factor=0.5)

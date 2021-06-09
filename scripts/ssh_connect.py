@@ -32,5 +32,5 @@ def conectar_bridge(cisco,cmd):
     net_connect.enable()
     output=[]
     for i in range(len(cmd)):
-        output.append(net_connect.send_command_timing(cmd[i]))
+        output.append(net_connect.send_command_timing(cmd[i],delay_factor=0.5))
     return output
