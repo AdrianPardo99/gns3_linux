@@ -1,0 +1,31 @@
+{% extends "base_template.html" %}
+{% block title %}Nueva vlan{% endblock %}
+{% block menu %}
+    <a href="{{url_for('nueva_vlan')}}">nueva vlan</a><br/>
+    <a href="{{url_for('ver_vlans')}}">ver vlans</a><br/>
+    <a href="{{url_for('eliminar_vlan')}}">eliminar vlan</a><br/>
+{% endblock %}
+{% block content %}
+    
+    <form action="{{url_for('nueva_vlan')}}" method="post">
+        <label for="numero">numero: </label>
+        <input type="text" id="numero" name="numero" /><br>
+
+        <label for="nombre">nombre: </label>
+        <input type="text" id="nombre" name="nombre" /><br>
+
+        <label for="id_subred">identificador de subred: </label>
+        <input type="text" id="id_subred" name="id_subred" /><br>
+        
+        <label for="mascara_subred">mascara de subred: </label>
+        <input type="text" id="mascara_subred" name="mascara_subred" /><br>
+        
+        <label for="interfaces">interfaces: </label>
+        <input type="text" id="interfaces" name="interfaces" /><br>
+
+        <input type="submit" id="create-vlan" name="createvlan" value="Crear vlan" />
+    </form>
+    {% for message in get_flashed_messages() %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endblock %}

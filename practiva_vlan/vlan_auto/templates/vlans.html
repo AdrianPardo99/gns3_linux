@@ -1,0 +1,13 @@
+{% extends "base_template.html" %}
+{% block title %}vlans registradas{% endblock %}
+{% block menu %}
+    <a href="{{url_for('nueva_vlan')}}">nueva vlan</a><br/>
+    <a href="{{url_for('ver_vlans')}}">ver vlans</a><br/>
+    <a href="{{url_for('eliminar_vlan')}}">eliminar vlan</a><br/>
+{% endblock %}
+{% block content %}
+
+    {% for vlan in value %}
+        <p>{{ vlan }}</p>
+    {% endfor %}
+{% endblock %}

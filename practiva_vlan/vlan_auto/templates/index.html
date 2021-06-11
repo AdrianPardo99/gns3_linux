@@ -1,0 +1,11 @@
+{% extends "base_template.html" %}
+{% block title %}Inicio{% endblock %}
+{% block menu %}
+    <a href="{{url_for('nueva_vlan')}}">nueva vlan</a><br/>
+    <a href="{{url_for('ver_vlans')}}">ver vlans</a><br/>
+    <a href="{{url_for('eliminar_vlan')}}">eliminar vlan</a><br/>
+{% endblock %}
+{% block content %}
+    <h1>VLAN y etherchannel</h1>
+    
+{% endblock %}
