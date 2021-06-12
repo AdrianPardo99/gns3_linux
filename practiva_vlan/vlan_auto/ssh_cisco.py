@@ -1,8 +1,8 @@
 from netmiko import ConnectHandler
 from cisco_operaciones import *
-import time
+import time, re
 
-switches = ['192.168.1.11', '10.10.1.12', '192.168.1.13']
+switches = ['192.168.1.11', '192.168.1.12', '192.168.1.13']
 router = '192.168.1.1'
 
 def conectarse_ssh(ip, username, pwd):
@@ -103,7 +103,7 @@ def crear_vlan(numero, nombre, id_subred, masc_subred, interfaces):
     if conn != None:
         print("COnfigurando subinterface...")
         configurar_subinterface(conn, numero, id_subred, masc_subred)
-
+        desconectarse_ssh(conn)
     print("vlan agregada exitosamente")
 
 def cambiar_interfaces(conn, interfaces, vlan):
@@ -126,17 +126,79 @@ def configurar_subinterface(conn, vlan, subred, mascara):
     ejecutarComando_config(conn, comandos)
 
 
+#para eliminar realmente la subinterface se tiene que hacer un reboot al router
 def eliminar_vlan(numero):
     print("eliminando vlan...")
     conn = conectarse_ssh(switches[0], 'admin', 'admin')
     if conn != None:
         print("conexion al switch server exitosa...")
-        res = ejecutar_comando(conn, "sh vlan-s")
-        print(res)
+        
+        res = ejecutar_comando(conn, "sh running-config | section Vlan{}".format(numero))
+        res = re.sub(' +', ' ', res)
+        res = re.sub('\n ', '\n', res).split('\n')
+        
+        gateway = None
+        masc = None
+        while len(res) != 3:
+            if len(res) == 1:
+                print("no existe la vlan")
+                desconectarse_ssh(conn)
+                return
+
+            res = ejecutar_comando(conn, "sh running-config | section Vlan{}".format(numero))
+            res = re.sub(' +', ' ', res)
+            res = re.sub('\n ', '\n', res).split('\n')
+
+        gateway = res[2].split(' ')[2]
+        masc = res[2].split(' ')[3]
+        print("gateway de vlan |{}|{}|".format(gateway, masc))
+        
+        desconectarse_ssh(conn)
+        #eliminar subinterface router
+        conn = conectarse_ssh(router, 'admin', 'admin')
+        if conn != None:
+            print("Eliminando subinterfaz de vlan en el router...")
+            comandos = ["no int fa 0/0.{}".format(numero)]
+            ejecutarComando_config(conn, comandos)
+            print("subinterface fa 0/0.{} eliminada".format(numero))
+            desconectarse_ssh(conn)
+
+        for switch in switches:
+            print("switch {}: quitando interfaces relacionadas a la vlan...".format(switch))
+            conn = conectarse_ssh(switch, 'admin', 'admin')
+            #obtener interfaces asociadas a la vlan en el switch
+            ifaces = ejecutar_comando(conn, 'sh vlan-s id {} | s active'.format(numero))
+            ifaces = re.sub(' +', ' ', ifaces)
+            ifaces = re.sub(',', '', ifaces).split(' ')
+
+            #print("ifaces: |{}| {}".format(ifaces, len(ifaces)))
+            ifaces2rm = [] 
+            for i in range(3, len(ifaces)):
+                if "Fa" in ifaces[i]:
+                    ifaces2rm.append(ifaces[i])
+            print(ifaces2rm)
+            if len(ifaces2rm) > 0:
+                if switch == switches[0]:
+                    #pasar interfaces de vlan n a la vlan 1 (default)
+                    comandos = ['int vlan {}'.format(numero), "no ip add {} {}".format(gateway, masc), 'exit', 'no int vlan {}'.format(numero)]
+                    ejecutarComando_config(conn, comandos)
+                #pasar interfaces de vlan # a la vlan 1 (default)
+                for iface in ifaces2rm:
+                        comandos = ['int {}'.format(iface), "switchport access vlan 1"]
+                        ejecutarComando_config(conn, comandos)
+
+                if switch == switches[0]:
+                    #Eliminar vlan de database
+                    comandos = ['vlan database', 'no vlan {}'.format(numero), 'apply', 'exit', 'wr']
+                    for comando in comandos:
+                        res = ejecutar_comando(conn, comando)
+                        print(res)
+            desconectarse_ssh(conn)
+
         # comandos = ['vlan database', 'vlan {} name {}'.format(numero, nombre), 'apply', 'exit' ]
         # for comando in comandos:
         #     res = ejecutar_comando(conn, comando)
         #     print(res)
-        desconectarse_ssh(conn)
+        #desconectarse_ssh(conn)
     else:
         print("error al eliminar vlan")
