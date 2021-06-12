@@ -20,9 +20,29 @@
         <label for="mascara_subred">mascara de subred: </label>
         <input type="text" id="mascara_subred" name="mascara_subred" /><br>
         
-        <label for="interfaces">interfaces: </label>
-        <input type="text" id="interfaces" name="interfaces" /><br>
-
+        <label>interfaces Switch1: </label><br/>
+        {%for i in range(4, 15)%}
+        <label for="1f0/{{i}}" >0f/{{i}}</label>
+        <input type="checkbox" id="1f0/{{i}}" value="0/{{i}}" name="sw1" />
+        {% endfor %}
+        <br/><br/>
+        <label>interfaces Switch2: </label><br/>
+        {%for i in range(8, 15)%}
+        <label for="2f0/{{i}}" >0f/{{i}}</label>
+        <input type="checkbox" id="2f0/{{i}}" value="0/{{i}}" name="sw2" />
+        {% endfor %}
+        <br/><br/>
+        <label>interfaces Switch3: </label><br/>
+        {%for i in range(0, 3)%}
+        <label for="3f0/{{i}}" >0f/{{i}}</label>
+        <input type="checkbox" id="3f0/{{i}}" value="0/{{i}}" name="sw3" />
+        {% endfor %}
+        {%for i in range(8, 15)%}
+        <label for="3f0/{{i}}" >0f/{{i}}</label>
+        <input type="checkbox" id="3f0/{{i}}" value="0/{{i}}" name="sw3" />
+        {% endfor %}
+        
+        <br/><br/>
         <input type="submit" id="create-vlan" name="createvlan" value="Crear vlan" />
     </form>
     {% for message in get_flashed_messages() %}

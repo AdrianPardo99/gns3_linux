@@ -1,4 +1,5 @@
 from netmiko import ConnectHandler
+from cisco_operaciones import *
 import time
 
 switches = ['192.168.1.11', '10.10.1.12', '192.168.1.13']
@@ -16,7 +17,7 @@ def conectarse_ssh(ip, username, pwd):
         conn_session.enable()
         return conn_session
     except Exception as e:
-        print("error al conectarse viassh a ", ip)
+        print("error al conectarse via ssh a ", ip)
     return None
 
 def desconectarse_ssh(conn):
@@ -64,13 +65,66 @@ def crear_vlan(numero, nombre, id_subred, masc_subred, interfaces):
     if conn != None:
         print("conexion al switch server exitosa...")
         comandos = ['vlan database', 'vlan {} name {}'.format(numero, nombre), 'apply', 'exit' ]
+        #crear vlans
         for comando in comandos:
             print("ejecutando {} ...".format(comando))
             res = ejecutar_comando(conn, comando)
             print(res)
+        
+        #asignar gateway a las vlans
+        asignar_gateway(conn, numero, id_subred, masc_subred)
+
+        #revisar se se tiene que cambiar alguna interfaz de sw1
+        if len(interfaces[0]) > 0:
+            print("cambiar al menos 1 fa de sw1")
+            cambiar_interfaces(conn, interfaces[0], numero)
         desconectarse_ssh(conn)
+    
     else:
         print("error al crear vlan")
+    #conexion al sw2
+    if len(interfaces[1]) > 0:
+        conn = conectarse_ssh(switches[1], 'admin', 'admin')
+        if conn != None:
+            print("conexion al switch client exitosa...")
+            cambiar_interfaces(conn, interfaces[1], numero)
+            desconectarse_ssh(conn)
+
+    #conexion al sw3
+    if len(interfaces[2]) > 0:
+        conn = conectarse_ssh(switches[2], 'admin', 'admin')
+        if conn != None:
+            print("conexion al switch client exitosa...")
+            cambiar_interfaces(conn, interfaces[2], numero)
+            desconectarse_ssh(conn)
+    
+    #configurar subinterfaz de la vlan
+    conn = conectarse_ssh(router, 'admin', 'admin')
+    if conn != None:
+        print("COnfigurando subinterface...")
+        configurar_subinterface(conn, numero, id_subred, masc_subred)
+
+    print("vlan agregada exitosamente")
+
+def cambiar_interfaces(conn, interfaces, vlan):
+    print("cambio")
+    for interfaz in interfaces:
+        comandos = ['interface fa {}'.format(interfaz), 'switchport access vlan {}'.format(vlan)]
+        ejecutarComando_config(conn, comandos)
+        print("interfaz {} agregada a vlan {}".format(interfaz, vlan))
+
+def asignar_gateway(conn, vlan, subred, mascara):
+    net = ipaddress.ip_network("{}/{}".format(subred, mascara))
+    comandos = ['interface vlan {}'.format(vlan), 'ip add {} {}'.format(list(net.hosts())[0], str(net.netmask))]
+    #print(comandos)
+    ejecutarComando_config(conn, comandos)
+
+def configurar_subinterface(conn, vlan, subred, mascara):
+    net = ipaddress.ip_network("{}/{}".format(subred, mascara))
+    comandos = ['interface fa 0/0.{}'.format(vlan), 'encapsulation dot1Q {}'.format(vlan),'ip add {} {}'.format(list(net.hosts())[0], str(net.netmask)), 'no shut']
+    #print(comandos)
+    ejecutarComando_config(conn, comandos)
+
 
 def eliminar_vlan(numero):
     print("eliminando vlan...")

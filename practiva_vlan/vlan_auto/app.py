@@ -41,7 +41,31 @@ def nueva_vlan():
             nombre = request.form['nombre']
             id_subred = request.form['id_subred']
             mascara_subred = request.form['mascara_subred']
-            interfaces = request.form['interfaces']
+            interfaces =[] 
+            for i in range(1,4):
+                key = 'sw{}'.format(i)
+                interfaces.append(request.form.getlist(key))
+
+            print(interfaces)
+            #interfaces de sw1
+            #interfaces = []
+            #for i in range(4,15):
+            #    key = '1f0/{}'.format(i)
+            #    if request.form[key] != None:
+            #        interfaces.append([1, "0/{}".format(i)])
+            #for i in range(8,15):
+            #    key = '2f0/{}'.format(i)
+            #    if request.form[key] != None:
+            #        interfaces.append([2, "0/{}".format(i)])
+            #for i in range(0,3):
+            #    key = '3f0/{}'.format(i)
+            #    if request.form[key] != None:
+            #        interfaces.append([3, "0/{}".format(i)])
+            #for i in range(8,15):
+            #    key = '3f0/{}'.format(i)
+            #    if request.form[key] != None:
+            #        interfaces.append([3, "0/{}".format(i)])
+            #print(interfaces)
             try:
 
                 #crear_vlan(numero, nombre, id_subred, mascara_subred, interfaces)
