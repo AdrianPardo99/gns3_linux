@@ -1,6 +1,8 @@
 from netmiko import ConnectHandler
 from cisco_operaciones import *
-import time, re
+from Vlan import *
+import time, re, ipcalc
+
 
 switches = ['192.168.1.11', '192.168.1.12', '192.168.1.13']
 router = '192.168.1.1'
@@ -126,6 +128,80 @@ def configurar_subinterface(conn, vlan, subred, mascara):
     ejecutarComando_config(conn, comandos)
 
 
+def ver_vlans():
+    #print("Buscando todas las vlan...")
+    conn = conectarse_ssh(switches[0], 'admin', 'admin')
+    vlans = []
+    if conn != None:
+        res = ejecutar_comando(conn, "sh running-config | section Vlan")
+        #desconectarse_ssh(conn)
+        res = re.sub(' +', ' ', res)
+        res = re.sub('\n ', '\n', res).split('\n')
+        i = 0
+        res.remove('')
+        numero = -1
+        gateway = -1
+        masc = -1
+        for fila in res:
+            if i % 2 == 0:
+                #print("vlan id |{}|".format(re.sub('interface Vlan','', fila)))
+                numero = re.sub('interface Vlan','', fila)
+            else:
+                gateway = fila.split(' ')[2]
+                masc = fila.split(' ')[3]
+                #print("gw: |{}| masc |{}|".format(gateway, masc))
+                id_subred = obtener_subred(gateway, masc)
+                #print("id subred: |{}|".format(id_subred))
+                vlans.append(Vlan(numero, None, id_subred, masc, gateway))
+            i += 1
+        
+        #obtener nombre de la vlan
+        for vlan in vlans:
+            nombre = ejecutar_comando(conn, 'sh vlan-s id {} | s active'.format(vlan.numero))
+            nombre = re.sub(' +', ' ', nombre)
+            nombre = re.sub(',', '', nombre).split(' ')
+            #print(nombre[1])
+            vlan.nombre = nombre[1]
+        #for vlan in vlans:
+        #    print(vlan)
+        desconectarse_ssh(conn)
+        #obtener interfaces asociadas a cada vlani
+        count_switch = 0
+        for switch in switches:
+            print('obteniendo interfaces de cada vlan...')
+            print("switch {}: obteniendo interfaces por vlan...".format(switch))
+            conn = conectarse_ssh(switch, 'admin', 'admin')
+            #obtener interfaces asociadas a cada vlan en el switch
+            for vlan in vlans:
+                ifaces = ejecutar_comando(conn, 'sh vlan-s id {} | s active'.format(vlan.numero))
+                ifaces = re.sub(' +', ' ', ifaces)
+                ifaces = re.sub(',', '', ifaces).split(' ')
+                ifaces2vlan = []
+                for i in range(3, len(ifaces)):
+                    if "Fa" in ifaces[i]:
+                        ifaces2vlan.append(ifaces[i])
+                #print("INTERFACES DE VLAN {}: {}".format(vlan.numero, ifaces2vlan))
+                vlan.ifaces[count_switch] = ifaces2vlan
+                #for ifa in ifaces2vlan:
+                    #print("agregando la {} del switch{} a la vlan {}".format(ifa, count_switch+1, vlan.numero))
+                    #vlan.ifaces[count_switch].append(ifa)
+                #print(vlan.ifaces)
+                #print(vlan)
+            count_switch += 1
+            desconectarse_ssh(conn)
+        for vlan in vlans:
+            print(vlan)
+            vlan.arr2str()
+            print(vlan.ifaces_str)
+    return vlans
+
+
+def obtener_subred(ip_address, masc):
+    addr = ipcalc.IP(ip_address, mask = '{}'.format(masc))
+    net_with_cidr = str(addr.guess_network())
+    return net_with_cidr.split('/')[0]
+
+
 #para eliminar realmente la subinterface se tiene que hacer un reboot al router
 def eliminar_vlan(numero):
     print("eliminando vlan...")
@@ -194,11 +270,5 @@ def eliminar_vlan(numero):
                         res = ejecutar_comando(conn, comando)
                         print(res)
             desconectarse_ssh(conn)
-
-        # comandos = ['vlan database', 'vlan {} name {}'.format(numero, nombre), 'apply', 'exit' ]
-        # for comando in comandos:
-        #     res = ejecutar_comando(conn, comando)
-        #     print(res)
-        #desconectarse_ssh(conn)
     else:
         print("error al eliminar vlan")
