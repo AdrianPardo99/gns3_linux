@@ -2,6 +2,7 @@ from flask import Flask
 from flask import request, render_template, url_for, redirect, flash, session
 from ssh_cisco import *
 from cisco_operaciones import *
+from Vlan import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = '128381230985812'    
@@ -47,28 +48,8 @@ def nueva_vlan():
                 interfaces.append(request.form.getlist(key))
 
             print(interfaces)
-            #interfaces de sw1
-            #interfaces = []
-            #for i in range(4,15):
-            #    key = '1f0/{}'.format(i)
-            #    if request.form[key] != None:
-            #        interfaces.append([1, "0/{}".format(i)])
-            #for i in range(8,15):
-            #    key = '2f0/{}'.format(i)
-            #    if request.form[key] != None:
-            #        interfaces.append([2, "0/{}".format(i)])
-            #for i in range(0,3):
-            #    key = '3f0/{}'.format(i)
-            #    if request.form[key] != None:
-            #        interfaces.append([3, "0/{}".format(i)])
-            #for i in range(8,15):
-            #    key = '3f0/{}'.format(i)
-            #    if request.form[key] != None:
-            #        interfaces.append([3, "0/{}".format(i)])
-            #print(interfaces)
             try:
-
-                #crear_vlan(numero, nombre, id_subred, mascara_subred, interfaces)
+                crear_vlan(numero, nombre, id_subred, mascara_subred, interfaces)
                 #guardar en bd
                 flash('vlan creada')
             except Exception as e:
@@ -83,7 +64,7 @@ def eliminar_vlan():
         if request.method == 'POST':
             numero = request.form['numero']
             try:
-                #eliminar_vlan_topologia(numero, nombre, id_subred, mascara_subred, interfaces)
+                eliminar_vlant(numero)
                 #eliminar en bd
                 flash('vlan eliminada')
             except Exception as e:
@@ -95,7 +76,7 @@ def eliminar_vlan():
 @app.route("/vlans", methods = ['GET'])
 def ver_vlans():
     #conectarse a la bd y obtener todas las vlans
-    datos = ["vlan1", "vlan2", "vlan3"]
+    datos = ver_vlanst()
     global ssh_username
     if ssh_username != '':
         return render_template("vlans.html", value=datos)

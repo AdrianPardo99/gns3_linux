@@ -21,7 +21,7 @@
         <input type="text" id="mascara_subred" name="mascara_subred" /><br>
         
         <label>interfaces Switch1: </label><br/>
-        {%for i in range(4, 15)%}
+        {%for i in range(4, 14)%}
         <label for="1f0/{{i}}" >0f/{{i}}</label>
         <input type="checkbox" id="1f0/{{i}}" value="0/{{i}}" name="sw1" />
         {% endfor %}
@@ -37,7 +37,7 @@
         <label for="3f0/{{i}}" >0f/{{i}}</label>
         <input type="checkbox" id="3f0/{{i}}" value="0/{{i}}" name="sw3" />
         {% endfor %}
-        {%for i in range(8, 15)%}
+        {%for i in range(8, 14)%}
         <label for="3f0/{{i}}" >0f/{{i}}</label>
         <input type="checkbox" id="3f0/{{i}}" value="0/{{i}}" name="sw3" />
         {% endfor %}
