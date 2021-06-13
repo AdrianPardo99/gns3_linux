@@ -14,6 +14,6 @@ m = '255.255.255.0'
 
 
 #crear_vlan(40, 'vlan-prueba', '192.168.40.0', '255.255.255.0', interfaces)
-ver_vlans()
+#ver_vlanst()
 
-#eliminar_vlan(40)
+eliminar_vlant(40)

@@ -128,7 +128,7 @@ def configurar_subinterface(conn, vlan, subred, mascara):
     ejecutarComando_config(conn, comandos)
 
 
-def ver_vlans():
+def ver_vlanst():
     #print("Buscando todas las vlan...")
     conn = conectarse_ssh(switches[0], 'admin', 'admin')
     vlans = []
@@ -203,7 +203,7 @@ def obtener_subred(ip_address, masc):
 
 
 #para eliminar realmente la subinterface se tiene que hacer un reboot al router
-def eliminar_vlan(numero):
+def eliminar_vlant(numero):
     print("eliminando vlan...")
     conn = conectarse_ssh(switches[0], 'admin', 'admin')
     if conn != None:
