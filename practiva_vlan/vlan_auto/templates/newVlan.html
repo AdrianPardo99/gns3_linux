@@ -25,9 +25,12 @@
         <label for="1f0/{{i}}" >0f/{{i}}</label>
         <input type="checkbox" id="1f0/{{i}}" value="0/{{i}}" name="sw1" />
         {% endfor %}
+        <label for="1f0/15" >0f/15</label>
+        <input type="checkbox" id="1f0/15" value="0/15" name="sw1" />
+
         <br/><br/>
         <label>interfaces Switch2: </label><br/>
-        {%for i in range(8, 15)%}
+        {%for i in range(8, 16)%}
         <label for="2f0/{{i}}" >0f/{{i}}</label>
         <input type="checkbox" id="2f0/{{i}}" value="0/{{i}}" name="sw2" />
         {% endfor %}
@@ -41,7 +44,9 @@
         <label for="3f0/{{i}}" >0f/{{i}}</label>
         <input type="checkbox" id="3f0/{{i}}" value="0/{{i}}" name="sw3" />
         {% endfor %}
-        
+        <label for="3f0/15" >0f/15</label>
+        <input type="checkbox" id="3f0/15" value="0/15" name="sw3" />
+
         <br/><br/>
         <input type="submit" id="create-vlan" name="createvlan" value="Crear vlan" />
     </form>
