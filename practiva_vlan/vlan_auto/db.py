@@ -88,6 +88,8 @@ def elimina_vlan(conexion,num):
 		print("Error al eliminar Vlan - VLAN NO EXISTENTE")		
 
 
+
+
 # --------------- Testing area ---------------
 
 # Crear BD
