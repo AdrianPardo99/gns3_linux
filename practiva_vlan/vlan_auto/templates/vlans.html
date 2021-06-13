@@ -19,14 +19,9 @@
         </tr>
         {% for vlan in value %}
             <tr>
-                <td>{{vlan.numero}}</td>
-                <td>{{vlan.nombre}}</td>
-                <td>{{vlan.id_subred}}</td>
-                <td>{{vlan.masc_subred}}</td>
-                <td>{{vlan.default_gw}}</td>
-                <td>{{vlan.ifaces_str[0]}}</td>
-                <td>{{vlan.ifaces_str[1]}}</td>
-                <td>{{vlan.ifaces_str[2]}}</td>
+                {% for elemento in vlan %}
+                <td>{{elemento}}</td>
+                {% endfor%}
             </tr>
         {% endfor %}
     </table>

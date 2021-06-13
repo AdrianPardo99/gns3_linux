@@ -40,7 +40,7 @@ def crea_vlan(conexion,num,nom,id_sub,ms_sub,d_gate,list_interfaces=None):
 	cursor_tb = conexion.cursor()
 	valida = valida_vlan(conexion,num)
 	if valida == 1:
-	 	print("Error al crear Vlan {} -  VLAN EXISTENTE".format(num))
+	 	print("Error al crear Vlan {} -  VLAN EXISTENTE".format(num))	 	
 	else:
 		list_data = list()		 
 		SW1 = ' '.join(list_interfaces[0])
@@ -72,7 +72,7 @@ def consulta_vlan_especial(conexion,num):
 		sentencia = "select * from vlans where numero=?"
 		resultado = cursor_tb.execute(sentencia,(num,))	
 	else:
-		print("Error al consultar Vlan - VLAN NO EXISTENTE")
+		print("Error al consultar Vlan {} -  VLAN NO EXISTENTE".format(num))
 		resultado = None
 	return resultado
 
@@ -85,51 +85,55 @@ def elimina_vlan(conexion,num):
 		conexion.commit()
 		print("Vlan {} eliminada exitosamente".format(num))
 	else:
-		print("Error al eliminar Vlan - VLAN NO EXISTENTE")		
+		print("Error al eliminar Vlan {} -  VLAN NO EXISTENTE".format(num))		
 
 
 
 
 # --------------- Testing area ---------------
+# # Crear BD
+# conexion = create_db("Vlans.db")
+# create_tb(conexion)
 
-# Crear BD
-conexion = create_db("Vlans.db")
-create_tb(conexion)
+# # Crea Vlan
+# print("\t > Respuestas al crear VLANS < \n")
+# interfaces = [['0/4', '0/5'], [], ['0/2', '0/8']]
+# crea_vlan(conexion,1, 'vlan-1', '192.168.10.0', '255.255.255.0', '192.168.1.1' , interfaces)
+# interfaces = [['0/4', '0/5'], ['0/2'], ['0/2', '0/8']]
+# crea_vlan(conexion,2, 'vlan-2', '192.168.20.0', '255.255.255.0', '192.168.1.1' , interfaces)
+# interfaces = [['0/4', '0/5'], ['0/2','0/7'], ['0/2', '0/8']]
+# crea_vlan(conexion,3, 'vlan-3', '192.168.30.0', '255.255.255.0', '192.168.1.1' , interfaces)
+# print("\n")
 
-# Crea Vlan
-print("\t > Respuestas al crear VLANS < \n")
-interfaces = [['0/4', '0/5'], [], ['0/2', '0/8']]
-crea_vlan(conexion,1, 'vlan-1', '192.168.10.0', '255.255.255.0', '192.168.1.1' , interfaces)
-interfaces = [['0/4', '0/5'], ['0/2'], ['0/2', '0/8']]
-crea_vlan(conexion,2, 'vlan-2', '192.168.20.0', '255.255.255.0', '192.168.1.1' , interfaces)
-interfaces = [['0/4', '0/5'], ['0/2','0/7'], ['0/2', '0/8']]
-crea_vlan(conexion,3, 'vlan-3', '192.168.30.0', '255.255.255.0', '192.168.1.1' , interfaces)
-print("\n")
+# # Consulta Vlans
+# print("\t > Respuestas al consultar VLANS < \n")
+# datos = consulta_vlans(conexion)
+# for dato in datos:
+# 	print(dato)
+# print("\n")
 
-# Consulta Vlans
-print("\t > Respuestas al consultar VLANS < \n")
-datos = consulta_vlans(conexion)
-for dato in datos:
-	print(dato)
-print("\n")
+# # Consulta especial Vlan
+# print("\t > Respuestas al consultar una VLAN < \n")
+# dato = consulta_vlan_especial(conexion,1)
+# for fila in dato:
+# 	print(fila)
+# print("\n")
 
-# Consulta especial Vlan
-print("\t > Respuestas al consultar una VLAN < \n")
-dato = consulta_vlan_especial(conexion,1)
-for fila in dato:
-	print(fila)
-print("\n")
+# # Elimina vlan
+# print("\t > Respuestas al eliminar una VLAN < \n")
+# elimina_vlan(conexion,1)
+# print("\n")
 
-# Elimina vlan
-print("\t > Respuestas al eliminar una VLAN < \n")
-elimina_vlan(conexion,1)
-print("\n")
+# # Consulta Vlans
+# print("\t > Respuestas al consultar VLANS < \n")
+# datos = consulta_vlans(conexion)
+# for dato in datos:
+# 	print(dato)
+# print("\n")
 
-# Consulta Vlans
-print("\t > Respuestas al consultar VLANS < \n")
-datos = consulta_vlans(conexion)
-for dato in datos:
-	print(dato)
-print("\n")
+# close_db(conexion)
 
-close_db(conexion)
+import ipaddress as ip
+net = ip.ip_network("{}/{}".format("192.168.1.0","255.255.255.0"))
+print(list(net)[1])
+
