@@ -84,6 +84,10 @@ def adm3():
 def adm4():
     return render_template('Adm4.html')
 
+@app.route('/adm41',methods = ['POST','GET'])
+def adm41():
+	return render_template('Adm41.html')
+
 
 @app.route('/adm5',methods = ['POST','GET'])
 def adm5():
@@ -101,6 +105,10 @@ def usr1():
 @app.route('/usr2',methods = ['POST','GET'])
 def usr2():
     return render_template('Usr2.html')
+
+@app.route('/usr21',methods = ['POST','GET'])
+def usr21():
+	return render_template('Usr21.html')
 
 @app.route('/usr3',methods = ['POST','GET'])
 def usr3():
