@@ -106,8 +106,8 @@ def adm3():
     mapeo = True
     while mapeo:
         try:
-            res = mapearRed("eth0")
-            dibujarRed(res)
+            #res = mapearRed("eth0")
+            #dibujarRed(res)
             mapeo = False
         except Exception as e:
             print("show_network(): error al mapear topologia, ", e)

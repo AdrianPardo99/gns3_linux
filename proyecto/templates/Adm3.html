@@ -1,9 +1,10 @@
 {% extends "Base_Admin.html" %}
 {% block title %}.: Dibuja Topologia :.{% endblock %}
-
+{% block css%}<link rel='stylesheet' href='../static/css/vis.css' type='text/css' />
+{% endblock %}
+{% block js%}<script type='text/javascript' src='../static/js/vis-network.min.js'></script>
+{% endblock %}
 {% block contenido %}
-<link rel='stylesheet' href='../static/css/vis.css' type='text/css' />
-<script type='text/javascript' src='../static/js/vis-network.min.js'></script>
 <!-- CONTENIDO --><br><br><br>
 <div class="row" style="margin-bottom: 15%;">
 	<!-- Timeline -->
