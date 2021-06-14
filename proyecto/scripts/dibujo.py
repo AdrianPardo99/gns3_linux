@@ -2,18 +2,35 @@ from pyvis.network import Network
 import json, ipaddress, os
 
 def cambiarEnlaces(net, out_net):
-    #se cambia el link y script a referencia local
-    fp = open(net, "r")
-    fo = open(out_net, "w")
-    for i in enumerate(fp):
-        if i[0] == 2: 
-            fo.write("<link rel='stylesheet' href='static/css/vis.css' type='text/css' />\n")
-        elif i[0] == 3:
-            fo.write("<script type='text/javascript' src='static/js/vis-network.min.js'></script>\n")
-        else:
-        	fo.write(i[1])
-    fp.close()
-    fo.close()
+	fp = open(net, 'r')
+	fo = open(out_net, 'w')
+	for i in enumerate(fp):
+		if i[0] == 0:
+			fo.write('''{% extends "base_template.html" %}\n''')
+		elif i[0] == 1:
+			fo.write('''{%block css %}{% endblock %}\n{%block js %}{% endblock %}\n{% block title %}Topologia{% endblock %}\n''')
+		elif i[0] == 2:
+			fo.write("<link rel='stylesheet' href='../static/css/vis.css' type='text/css' />\n")
+		elif i[0] == 3:
+			fo.write("<script type='text/javascript' src='../static/js/vis-network.min.js'></script>\n")	
+		elif i[0] == 14:
+			fo.write("width: 80%;\n")
+		elif i[0] == 15:
+			fo.write("height: 80%;\n")
+		elif i[0] == 17:
+			fo.write("\n")
+		elif i[0] == 29:
+			fo.write("\n")
+		elif i[0] == 31:
+			fo.write("{% block content %}\n")	
+		elif i[0] == 106:
+			fo.write("{% endblock %}\n")
+		elif i[0] == 107:
+			fo.write("\n")			
+		else:
+			fo.write(i[1])
+	fp.close()
+	fo.close()
 
 def eliminarTemporal(file):
 	os.remove(file)
@@ -93,7 +110,7 @@ def construirDibujoTopologia(routers, interconexiones, devices, general):
 	#nodos de cada router
 	for router in routers_dic:
 		print("anadiendo nodo router {}".format(router))
-		net.add_node(routers_dic[router], "{}".format(router), physics=False,mass=1, level=1, shape="image", title="interfaces:", image="blue/router.svg")
+		net.add_node(routers_dic[router], "{}".format(router), physics=False,mass=1, level=1, shape="image", title="interfaces:", image="../static/icons/blue/router.svg")
 
 	#conexiones entre routers
 	for (edge, red) in zip(edges, redes):
@@ -104,7 +121,7 @@ def construirDibujoTopologia(routers, interconexiones, devices, general):
 	#nodos de cada cliente
 	for client, id_cli in clients_id.items():
 		print("anadiendo nodo cli {}".format(client))
-		net.add_node(id_cli, "{}".format(client), physics=False, mass=1, level=3, shape="image", title="{}".format(clients_dic[client]), image="blue/client.svg")
+		net.add_node(id_cli, "{}".format(client), physics=False, mass=1, level=3, shape="image", title="{}".format(clients_dic[client]), image="../static/icons/blue/client.svg")
 
 	#conexiones de clientes
 	for (edge, red) in zip(edges_cli, redes_cli):

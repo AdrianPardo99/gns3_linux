@@ -2,7 +2,7 @@ from flask import Flask
 from flask import render_template, redirect
 from scripts.scanner import *
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static', template_folder='templates')
 app.config['SECRET_KEY'] = '12345'
 
 
@@ -15,13 +15,13 @@ def show_network():
     mapeo = True
     while mapeo:
         try:
-            res = mapearRed("eth0")
-            dibujarRed(res)
+            #res = mapearRed("eth0")
+            #dibujarRed(res)
             mapeo = False
         except Exception as e:
             print("show_network(): error al mapear topologia, ", e)
 
-    return render_template('net.html')
+    return render_template('network.html')
 
 
 @app.errorhandler(404)
