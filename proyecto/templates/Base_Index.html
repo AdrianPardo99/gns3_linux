@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<title>{% block title %}{% endblock %}</title>	
+	<link rel="shortcut icon" href="{{ url_for('static',filename='img/lv.ico') }}" type="image/x-icon">	
+	<link rel="icon" href="{{ url_for('static',filename='img/lv.ico') }}" type="image/x-icon">	
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/materialize.min.css') }}">	
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/estilos.css') }}">		
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<script src="{{ url_for('static',filename='js/jquery.min.js') }}"></script>	
+	<script src="{{ url_for('static',filename='js/materialize.min.js') }}"></script>	
+
+</head>
+
+<!-- <body oncopy="return false" oncut="return false" onpaste="return false" oncontextmenu="return false" onkeydown="return false" ondragstart='return false' onselectstart="return false"> -->
+	<body onselectstart="return false">
+	<header>
+		<!-- Empieza Menu sin Cuenta-->
+		<div class="navbar-fixed">
+			<nav class="grey darken-2">
+			    <div class="nav-wrapper grey darken-3">
+				    <a href="" class="brand-logo" style="font-size: 28px; margin-left: 1%; "> <i class="material-icons left">question_answer</i> Proyecto </a>
+				    <a href="" data-activates="mobile-demo" class="button-collapse"><i class="material-icons" style="margin-left: 35%;">menu</i></a>
+				    <ul class="right hide-on-med-and-down" style="margin-right: 1%;">
+				        <li><a href="{{url_for('inicio')}}"><i class="material-icons left">visibility</i>Inicio</a></li>
+				        <li><a href="{{url_for('registro_Publico')}}"><i class="material-icons left">edit</i>Registro</a></li> 
+				        <li><a href="{{url_for('login')}}"><i class="material-icons left">vpn_key</i>Login</a></li>
+				    </ul>
+				    <ul class="side-nav" id="mobile-demo">
+				        <li><a href="index.html"><i class="material-icons left">visibility</i>¿Qué es Lechuza Postales?</a></li>
+				        <li><a href="registro.html"><i class="material-icons left">edit</i>Registro</a></li> 
+				        <li><a href="login.html"><i class="material-icons left">vpn_key</i>Login</a></li>
+				    </ul>
+			    </div>
+			</nav>			   
+		</div>
+		<!-- Termina Menu sin Cuenta-->
+	</header>
+
+	<main>
+
+	  {% block content %}{% endblock %}
+
+	</main>
+
+	<footer class="page-footer grey darken-2">	
+        <div class="container">
+	        <div class="row">
+	            <div class="col l6 s12">
+	                <h5 class="grey-text text-lighten-3">¿Qué Puede Hacer Cada Usuario?</h5>
+	               	<p class="grey-text text-lighten-1">Descubre las opciones que tiene cada tipo de usuario en nuestro sistema </p>
+	                <a class="btn blue-grey darken-2 waves-effect waves-light grey-text text-lighten-2 modal-trigger" href="#Footer1">Conocer</a>
+	    		</div>
+	            <div class="col l4 offset-l2 s12">
+	                <h5 class="grey-text text-lighten-3">Soporte Técnico</h5>
+	                <ul>
+	                <p class="grey-text text-lighten-1">Si se llega a presentar alguna situación especial favor de contactarnos</p>
+	                <a class="btn blue-grey darken-2 waves-effect waves-light grey-text text-lighten-2 modal-trigger" href="#Footer2">Contactar</a>
+	                </ul>
+	            </div>
+	        </div>
+	    </div>
+	    <div class="footer-copyright grey darken-3">
+	        <div class="container">
+	        	© La pandilla mantequilla, 2021
+	            <a class="grey-text text-lighten-1 right" href="#!"><i>"Proyecto"</i></a>
+	        </div>
+        </div>
+
+        <!--Inicia Ventana Footer1 -->
+		<div id="Footer1" class="modal grey lighten-1">
+		    <div class="modal-content" style="background-color: rgba(35,35,35,1);">
+			    <h3 style="color: white; text-align: center;">Tipos de Usuario</h3> 
+		    </div>
+		    <div class="modal-content" >
+		      	<h6 style="font-size: 20px;">Administrador:</h6>
+		      	<p>
+		      	1.- Gestionar usuarios.<br>
+		      	2.- Recibir alertas de dispositivos de red.<br>
+		      	3.- Monitorizar la red.<br>
+		      	4.- Visualizar reportes de las redes.<br>
+		      	</p>
+		      	<h6 style="font-size: 20px;">Cliente:</h6>
+		      	<p>
+		      	1.- Recibir alertas de dispositivos de red.<br>
+		      	2.- Monitorizar la red.<br>
+		      	3.- Visualizar reportes de las redes.<br>
+		      	</p>
+
+		    </div>
+		    <div class="modal-footer grey lighten-1">
+		      	<a class="btn-flat waves-effect waves-green modal-action modal-close">Cerrar</a>
+		    </div>
+		</div>
+		<!--Termina Ventana Footer1 -->
+
+		<!--Inicia Ventana Footer2 -->
+		<div id="Footer2" class="modal bottom-sheet">
+		    <div class="modal-content grey lighten-1">
+		    	<div class="row">
+		        	<div class="col s6">
+		        		<ul class="collection">
+						    <li class="collection-item avatar grey lighten-2">
+						      	<img src="{{ url_for('static',filename='img/logo.png') }}" alt="PM" class="circle">
+						      	<span class="title"><h4>Proyecto</h4></span>
+						      	<p>
+							    	E-mail: <br>
+							    </p>
+							    <a href="#!" class="secondary-content"><i class="material-icons">grade</i></a>
+						    </li>
+						</ul>
+		        	</div>
+	        	</div>
+		    </div>
+		    <div class="modal-footer grey lighten-1">
+			    <a class="modal-action modal-close waves-effect waves-green btn-flat">Cerrar</a>
+		    </div>
+		</div>
+		<!--Termina Ventana Footer2 -->
+    </footer>
+</body>
+
+</html>

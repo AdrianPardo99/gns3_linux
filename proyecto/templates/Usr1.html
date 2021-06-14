@@ -1,0 +1,95 @@
+{% extends "Base_Usr.html" %}
+{% block title %}.: Dibuja Topologia :.{% endblock %}
+
+{% block contenido %}
+<link rel='stylesheet' href='../static/css/vis.css' type='text/css' />
+<script type='text/javascript' src='../static/js/vis-network.min.js'></script>
+<!-- CONTENIDO --><br><br><br>
+<div class="row" style="margin-bottom: 15%;">
+	<!-- Timeline -->
+	<h2 class="center-align">Dibujar Topología</h2>
+	<br><br>
+</div>
+<center>
+	<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+	<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+
+	<style type="text/css">
+
+		#mynetwork {
+			width: 900px;
+			height: 900px;
+			background-color: #ffffff;
+
+			position: relative;
+			float: left;
+		}
+
+	</style>
+
+	<div id = "mynetwork"></div>
+
+	<script type="text/javascript">
+
+    // initialize global variables.
+    var edges;
+    var nodes;
+    var network; 
+    var container;
+    var options, data;
+
+    // This method is responsible for drawing the graph, returns the drawn network
+    function drawGraph() {
+    	var container = document.getElementById('mynetwork');
+
+        // parsing and collecting nodes and edges from the python
+        nodes = new vis.DataSet([{"id": 0, "image": "../static/icons/blue/router.svg", "label": "R3", "level": 1, "mass": 1, "physics": false, "shape": "image", "title": "interfaces:"}, {"id": 1, "image": "../static/icons/blue/router.svg", "label": "R5", "level": 1, "mass": 1, "physics": false, "shape": "image", "title": "interfaces:"}, {"id": 2, "image": "../static/icons/blue/router.svg", "label": "R2", "level": 1, "mass": 1, "physics": false, "shape": "image", "title": "interfaces:"}, {"id": 3, "image": "../static/icons/blue/router.svg", "label": "R1", "level": 1, "mass": 1, "physics": false, "shape": "image", "title": "interfaces:"}, {"id": 4, "image": "../static/icons/blue/router.svg", "label": "R4", "level": 1, "mass": 1, "physics": false, "shape": "image", "title": "interfaces:"}, {"id": 5, "image": "../static/icons/blue/client.svg", "label": "10.0.1.1", "level": 3, "mass": 1, "physics": false, "shape": "image", "title": "Unix-OS 0"}, {"id": 6, "image": "../static/icons/blue/client.svg", "label": "10.0.1.2", "level": 3, "mass": 1, "physics": false, "shape": "image", "title": "Unix-OS 0"}, {"id": 7, "image": "../static/icons/blue/client.svg", "label": "10.0.5.253", "level": 3, "mass": 1, "physics": false, "shape": "image", "title": "Unix-OS 2"}, {"id": 8, "image": "../static/icons/blue/client.svg", "label": "10.0.3.253", "level": 3, "mass": 1, "physics": false, "shape": "image", "title": "Unix-OS 2"}, {"id": 9, "image": "../static/icons/blue/client.svg", "label": "10.0.4.253", "level": 3, "mass": 1, "physics": false, "shape": "image", "title": "Unix-OS 2"}, {"id": 10, "image": "../static/icons/blue/client.svg", "label": "10.0.6.253", "level": 3, "mass": 1, "physics": false, "shape": "image", "title": "Unix-OS 2"}]);
+        edges = new vis.DataSet([{"from": 0, "title": "10.0.2.4", "to": 1}, {"from": 0, "title": "10.0.2.0", "to": 2}, {"from": 0, "title": "10.0.2.16", "to": 3}, {"from": 0, "title": "10.0.2.20", "to": 4}, {"from": 1, "title": "10.0.2.12", "to": 4}, {"from": 2, "title": "10.0.2.8", "to": 3}, {"from": 0, "title": "10.0.1.0/24", "to": 5}, {"from": 0, "title": "10.0.1.0/24", "to": 6}, {"from": 1, "title": "10.0.5.252/30", "to": 7}, {"from": 2, "title": "10.0.3.252/30", "to": 8}, {"from": 3, "title": "10.0.4.252/30", "to": 9}, {"from": 4, "title": "10.0.6.252/30", "to": 10}]);
+
+        // adding nodes and edges to the graph
+        data = {nodes: nodes, edges: edges};
+
+        var options = {
+        	"configure": {
+        		"enabled": false
+        	},
+        	"edges": {
+        		"color": {
+        			"inherit": true
+        		},
+        		"smooth": {
+        			"enabled": false,
+        			"type": "continuous"
+        		}
+        	},
+        	"interaction": {
+        		"dragNodes": true,
+        		"hideEdgesOnDrag": false,
+        		"hideNodesOnDrag": false
+        	},
+        	"physics": {
+        		"enabled": true,
+        		"stabilization": {
+        			"enabled": true,
+        			"fit": true,
+        			"iterations": 1000,
+        			"onlyDynamicEdges": false,
+        			"updateInterval": 50
+        		}
+        	}
+        };
+
+        network = new vis.Network(container, data, options);
+
+        return network;
+
+    }
+
+    drawGraph();
+
+</script>  
+<!-- CONTENIDO -->        
+{% endblock %}
