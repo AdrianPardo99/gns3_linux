@@ -1,0 +1,74 @@
+{% extends "Base_Index.html" %}
+{% block title %}.: Login :.{% endblock %}
+
+{% block content %}
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/login.css') }}">
+		<script>
+		$(document).ready(function() {
+    		$(".button-collapse").sideNav(); //Menu del Header
+
+    		$('ul.tabs').tabs(); //Menu
+
+    		$('.parallax').parallax(); //Efecto Parallax
+
+    		var options = [ 			
+				{selector: '#SeccionLogin', offset: 455, callback: function() { Materialize.showStaggeredList("#SeccionLogin"); } }
+			]; //Variable para la siguiente opcion	
+
+			Materialize.scrollFire(options); //Efecto para aparecer derrepente las cosas
+
+			$('.scrollspy').scrollSpy(); //Transicion a los elementos de forma fluida
+
+			$('.modal-trigger').leanModal({ //Ventanas Modales (Las que aparecen derrepente :v)
+			      dismissible: true, // Afecto
+			      opacity: .7, // Opacidad de fondo
+			      in_duration: 300, // Duracion de la transicion al abrir
+			      out_duration: 250, // Duracion de la transicion al cerrar
+			    }
+			);
+
+	    	Materialize.updateTextFields();
+	    	$('select').material_select();
+	    	$('input#input_text, textarea#textarea1').characterCounter();
+
+	  		$('.datepicker').pickadate({
+			    selectMonths: true, // Creates a dropdown to control month
+			    selectYears: 15 // Creates a dropdown of 15 years to control year
+			});
+
+			$('.tooltipped').tooltip({delay: 50});//Mensajito en hover del boton
+
+			$('.materialboxed').materialbox();//Efecto zoom de imagenes
+  		});
+	</script>
+		<!-- Empieza SeccionLogin -->
+		<div class="section seccion login">
+			<div style="margin-top: 2%;">
+				<!-- <form method ="POST" action="alumno.html"> -->
+					<form method ="POST" action="/adm5">
+						<h2> Ingresar </h2>
+						<div class="row">
+							<div class="input-field col s11 blue-text">
+								<i class="material-icons prefix">account_circle</i>
+								<input id="usuario" name="usuario" type="text" class="validate" length="64" maxlength="64" required >
+								<label for="usuario">&#128588; Nombre de Usuario</label>
+							</div>
+						</div>
+						<div class="row">
+							<div class="input-field col s11 blue-text">
+								<i class="material-icons prefix">lock</i>
+								<input id="clave" name="clave" type="password" class="validate" length="64" maxlength="64" required>
+								<label for="clave">&#128273; Contraseña</label>
+							</div>
+						</div>
+						
+						<div class="col s12  center"> 
+							<button class="btn-large pink darken-4 waves-effect waves-light" type="submit" id="enviar" name="enviar" value="Ingresar" >Acceder <i class="material-icons right">vpn_key</i></button>
+						</div>					
+					</form>
+				</div><br><br>
+				<center><div class="center btn-large blue darken-4 waves-effect waves-light">
+					<a href="/regPublic" class="link">Crear cuenta</a>
+				</div></center>
+			</div>
+{% endblock %}
