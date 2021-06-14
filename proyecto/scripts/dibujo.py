@@ -8,21 +8,24 @@ def cambiarEnlaces(net, out_net):
 		if i[0] == 0:
 			fo.write('''{% extends "base_template.html" %}\n''')
 		elif i[0] == 1:
-			fo.write('''{%block css %}{% endblock %}\n{%block js %}{% endblock %}\n{% block title %}Topologia{% endblock %}\n''')
+			fo.write('''{% block title %}Topologia{% endblock %}\n''')
 		elif i[0] == 2:
-			fo.write("<link rel='stylesheet' href='../static/css/vis.css' type='text/css' />\n")
+			fo.write("{%block css %}<link rel='stylesheet' href='../static/css/vis.css' type='text/css' />{% endblock %}\n")
 		elif i[0] == 3:
-			fo.write("<script type='text/javascript' src='../static/js/vis-network.min.js'></script>\n")	
+			fo.write("{%block js %}<script type='text/javascript' src='../static/js/vis-network.min.js'></script>{% endblock %}\n")	
+		elif i[0] == 4:
+			fo.write("{% block content %}\n")
+			fo.write(i[1])
 		elif i[0] == 14:
-			fo.write("width: 80%;\n")
+			fo.write("\t\twidth: 900px;\n")
 		elif i[0] == 15:
-			fo.write("height: 80%;\n")
+			fo.write("\t\theight: 900px;\n")
 		elif i[0] == 17:
 			fo.write("\n")
 		elif i[0] == 29:
 			fo.write("\n")
 		elif i[0] == 31:
-			fo.write("{% block content %}\n")	
+			fo.write("\n")	
 		elif i[0] == 106:
 			fo.write("{% endblock %}\n")
 		elif i[0] == 107:
