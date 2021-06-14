@@ -1,0 +1,50 @@
+{% extends "Base_Admin.html" %}
+{% block title %}.: Gestiona Usrs :.{% endblock %}
+
+{% block contenido %}
+<!-- CONTENIDO --><br><br><br>
+        <div class="row" style="margin-bottom: 15%;">
+            <h2 style="text-align: center;"> Gestión Usuarios </h2>
+            <article class="col s12">
+
+                <div class="full-width center-align" style="margin: 40px 0;">
+
+                    <a href="/adm21">
+                    <div class="tile">
+                        <div class="tile-icon"><i class="zmdi zmdi-accounts-add"></i></div>
+                        <div class="tile-caption">
+                            <br>
+                            <span class="center-align">Agregar</span>                            
+                        </div>
+                        <a href="/adm21" class="tile-link waves-effect waves-light">Agregar a un Usuario &nbsp;<i class="zmdi zmdi-caret-right-circle"></i></a>
+                    </div>
+                    </a>
+
+                    <a href="/adm22">
+                    <div class="tile">
+                        <div class="tile-icon"><i class="zmdi zmdi-search-in-file"></i></div>
+                        <div class="tile-caption">
+                            <br>
+                            <span class="center-align">Buscar</span>                               
+                        </div>
+                        <a href="/adm22" class="tile-link waves-effect waves-light">Buscar a un Usuario &nbsp;<i class="zmdi zmdi-caret-right-circle"></i></a>
+                    </div>
+                    </a>
+                    
+                    <a href="/adm23">
+                    <div class="tile">
+                        <div class="tile-icon"><i class="zmdi zmdi-card-off"></i></div>
+                        <div class="tile-caption">
+                            <br>
+                            <span class="center-align">Eliminar</span>                            
+                        </div>
+                        <a href="/adm23" class="tile-link waves-effect waves-light">Eliminar a un Usuario &nbsp;<i class="zmdi zmdi-caret-right-circle"></i></a>
+                    </div>
+                    </a>
+
+                </div><br><br> 
+
+            </article>
+        </div>
+<!-- CONTENIDO -->        
+{% endblock %}

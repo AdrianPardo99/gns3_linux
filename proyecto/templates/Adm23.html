@@ -1,0 +1,103 @@
+{% extends "Base_Admin.html" %}
+{% block title %}.: Elimina Admins :.{% endblock %}
+
+{% block contenido %}
+    <script type="text/javascript">
+    function EliminarUsr(){
+        var valor='prueba';
+        swal({//Método de sweetAlert para ventanas de dialogo  
+            title: "¿Quieres borrar este usuario?",
+            text: "Será borrado el usuario: "+valor,
+            type: "warning", //Logo de cuidado :v
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B5F",
+            confirmButtonText: "Si, quiero Borrarlo",
+            cancelButtonText: "Cancelar",
+            closeOnConfirm: false,
+            closeOnCancel: false }, 
+            function(isConfirm){//Funcion de sweet alert para validar confirmacion
+               if (isConfirm) {                    
+                    swal({
+                        title: "Usuarios Eliminado",
+                        text: "El usuario: "+valor+" ha sido eliminado",
+                        type: "success"
+                        },
+                        function(){
+                            setTimeout(function(){location.reload();},350);//Esperamos 0.35s para recargar la pagina
+                            //location.reload(); //Recargamos pagina para ver que se haya eliminado el usuario
+                    })
+                } else {     
+                    swal("Operación Cancelada", "El usuario: "+valor+" está a salvo", "error");   
+                }
+            });
+    }
+    </script> 
+<!-- CONTENIDO -->
+        <div class="row">
+            <nav>
+                <div class="nav-wrapper grey darken-2">
+                    <div class="col s12" style="text-align: center;">
+                        <a href="/adm2" class="rutaNavega">Gestón Usuarios</a>
+                        <i class="zmdi zmdi-chevron-right rutaNavega" style="display: inline-block;"></i>
+                        <a href="#" class="rutaNavegaFinal">Eliminar</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <h2 class="center-align">Eliminar Usuario</h2>
+        <div class="container" style="margin-bottom: 15%;">
+            <div class="row">
+                <div class="col s12">
+                    <table class="responsive-table highlight centered">
+                        <thead>
+                            <tr>
+                                <!-- <th data-field="Email">Email</th> -->
+                                <th data-field="Usuario">Usuario</th>
+                                <th data-field="Nombre">Nombre</th>
+                                <th data-field="Apellido1">Primer Apellido</th>
+                                <th data-field="Apellido2">Segundo Apellido</th>
+                                <th data-field="Eliminar">Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <!-- <td>CorreoNumeroUno@hotmail.com</td> -->
+                                <td>UsuarioNumeroUno</td>
+                                <td>NombreyNombresNumeroUno</td>
+                                <td>ApellidoNumeroUno</td>
+                                <td>ApellidoNumeroDos</td>
+                                <td>                                    
+                                    <button class="btn waves-effect waves-light red hola" type="submit" name="enviar" id="enviar" onclick="EliminarUsr()"><i class="zmdi zmdi-delete"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <!-- <td>CorreoNumeroDos@hotmail.com</td> -->
+                                <td>UsuarioNumeroDos</td>
+                                <td>NombreyNombresNumeroDos</td>
+                                <td>ApellidoNumeroUno</td>
+                                <td>ApellidoNumeroDos</td>
+                                <td>                                    
+                                    <button class="btn waves-effect waves-light red hola" type="submit" name="enviar" id="enviar" onclick="EliminarUsr()"><i class="zmdi zmdi-delete"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <!-- <td>CorreoNumeroTres@hotmail.com</td> -->
+                                <td>UsuarioNumeroTres</td>
+                                <td>NombreyNombresNumeroTres</td>
+                                <td>ApellidoNumeroUno</td>
+                                <td>ApellidoNumeroDos</td>
+                                <td>                                    
+                                    <button class="btn waves-effect waves-light red hola" type="submit" name="enviar" id="enviar" onclick="EliminarUsr()"><i class="zmdi zmdi-delete"></i>
+                                    </button>
+                                </td>
+                            </tr>                        
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+<!-- CONTENIDO -->        
+{% endblock %}

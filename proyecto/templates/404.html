@@ -1,0 +1,43 @@
+{% extends "Base_Index.html" %}
+{% block title %}.: Inicio :.{% endblock %}
+
+
+{% block content %}
+	<script>
+		$(document).ready(function() {
+    		$(".button-collapse").sideNav(); //Menu del Header
+
+    		$('.slider').slider({
+    			height: 500
+    		}); //Slider
+
+    		$('.parallax').parallax(); //Efecto Parallax
+
+    		var options = [ 			
+				{selector: '#SeccionLoyola', offset: 405, callback: function() { Materialize.showStaggeredList("#SeccionLoyola"); } }
+			]; //Variable para la siguiente opcion	
+
+			Materialize.scrollFire(options); //Efecto para aparecer derrepente las cosas
+
+			$('.scrollspy').scrollSpy(); //Transicion a los elementos de forma fluida
+
+			$('.modal-trigger').leanModal({ //Ventanas Modales (Las que aparecen derrepente :v)
+			      dismissible: true, // Afecto
+			      opacity: .7, // Opacidad de fondo
+			      in_duration: 300, // Duracion de la transicion al abrir
+			      out_duration: 250, // Duracion de la transicion al cerrar
+			    }
+			);
+
+			$('.tooltipped').tooltip({delay: 50});//Mensajito en hover del boton
+  		});
+	</script>
+	<div>
+		<div class="section seccion">			
+			<div class="container center-align" style="background-color: rgb(220,220,220); display: block; padding: 25px;">
+				<h2 class="pink-text text-lighten-0">A la pagina le dio ansiedad</h2>				
+				<img src="{{ url_for('static',filename='img/cheems.png') }}"> <!-- random image -->
+			</div>
+		</div>
+	</div>
+{% endblock %}

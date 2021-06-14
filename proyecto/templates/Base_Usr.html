@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>{% block title %}{% endblock %}</title>
+    <link rel="shortcut icon" href="{{ url_for('static',filename='img/lv.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static',filename='img/lv.ico') }}" type="image/x-icon">
+    
+     <!-- Normalize CSS -->
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/normalize1.css') }}">
+    
+     <!-- Materialize CSS -->
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/materialize.min1.css') }}">
+    
+     <!-- Material Design Iconic Font CSS -->
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/material-design-iconic-font.min1.css') }}">
+    
+    <!-- Malihu jQuery custom content scroller CSS -->
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/jquery.mCustomScrollbar1.css') }}">
+    
+    <!-- Sweet Alert CSS -->
+    <link rel="stylesheet" href="{{ url_for('static',filename='css/sweetalert1.css') }}">
+    
+    <!-- MaterialDark CSS -->
+	<link rel="stylesheet" href="{{ url_for('static',filename='css/style1.css') }}">
+
+    <!-- Sweet Alert JS -->
+    <script src="{{ url_for('static',filename='js/sweetalert.min1.js') }}"></script>
+    
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="{{ url_for('static',filename='js/jquery-2.2.0.min.js') }}"><\/script>')</script>
+    
+    <!-- Materialize JS -->
+    <script src="{{ url_for('static',filename='js/materialize.min1.js') }}"></script>
+    
+    <!-- Malihu jQuery custom content scroller JS -->
+    <script src="{{ url_for('static',filename='js/jquery.mCustomScrollbar.concat.min1.js') }}"></script>
+    
+    <!-- MaterialDark JS -->
+    <script src="{{ url_for('static',filename='js/main1.js') }}"></script>
+</head>
+
+<body oncopy="return false">
+    <!-- Nav Lateral -->
+    <section class="NavLateral full-width">
+
+        <div class="NavLateral-FontMenu full-width ShowHideMenu"></div>
+
+        <div class="NavLateral-content full-width">
+
+            <header class="NavLateral-title full-width center-align">
+            	Proyecto<i class="zmdi zmdi-close NavLateral-title-btn ShowHideMenu"></i>
+            </header>
+
+            <figure class="full-width NavLateral-logo">
+                <img src="{{ url_for('static',filename='img/logo.png') }}" alt="material-logo" class="responsive-img center-box">
+                <figcaption class="center-align" style="padding: 1%;">La pandilla mantequilla</figcaption>
+                <figcaption class="center-align grey-text" style="padding: 1%;">Usuario</figcaption>
+            </figure> 
+
+            <div class="NavLateral-Nav">
+
+                <ul class="full-width">
+
+                    <li>
+                        <a href="/usr0" class="waves-effect waves-light"><i class="zmdi zmdi-swap-vertical-circle zmdi-hc-fw"></i> Escanear Red</a>
+                    </li>
+                    <li class="NavLateralDivider"></li>
+
+                    <li>
+                        <a href="/usr1" class="waves-effect waves-light"><i class="zmdi zmdi-file-text zmdi-hc-fw"></i> Topología</a>
+                    </li>
+                    <li class="NavLateralDivider"></li>
+
+                    <li>
+                        <a href="/usr2" class="waves-effect waves-light"><i class="zmdi zmdi-laptop zmdi-hc-fw"></i> Dispositivos</a>
+                    </li>
+                    <li class="NavLateralDivider"></li>
+
+                    <li>
+                        <a href="/usr3" class="waves-effect waves-light"><i class="zmdi zmdi zmdi-badge-check zmdi-hc-fw"></i> Notificaciones</a>
+                    </li>
+                    <li class="NavLateralDivider"></li>                
+
+                </ul><br><br><br>
+
+            </div>  
+
+        </div>
+
+    </section>
+
+    <!-- Page content -->
+    <section class="ContentPage full-width">
+
+        <!-- Area de Campanita de Notificaciones -->
+        <div class="ContentPage-Nav full-width">
+            <ul class="full-width">
+
+                <li class="btn-MobileMenu ShowHideMenu"><a href="#" class="tooltipped waves-effect waves-light" data-position="bottom" data-delay="50" data-tooltip="Menu"><i class="zmdi zmdi-menu"></i></a></li>
+
+                <a href="#" class="hola">
+                <li style="margin-top: 10px; margin-right: 10px;"><figure><img src="{{ url_for('static',filename='img/usr1.png') }}" alt="UserImage"></figure></li>
+                <li class="hola" style="padding:0 5px; margin-top: 10px;">Nombre de la persona</li>
+            	</a>             
+
+                <li style="margin-top: 10px; margin-right: 20px;"><a href="#" class="tooltipped waves-effect waves-light btn-ExitSystem" data-position="bottom" data-delay="50" data-tooltip="Cerrar Sesión"><i class="zmdi zmdi-power"></i></a></li>
+
+                <li style="margin-top: 10px; margin-right: 15px; ">
+                    <a href="#" class="tooltipped waves-effect waves-light btn-Notification" data-position="bottom" data-delay="50" data-tooltip="Notificationes">
+                        <i class="zmdi zmdi-notifications"></i>
+                        <span class="ContentPage-Nav-indicator bg-danger">{% block numAlertas %}{% endblock %}</span>
+                    </a>
+                </li>
+                                
+            </ul>   
+        </div>
+        <!-- Termina Area de Campanita -->
+
+        <!-- Area de Mensajes que Llegan -->
+        <section class="z-depth-3 NotificationArea">
+            <div class="full-width center-align NotificationArea-title">Notificaciones <i class="zmdi zmdi-close btn-Notification"></i></div>
+
+            {% block contenidoAlertas %}{% endblock %}
+
+            <a href="/usr3" class="waves-effect Notification">
+                <div class="Notification-icon"><i class="zmdi zmdi-device-hub bg-primary"></i></div>
+                <div class="Notification-text">
+                    <p>
+                        <i class="zmdi zmdi-circle tooltipped" data-position="left" data-delay="50" data-tooltip="Notification as UnRead"></i>
+                        <strong>Alerta</strong> 
+                        <br>
+                        <small>Nombre Dispositivo</small>
+                    </p>
+                </div>
+            </a>
+
+            
+        </section>
+        <!-- Termina Area de Mensajes  -->
+        
+
+<!-- CONTENIDO -->
+        {% block contenido %}{% endblock %}
+<!-- CONTENIDO -->        
+
+        <!-- Footer -->   
+        <footer class="footer-MaterialDark">
+            <div class="container">
+                <div class="row">
+                    <div class="col l6 s12">
+                        <h5 class="white-text">Pie de Pagina</h5>
+                        <p class="grey-text text-lighten-4">
+                            Informacion de Soporte Técnico
+                            <br>
+                            Para mejor soporte sobre los componentes CSS e iconos, por favor visite los sitios web oficiales de las tecnologias usadas
+                        </p>
+                    </div>
+                    <div class="col l4 offset-l2 s12">
+                        <h5 class="white-text">Tecnologia Utilizada</h5>
+                        <ul>
+                            <li><a class="grey-text text-lighten-3" href="http://materializecss.com/">Materialize</a></li>
+                            <li><a class="grey-text text-lighten-3" href="http://zavoloklom.github.io/material-design-iconic-font/icons.html">Material Design Iconic Font</a></li>
+                            <li><a class="grey-text text-lighten-3" href="http://t4t5.github.io/sweetalert/">Sweet Alert</a></li>
+                            <li><a class="grey-text text-lighten-3" href="http://manos.malihu.gr/jquery-custom-content-scroller/">jQuery custom content scroller</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="NavLateralDivider"></div>
+            <div class="footer-copyright">
+                <div class="container center-align">
+                    © La pandilla mantequilla , 2021
+                </div>
+            </div>
+        </footer>
+    </section>    
+</body>
+</html>

@@ -1,7 +1,82 @@
-{% extends "base_template.html" %}
-{%block css %}{% endblock %}
-{%block js %}{% endblock %}
-{% block title %}Redes 3{% endblock %}
+{% extends "Base_Index.html" %}
+{% block title %}.: Inicio :.{% endblock %}
+
+
 {% block content %}
-    <h1>Inicio</h1>
+	<script>
+		$(document).ready(function() {
+    		$(".button-collapse").sideNav(); //Menu del Header
+
+    		$('.slider').slider({
+    			height: 500
+    		}); //Slider
+
+    		$('.parallax').parallax(); //Efecto Parallax
+
+    		var options = [ 			
+				{selector: '#SeccionLoyola', offset: 405, callback: function() { Materialize.showStaggeredList("#SeccionLoyola"); } }
+			]; //Variable para la siguiente opcion	
+
+			Materialize.scrollFire(options); //Efecto para aparecer derrepente las cosas
+
+			$('.scrollspy').scrollSpy(); //Transicion a los elementos de forma fluida
+
+			$('.modal-trigger').leanModal({ //Ventanas Modales (Las que aparecen derrepente :v)
+			      dismissible: true, // Afecto
+			      opacity: .7, // Opacidad de fondo
+			      in_duration: 300, // Duracion de la transicion al abrir
+			      out_duration: 250, // Duracion de la transicion al cerrar
+			    }
+			);
+
+			$('.tooltipped').tooltip({delay: 50});//Mensajito en hover del boton
+  		});
+	</script>
+	<div class="slider">
+		    <ul class="slides">
+		      <li>
+		        <img src="{{ url_for('static',filename='img/inicio/01.jpg') }}"> <!-- random image -->
+		        <div class="caption center-align">
+		        	<h2 class="header center grey-text text-lighten-2">Proyecto Redes Tres</h2>
+			        <div class="row center">			          	
+			          	<a href="#Presentacion" class="btn-large tooltipped waves-effect waves-purple transparent" data-position="bottom" data-delay="50" data-tooltip="!Vamos¡" style="color: rgb(200,225,75); font-size: 30px;">Logo</a>
+			        </div>
+		        </div>
+		      </li>
+		      <li>
+		        <img src="{{ url_for('static',filename='img/inicio/01.jpg') }}"> <!-- random image -->
+		        <div class="caption left-align">
+		          <h3>Integrantes</h3>
+		          <h5 class="light grey-text text-lighten-3">Gonzalez Pardo Adrian</h5>
+		          <h5 class="light grey-text text-lighten-3">Muñoz Primero Elias</h5>
+		          <h5 class="light grey-text text-lighten-3">Sanchez Garcia Francisco Nicolas</h5>
+		        </div>
+		      </li>
+		    </ul>
+		  </div>
+
+	  <!-- Empieza SeccionLoyola -->
+		<div class="section seccion">
+			<ul id="SeccionLoyola">
+				<li style="opacity: 0;">
+			    <div class="container">
+			    	<div class="row">
+			    		<div class="col s12 m12">
+				 	    	<h2 class="header center-align">Proyecto</h2>
+			 	    	</div>
+			 	    </div>
+			 	    <div class="row">
+			  			<center><p id="Presentacion" class="section scrollspy center-align">
+			  				Usa el menu superior derecho para registrarte o iniciar sesión
+	                    </p></center>
+	                </div>
+	                <div class="row center">
+	                    <div class="col s12">
+		    				<img src="{{ url_for('static',filename='img/logo.png') }}" class="responsive-img z-depth-1 hoverable materialboxed " data-caption="Lechuza Postales" width="250" style="margin: auto;">
+		    			</div>    
+	                </div>    
+			    </div>
+			    </li>
+			</ul>
+		</div>
 {% endblock %}
