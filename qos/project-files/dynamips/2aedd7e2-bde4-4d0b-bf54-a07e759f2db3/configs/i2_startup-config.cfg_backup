@@ -1,6 +1,5 @@
 !
 !
-!
 
 !
 version 12.4
@@ -39,35 +38,9 @@ no ip domain lookup
 !
 !
 ip tcp synwait-time 5
-!
-class-map match-all OSPF
- match protocol ospf
-class-map match-all MATCH_HTTP
- match access-group 105
-class-map match-all ICMP_TO_CORE
- match  precedence 1
-class-map match-all HTTP_TO_CORE
- match  precedence 3
-class-map match-all MATCH_ICMP
- match access-group 101
+! 
 !
 !
-policy-map FROM_HOST
- class MATCH_ICMP
-  set precedence 1
- class MATCH_HTTP
-  set precedence 3
-policy-map TO_CORE
- class ICMP_TO_CORE
-  bandwidth 8
-   police cir 8000
-     conform-action transmit
-     exceed-action drop
- class HTTP_TO_CORE
-  bandwidth 10000
- class OSPF
-  set precedence 7
-  priority 1000
 !
 !
 interface Loopback0
@@ -76,7 +49,6 @@ interface Loopback0
 interface FastEthernet0/0
  ip address 10.10.2.1 255.255.255.0
  duplex half
- service-policy output TO_CORE
 !
 interface FastEthernet1/0
  no ip address
@@ -94,7 +66,6 @@ interface FastEthernet2/0
  ip address 10.10.23.1 255.255.255.252
  duplex auto
  speed auto
- service-policy output TO_CORE
 !
 interface FastEthernet2/1
  no ip address
@@ -114,10 +85,6 @@ no ip http server
 no ip http secure-server
 !
 !
-access-list 101 permit icmp any any
-access-list 101 remark "match icmp"
-access-list 105 remark "match http"
-access-list 105 permit tcp any any eq www
 no cdp log mismatch duplex
 !
 !
