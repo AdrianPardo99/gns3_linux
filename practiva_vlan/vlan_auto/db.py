@@ -92,8 +92,8 @@ def elimina_vlan(conexion,num):
 
 # --------------- Testing area ---------------
 # # Crear BD
-# conexion = create_db("Vlans.db")
-# create_tb(conexion)
+conexion = create_db("Vlans.db")
+create_tb(conexion)
 
 # # Crea Vlan
 # print("\t > Respuestas al crear VLANS < \n")
@@ -133,7 +133,7 @@ def elimina_vlan(conexion,num):
 
 # close_db(conexion)
 
-import ipaddress as ip
-net = ip.ip_network("{}/{}".format("192.168.1.0","255.255.255.0"))
-print(list(net)[1])
+#import ipaddress as ip
+#net = ip.ip_network("{}/{}".format("192.168.1.0","255.255.255.0"))
+#print(list(net)[1])
 
