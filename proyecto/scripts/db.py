@@ -164,6 +164,12 @@ def regresa_nombre(conexion,usr):
 	for fila in respuesta:
 		return fila[0]
 
+def regresa_email(conexion,usr):
+	cursor_tb = conexion.cursor()
+	sentencia = "select email from persona where usr=?"
+	respuesta = cursor_tb.execute(sentencia,(usr,))
+	for fila in respuesta:
+		return fila[0]
 		
 def valida_login(conexion,usr,psw,opc):
 	cursor_tb = conexion.cursor()
@@ -275,132 +281,230 @@ def elimina_usur(conexion,usr):
 
 	return msj
 
-
-
-
-
-
-
-def valida_vlan(conexion,numero_vlan):
+def valida_disp(conexion,idDisp):
 	cursor_tb = conexion.cursor()
-	sentencia = "select * from vlans where numero=?"
-	respuesta = cursor_tb.execute(sentencia,(numero_vlan,))
+	sentencia = "select * from dispositivos where idDisp=?"
+	respuesta = cursor_tb.execute(sentencia,(idDisp,))
 	existencia = respuesta.fetchone()
 	if existencia!=None:
-		existe = 1
-		# print("La Vlan ya existe")
+		existe = 1		
 	else:
 		existe = 0
-		# print("La Vlan NO existe")
 	return existe
 
-def crea_vlan(conexion,num,nom,id_sub,ms_sub,d_gate,list_interfaces=None):
+def alta_disp(conexion,list_data):
 	cursor_tb = conexion.cursor()
-	valida = valida_vlan(conexion,num)
-	if valida == 1:
-	 	print("Error al crear Vlan {} -  VLAN EXISTENTE".format(num))	 	
-	else:
-		list_data = list()		 
-		SW1 = ' '.join(list_interfaces[0])
-		SW2 = ' '.join(list_interfaces[1])
-		SW3 = ' '.join(list_interfaces[2])		
-		sentencia = "insert into vlans(numero,nombre,id_subred,ms_subred,d_gateway,SW1_inter,SW2_inter,SW3_inter) values(?,?,?,?,?,?,?,?)"
-		list_data.append(num)
-		list_data.append(nom)
-		list_data.append(id_sub)
-		list_data.append(ms_sub)
-		list_data.append(d_gate)
-		list_data.append(SW1)
-		list_data.append(SW2)
-		list_data.append(SW3)
-		# print(list_data)
+	valida = valida_disp(conexion,list_data[0])
+	if valida == 0:
+		sentencia = "insert into dispositivos(idDisp,nombre,sistem,locali,encarg,contac,timeac,timemo) values(?,?,?,?,?,?,?,?)"
 		cursor_tb.execute(sentencia,list_data)
 		conexion.commit()
-		print("Vlan {} Registrada".format(list_data[0]))
+		return "Registro exitoso"
+	else:
+		return "Dispositivo previamente registrado"
 
-def consulta_vlans(conexion):
+def consulta_disp(conexion):
 	cursor_tb = conexion.cursor()
-	sentencia = "select * from vlans"
+	sentencia = "select * from dispositivos"
 	return cursor_tb.execute(sentencia)
 
-def consulta_vlan_especial(conexion,num):	
+def consulta_disp_esp(conexion,idDisp):
 	cursor_tb = conexion.cursor()
-	valida = valida_vlan(conexion,num)
+	valida = valida_disp(conexion,idDisp)
 	if valida == 1:
-		sentencia = "select * from vlans where numero=?"
-		resultado = cursor_tb.execute(sentencia,(num,))	
+		sentencia = "select * from dispositivos where idDisp=?"
+		return cursor_tb.execute(sentencia,(idDisp,))
 	else:
-		print("Error al consultar Vlan {} -  VLAN NO EXISTENTE".format(num))
-		resultado = None
-	return resultado
+		return None
 
-def elimina_vlan(conexion,num):
+def modifica_disp(conexion,list_data):
 	cursor_tb = conexion.cursor()
-	valida = valida_vlan(conexion,num)
-	if valida == 1:
-		sentencia = "delete from vlans where numero=?"
-		cursor_tb.execute(sentencia,(num,))
-		conexion.commit()
-		print("Vlan {} eliminada exitosamente".format(num))
+	sentencia = "update dispositivos set sistem=?, locali=?, encarg=?, contac=?  where idDisp=?"
+	cursor_tb.execute(sentencia,list_data)
+	conexion.commit()
+	return "Dispositivo modificado"
+
+def inserta_paquetes(conexion,idDisp,paqEnviados,paqPerdidos):
+	cursor_tb = conexion.cursor()
+	respuesta = cursor_tb.execute("select max(idHist) from historial_paquetes")				
+	idReg = respuesta.fetchone()[0]
+	if(idReg==None):
+		idRegistro=1
 	else:
-		print("Error al eliminar Vlan {} -  VLAN NO EXISTENTE".format(num))		
+		idRegistro = int(idReg)
+		idRegistro = idRegistro+1	
+	sentencia = "insert into historial_paquetes(idHist,idDisp,paqEnv,paqPer) values(?,?,?,?)"
+	cursor_tb.execute(sentencia,(idRegistro,idDisp,paqEnviados,paqPerdidos))
+	conexion.commit()
+	return "Registro insertado"
+
+def consulta_paquetes(conexion,idDisp):
+	cursor_tb = conexion.cursor()
+	sentencia = "select * from historial_paquetes where idDisp=? order by idDisp desc"
+	return cursor_tb.execute(sentencia,(idDisp,))	
+
+def consulta_paquete_esp(conexion,idDisp):
+	cursor_tb = conexion.cursor()
+	respuesta = cursor_tb.execute("select max(idHist) from historial_paquetes where idDisp=?",(idDisp,))	
+	idReg = respuesta.fetchone()[0]	
+	sentencia = "select paqEnv,paqPer from historial_paquetes where idHist=?"
+	respuesta = cursor_tb.execute(sentencia,(idReg,))	
+	return respuesta.fetchone()
+
+def alertas_activas(conexion,idDisp,email):
+	cursor_tb = conexion.cursor()
+	sentencia = "select idEdoCo from control_alertas where idDisp=? and email=?"
+	respuesta = cursor_tb.execute(sentencia,(idDisp,email))
+	existencia = respuesta.fetchone()
+	if existencia == None:		
+		return (2,)
+	else:
+		return existencia
+
+def valida_control(conexion,idDisp,email):
+	cursor_tb = conexion.cursor()
+	sentencia = "select * from control_alertas where idDisp=? and email=?"
+	respuesta = cursor_tb.execute(sentencia,(idDisp,email))
+	existencia = respuesta.fetchone()
+	if existencia!=None:
+		existe = 1		
+	else:
+		existe = 0
+	return existe
 
 
+def config_alertas(conexion,idDisp,email):
+	cursor_tb = conexion.cursor()
+	exis_dispo = valida_disp(conexion,idDisp)
+	if(exis_dispo==1):
+		exis_email = valida_email(conexion,email)
+		if(exis_email==1):
+			exis_reg = valida_control(conexion,idDisp,email)
+			if(exis_reg==1):				
+				sentencia = "select idEdoCo from control_alertas where idDisp=? and email=?"
+				respuesta = cursor_tb.execute(sentencia,(idDisp,email))
+				idstatus = respuesta.fetchone()[0]
+				if(idstatus==1):
+					sentencia = "update control_alertas set idEdoCo=2 where idDisp=? and email=?"
+					respuesta = cursor_tb.execute(sentencia,(idDisp,email))
+					conexion.commit()
+					return "Alertas Desactivadas"
+				elif(idstatus==2):
+					sentencia = "update control_alertas set idEdoCo=1 where idDisp=? and email=?"
+					respuesta = cursor_tb.execute(sentencia,(idDisp,email))
+					conexion.commit()
+					return "Alertas Activadas"
+			else:				
+				respuesta = cursor_tb.execute("select max(idContr) from control_alertas ")				
+				idreg = respuesta.fetchone()[0]
+				if(idreg==None):
+				  	idRegistro=1
+				else:
+				 	idRegistro = int(idreg)
+				 	idRegistro = idRegistro+1				
+				sentencia = "insert into control_alertas(idContr,email,idDisp,idEdoCo) values(?,?,?,1)"
+				cursor_tb.execute(sentencia,(idRegistro,email,idDisp))
+				conexion.commit()
+				return "Persona registrada para recibir notificaciones"
+		else:
+			return "No existe el email"
+	else:
+		return "No existe el dispositivo"
+
+def regis_alerta(conexion,idDisp,email,descrip):
+	cursor_tb = conexion.cursor()
+	exis_dispo = valida_disp(conexion,idDisp)
+	if(exis_dispo==1):
+		exis_email = valida_email(conexion,email)
+		if(exis_email==1):
+			respuesta = cursor_tb.execute("select max(idAlert) from alertas ")				
+			idreg = respuesta.fetchone()[0]
+			if(idreg==None):
+				  idRegistro=1
+			else:
+				 idRegistro = int(idreg)
+				 idRegistro = idRegistro+1
+			sentencia = "insert into alertas(idAlert,idDisp,email,idEdoAler,descrip) values(?,?,?,1,?)"
+			cursor_tb.execute(sentencia,(idRegistro,idDisp,email,descrip))
+			conexion.commit()
+			return "Alerta Registrada"
+		else:
+			return "No existe el email"
+	else:
+		return "No existe el dispositivo"
+
+def consul_alertas(conexion,email):
+	cursor_tb = conexion.cursor()	
+	cursor_tb = conexion.cursor()
+	sentencia = "select * from alertas where email=? order by idAlert desc"
+	respuesta = cursor_tb.execute(sentencia,(email,))
+	return respuesta	
+
+def cantidad_alertas(conexion,email):
+	cursor_tb = conexion.cursor()	
+	sentencia = "select count(*) from alertas where email=?"
+	respuesta = cursor_tb.execute(sentencia,(email,))
+	return respuesta.fetchone()
+
+def cantidad_alertas_NoVistas(conexion,email):
+	cursor_tb = conexion.cursor()	
+	sentencia = "select count(*) from alertas where email=? and idEdoAler=1" #Contamos las alertas que esten en 1 "No vistas"
+	respuesta = cursor_tb.execute(sentencia,(email,))
+	return respuesta.fetchone()
+
+def set_alertas_visto(conexion,email):
+	cursor_tb = conexion.cursor()	
+	sentencia = "update alertas set idEdoAler=2 where email=?" #Pasamos las alertas en 2 "Vistas"
+	respuesta = cursor_tb.execute(sentencia,(email,))
+	conexion.commit()
+	return "Alertas dejadas en visto"
 
 
 # --------------- Testing area ---------------
 # # Crear BD
 # conexion = conecta_db("Proyecto.db")
-# # crea_tbs(conexion)
+# cursor_tb = conexion.cursor()
+# respuesta = consulta_paquete_esp(conexion,1)
+# print(inserta_paquetes(conexion,1,'94874','1270'))
+# resp=cursor_tb.execute("select * from alertas")
+# for i in resp:
+# 	print(i)
+# datos = list()
+
+
+# respuesta = consul_alertas(conexion,'elias@alumno.com')
+# for i in respuesta:
+# 	print(i)
+# conexion = conecta_db("Proyecto.db")
+# print(regis_alerta(conexion,4,'elias@alumno.com','ALERTA PRUEBA COMO NO'))
+# crea_tbs(conexion)
+# lista = [1,'R1','SO','Localidad','Encargado','Contacto','Tiempo Activo','Tiempo Ultima Modificacion']
+# print(alta_disp(conexion,lista))
+# lista = [2,'R2','SO','Localidad','Encargado','Contacto','Tiempo Activo','Tiempo Ultima Modificacion']
+# print(alta_disp(conexion,lista))
+# lista = [3,'R3','SO','Localidad','Encargado','Contacto','Tiempo Activo','Tiempo Ultima Modificacion']
+# print(alta_disp(conexion,lista))
+# lista = [4,'R4','SO4','Localidad4','Encargado4','Contacto4','Tiempo Activo4','Tiempo Ultima Modificacion4']
+# print(alta_disp(conexion,lista))
+# respuesta = consulta_disp_esp(conexion,1)
+# if respuesta != None:
+# 	for fila in respuesta:
+# 		print(fila)
+# print(alertas_activas(conexion,1,'elias@alumno.com'))
+
+# print(config_alertas(conexion,1,'elias@alumno.com'))
+# respuesta = alertas_activas(conexion,2,'elias@alumno.com')
+# print(respuesta[0])
+# respuesta = consulta_disp(conexion)
+# for fila in respuesta:
+# 	print(fila)
+
+
 # # print(alta_usur(conexion,'hola1@hola.com','usr1','123','USR01','02','02','M',1))
 # # print(alta_usur(conexion,'hola2@hola.com','usr2','123','USR02','02','02','F',2))
 # # print(alta_usur(conexion,'hola3@hola.com','usr3','123','USR03','03','03','M',2))
 # # print(cambio_usur(conexion,'usr1','12','usr1','01','01','M'))
 # # print(cambio_usur(conexion,'usr2','12','usr2','02','02','M'))
-# respuesta = regresa_nombre(conexion,'usr1')
+# respuesta = consulta_disp(conexion)
 # print(respuesta)
 # print(elimina_usur(conexion,'usr3','hola3@hola.com'))
-
-
-# # Crea Vlan
-# print("\t > Respuestas al crear VLANS < \n")
-# interfaces = [['0/4', '0/5'], [], ['0/2', '0/8']]
-# crea_vlan(conexion,1, 'vlan-1', '192.168.10.0', '255.255.255.0', '192.168.1.1' , interfaces)
-# interfaces = [['0/4', '0/5'], ['0/2'], ['0/2', '0/8']]
-# crea_vlan(conexion,2, 'vlan-2', '192.168.20.0', '255.255.255.0', '192.168.1.1' , interfaces)
-# interfaces = [['0/4', '0/5'], ['0/2','0/7'], ['0/2', '0/8']]
-# crea_vlan(conexion,3, 'vlan-3', '192.168.30.0', '255.255.255.0', '192.168.1.1' , interfaces)
-# print("\n")
-
-# Consulta Vlans
-# print("\t > Respuestas al consultar all < \n")
-# datos = consulta_all(conexion)
-# for dato in datos:
-# 	print(dato)
-# print("\n")
-
-# # Consulta especial Vlan
-# print("\t > Respuestas al consultar una VLAN < \n")
-# dato = consulta_vlan_especial(conexion,1)
-# for fila in dato:
-# 	print(fila)
-# print("\n")
-
-# # Elimina vlan
-# print("\t > Respuestas al eliminar una VLAN < \n")
-# elimina_vlan(conexion,1)
-# print("\n")
-
-# # Consulta Vlans
-# print("\t > Respuestas al consultar VLANS < \n")
-# datos = consulta_vlans(conexion)
-# for dato in datos:
-# 	print(dato)
-# print("\n")
-
-# close_db(conexion)
-
-#import ipaddress as ip
-#net = ip.ip_network("{}/{}".format("192.168.1.0","255.255.255.0"))
-#print(list(net)[1])
-
