@@ -1,7 +1,7 @@
 from pyvis.network import Network
 import json, ipaddress, os
 
-def cambiarEnlaces(net, out_net):
+def cambiarEnlaces(net, out_net): #if para base_template 
 	fp = open(net, 'r')
 	fo = open(out_net, 'w')
 	for i in enumerate(fp):
