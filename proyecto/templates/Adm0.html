@@ -3,16 +3,43 @@
 
 {% block contenido %}
 <!-- CONTENIDO --><br><br><br>
-        <div class="row" style="margin-bottom: 15%;">
+        <div class="row" style="margin-bottom: 5%;">
             <!-- Timeline -->
-            <h2 class="center-align">Escanear red</h2>
+            <h2 class="center-align">Opciones Red</h2>
             <article class="col s12">
 
                 <div class="full-width center-align" style="margin: 40px 0; font-size: 24px;">
+                	<form method="POST" action="/adm0">
+                		<input type="hidden" name="opc" id="opc" value="1">
+                    	<button type="submit" class="waves-effect waves-light btn-large blue"><i class="zmdi zmdi-swap-vertical-circle left"></i>Escanear Red</button>
+                	</form>
+                </div>
 
-                    <a class="waves-effect waves-light btn-large blue"><i class="zmdi zmdi-swap-vertical-circle left"></i>Escanear</a>
+            </article>                    
+        </div>        
+        <div class="row" style="margin-bottom: 15%;">
+        	<article class="col s12">
 
-                </div><br><br><br><br> 
+                <div class="col s12 m4 full-width center-align" style="margin: 40px 0; font-size: 24px;">
+                	<form method="POST" action="/adm0">
+                		<input type="hidden" name="opc" id="opc" value="2">
+                    	<button type="submit" class="waves-effect waves-light btn-large indigo"><i class="zmdi zmdi-swap-vertical-circle left"></i>RIP</button>
+                	</form>
+                </div>
+
+                <div class="col s12 m4 full-width center-align" style="margin: 40px 0; font-size: 24px;">
+                    <form method="POST" action="/adm0">
+                		<input type="hidden" name="opc" id="opc" value="3">
+                    	<button type="submit" class="waves-effect waves-light btn-large indigo"><i class="zmdi zmdi-swap-vertical-circle left"></i>OSPF</button>
+                	</form>
+                </div>
+
+                <div class="col s12 m4 full-width center-align" style="margin: 40px 0; font-size: 24px;">
+                	<form method="POST" action="/adm0">
+                		<input type="hidden" name="opc" id="opc" value="4">
+                    	<button type="submit" class="waves-effect waves-light btn-large indigo"><i class="zmdi zmdi-swap-vertical-circle left"></i>EIGRP</button>
+                	</form>
+                </div>
 
             </article>
         </div>        

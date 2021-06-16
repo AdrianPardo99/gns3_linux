@@ -1,0 +1,111 @@
+{% extends "Base_Admin.html" %}
+{% block title %}.: Dispositivos Red :.{% endblock %}
+
+{% block contenido %}
+<!-- CONTENIDO -->
+        <script type="text/javascript">
+        function modifica(form){
+            $("form").submit(function(e){//entro en la funcion submit
+                e.preventDefault();//Desactivo el envio automatico
+                //resto código
+                $.ajax({
+                        url: '/adm413',
+                        type: 'POST',
+                        data: {
+                            idDisp: form.idDisp.value,
+                            nombre: form.nombre.value,
+                            sistem: form.sistem.value,
+                            locali: form.locali.value,
+                            encarg: form.encarg.value,
+                            contac: form.contac.value,
+                            timeac: form.timeac.value,
+                            timemo: form.timemo.value
+                        },
+                        cache:false,
+                        success: function(response){
+                            console.log(response);
+                            swal({
+                                title: "Actualización Exitosa :)",
+                                text: response,
+                                type: "success"
+                            },
+                            function(){
+                                setTimeout(function(){location.href ="/adm4";},350);//Esperamos 0.35s para recargar la pagina
+                            });
+                        }
+                    })
+            });
+        }
+    </script>
+
+        <div class="row">
+            <nav>
+                <div class="nav-wrapper grey darken-2">
+                    <div class="col s12" style="text-align: center;">                        
+                        <a href="/adm4" class="rutaNavega">Dispositivos de red</a>
+                        <i class="zmdi zmdi-chevron-right rutaNavega" style="display: inline-block;"></i>                        
+                        <a href="#" class="rutaNavegaFinal">Modificar {{filas[1]}}</a>                        
+                    </div>
+                </div>
+            </nav>
+        </div>
+        <div class="row" style="margin-bottom: 15%;">
+            <!-- Timeline -->            
+            <article class="col s12">
+
+                <div class="full-width center-align" style="margin: 40px 0; padding: 0;">                
+                    <div class="container">
+                        <div class="row">
+                            <h2 class="center-align">{{filas[1]}}</h2>                                
+                            <hr>
+                            <form method="POST" action="/adm412">
+                                <div class="col s12 m12 left-align">
+                                    <p style="font-size: 18px;">
+                                        <b>Sistema:&nbsp; &nbsp; &nbsp;</b>
+                                        <input type="text" name="sistem" id="sistem" value="{{filas[2]}}" required>
+                                    </p>
+                                </div>
+                                <div class="col s12 left-align">
+                                    <p style="font-size: 18px;">
+                                        <b>Localizacion:&nbsp; &nbsp; &nbsp;</b>
+                                        <input type="text" name="locali" id="locali" value="{{filas[3]}}"required>
+                                    </p>
+                                </div>
+                                <div class="col s12 left-align">
+                                    <p style="font-size: 18px;">
+                                        <b>Encargado:&nbsp; &nbsp; &nbsp;</b>
+                                        <input type="text" name="encarg" id="encarg" value="{{filas[4]}}"required>
+                                    </p>
+                                </div>
+                                <div class="col s12 left-align">
+                                    <p style="font-size: 18px;">
+                                        <b>Contacto:&nbsp; &nbsp; &nbsp;</b>
+                                        <input type="text" name="contac" id="contac" value="{{filas[5]}}"required>
+                                    </p>
+                                </div>
+                                <div class="col s12 left-align">
+                                    <p style="font-size: 18px;">
+                                        <b>Tiempo Activo:&nbsp; &nbsp; &nbsp;</b>
+                                        <input type="text" name="timeac" id="timeac" value="{{filas[6]}}"required disabled>
+                                    </p>
+                                </div>
+                                <div class="col s12 left-align">
+                                    <p style="font-size: 18px;">
+                                        <b>Ultima modificacion:&nbsp; &nbsp; &nbsp;</b>
+                                        <input type="text" name="timemo" id="timemo" value="{{filas[7]}}"required disabled>
+                                    </p>
+                                </div>                            
+                                    <input type="hidden" name="idDisp" id="idDisp" value="{{filas[0]}}">
+                                    <input type="hidden" name="nombre" id="nombre" value="{{filas[1]}}">                               
+                                    <button onclick="modifica(this.form);" class="btn-large purple waves-effect waves-light" type="submit" name="enviar" id="enviar"><i class="zmdi zmdi-mail-send right"></i>Modificar
+                                    </button>
+                            </form>
+                        </div>
+                    </div>                                    
+                </div>
+            </article>
+        </div>        
+<!-- CONTENIDO -->
+
+
+{% endblock %}

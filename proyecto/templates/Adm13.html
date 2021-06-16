@@ -3,33 +3,60 @@
 
 {% block contenido %}
     <script type="text/javascript">
-    function EliminarAdmin(){
-        var valor='prueba';
-        swal({//Método de sweetAlert para ventanas de dialogo  
-            title: "¿Quieres borrar este administrador?",
-            text: "Será borrado el administrador: "+valor,
-            type: "warning", //Logo de cuidado :v
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B5F",
-            confirmButtonText: "Si, quiero Borrarlo",
-            cancelButtonText: "Cancelar",
-            closeOnConfirm: false,
-            closeOnCancel: false }, 
-            function(isConfirm){//Funcion de sweet alert para validar confirmacion
-               if (isConfirm) {                    
-                    swal({
-                        title: "Administrador Eliminado",
-                        text: "El administrador: "+valor+" ha sido eliminado",
-                        type: "success"
-                        },
-                        function(){
-                            setTimeout(function(){location.reload();},350);//Esperamos 0.35s para recargar la pagina
-                            //location.reload(); //Recargamos pagina para ver que se haya eliminado el usuario
-                    })
-                } else {     
-                    swal("Operación Cancelada", "El administrador: "+valor+" está a salvo", "error");   
+    function EliminarAdmin(form){
+        $("form").submit(function(e){
+            e.preventDefault();//Desactivo el envio automatico
+            swal(
+                {//Método de sweetAlert para ventanas de dialogo  
+                title: "¿Desea borrar este administrador?",
+                text: "El usuario "+form.usr.value+" será eliminado",
+                type: "warning", //Logo de cuidado :v
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B5F",
+                confirmButtonText: "Si, quiero Borrarlo",
+                cancelButtonText: "Cancelar",
+                closeOnConfirm: false,
+                closeOnCancel: true 
+                }, 
+                function(isConfirm)
+                {//Funcion de sweet alert para validar confirmacion
+                if (isConfirm) {
+                    $.ajax({
+                        url: '/adm131',
+                        type: 'POST',
+                        data: {
+                                usr: form.usr.value
+                              },
+                        cache:false,
+                            success: function(response){
+                                console.log(response);
+                                if(response=="La persona ya no existe en el sistema"){                                    
+                                    swal({
+                                        title: "Usuario Invalido",
+                                        text: response,
+                                        type: "error"
+                                        },
+                                        function(){
+                                            setTimeout(function(){location.href ="/adm13";},350);//Esperamos 0.35s para recargar la pagina
+                                        }
+                                    );
+                                }else{
+                                    swal({
+                                        title: "Eliminación Exitosa :)",
+                                        text: "Administrador Eliminado",
+                                        type: "success"
+                                        },
+                                        function(){
+                                            setTimeout(function(){location.href ="/adm13";},350);//Esperamos 0.35s para recargar la pagina
+                                        }
+                                    );
+                                }
+                            }
+                        })
+                    }
                 }
-            });
+            );
+        });
     }
     </script>
 <!-- CONTENIDO -->
@@ -60,39 +87,23 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <!-- <td>CorreoNumeroUno@hotmail.com</td> -->
-                                <td>UsuarioNumeroUno</td>
-                                <td>NombreyNombresNumeroUno</td>
-                                <td>ApellidoNumeroUno</td>
-                                <td>ApellidoNumeroDos</td>
-                                <td>                                    
-                                    <button class="btn waves-effect waves-light red hola" type="submit" name="enviar" id="enviar" onclick="EliminarAdmin()"><i class="zmdi zmdi-delete"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <!-- <td>CorreoNumeroDos@hotmail.com</td> -->
-                                <td>UsuarioNumeroDos</td>
-                                <td>NombreyNombresNumeroDos</td>
-                                <td>ApellidoNumeroUno</td>
-                                <td>ApellidoNumeroDos</td>
-                                <td>                                    
-                                    <button class="btn waves-effect waves-light red hola" type="submit" name="enviar" id="enviar" onclick="EliminarAdmin()"><i class="zmdi zmdi-delete"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <!-- <td>CorreoNumeroTres@hotmail.com</td> -->
-                                <td>UsuarioNumeroTres</td>
-                                <td>NombreyNombresNumeroTres</td>
-                                <td>ApellidoNumeroUno</td>
-                                <td>ApellidoNumeroDos</td>
-                                <td>                                    
-                                    <button class="btn waves-effect waves-light red hola" type="submit" name="enviar" id="enviar" onclick="EliminarAdmin()"><i class="zmdi zmdi-delete"></i>
-                                    </button>
-                                </td>
-                            </tr>                        
+                            {% if filas != None %}
+                                {% for fila in filas %}
+                                <tr>
+                                    <form class="col s12" id="ModAdmin" name="ModAdmin" method="POST" action="/adm131">
+                                        <input type="hidden" name="usr" id="usr" value="{{fila[1]}}">
+                                        <td>{{fila[1]}}</td>
+                                        <td>{{fila[2]}}</td>
+                                        <td>{{fila[3]}}</td>
+                                        <td>{{fila[4]}}</td>
+                                        <td>                                    
+                                            <button class="btn waves-effect waves-light red hola" type="submit" name="enviar" id="enviar" onclick="EliminarAdmin(this.form)"><i class="zmdi zmdi-delete"></i>
+                                            </button>
+                                        </td>
+                                    </form>
+                                </tr>
+                                {% endfor %}
+                            {% endif %}                                                
                         </tbody>
                     </table>
                 </div>

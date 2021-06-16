@@ -1,15 +1,46 @@
-{% extends "Base_Usr.html" %}
+{% extends "Base_Admin.html" %}
 {% block title %}.: Dispositivos Red :.{% endblock %}
 
 {% block contenido %}
 <!-- CONTENIDO -->
+        <script type="text/javascript">
+        function alertas(form){
+            $("form").submit(function(e){//entro en la funcion submit
+                e.preventDefault();//Desactivo el envio automatico
+                //resto código
+                $.ajax({
+                        url: '/adm411',
+                        type: 'POST',
+                        data: {
+                            idDisp: form.idDisp.value,
+                            email: form.email.value
+                        },
+                        cache:false,
+                        success: function(response){
+                            console.log(response);
+                            swal({
+                                title: "Actualización Exitosa :)",
+                                text: response,
+                                type: "success"
+                            },
+                            function(){
+                                setTimeout(function(){location.href ="/adm4";},350);//Esperamos 0.35s para recargar la pagina
+                            });
+                        }
+                    })
+            });
+        }
+
+        
+    </script>
+
         <div class="row">
             <nav>
                 <div class="nav-wrapper grey darken-2">
                     <div class="col s12" style="text-align: center;">                        
                         <a href="/adm4" class="rutaNavega">Dispositivos de red</a>
                         <i class="zmdi zmdi-chevron-right rutaNavega" style="display: inline-block;"></i>                        
-                        <a href="#" class="rutaNavegaFinal">Nombre Dispositivo</a>
+                        <a href="#" class="rutaNavegaFinal">{{filas[1]}}</a>
                     </div>
                 </div>
             </nav>
@@ -18,43 +49,225 @@
             <!-- Timeline -->            
             <article class="col s12">
 
-                <div class="full-width center-align" style="margin: 40px 0;">
-                    
+                <div class="full-width center-align" style="margin: 40px 0; padding: 0;">                
                     <div class="container">
                         <div class="row">
-                            <h2 class="center-align">Nombre Dispositivo</h2>
+                            <h2 class="center-align">{{filas[1]}}</h2>
                             <hr>
-                            <div class="col s12">
-                                <p class="flow-text">
-                                    Lorem ipsum dolor sit amet
+                            <div class="col s12 left-align">
+                                <p style="font-size: 18px;">
+                                    <b>Sistema:&nbsp; &nbsp; &nbsp;</b>{{filas[2]}}
                                 </p>
                             </div>
-                            <div class="col s12">
-                                <p class="flow-text">
-                                    Lorem ipsum dolor sit amet
+                            <div class="col s12 left-align">
+                                <p style="font-size: 18px;">
+                                    <b>Localizacion:&nbsp; &nbsp; &nbsp;</b>{{filas[3]}}
                                 </p>
                             </div>
-                            <div class="col s12">
-                                <p class="flow-text">
-                                    Lorem ipsum dolor sit amet
+                            <div class="col s12 left-align">
+                                <p style="font-size: 18px;">
+                                    <b>Encargado:&nbsp; &nbsp; &nbsp;</b>{{filas[4]}}
+                                </p>
+                            </div>
+                            <div class="col s12 left-align">
+                                <p style="font-size: 18px;">
+                                    <b>Contacto:&nbsp; &nbsp; &nbsp;</b>{{filas[5]}}
+                                </p>
+                            </div>
+                            <div class="col s12 left-align">
+                                <p style="font-size: 18px;">
+                                    <b>Tiempo Activo:&nbsp; &nbsp; &nbsp;</b>{{filas[6]}}
+                                </p>
+                            </div>
+                            <div class="col s12 left-align">
+                                <p style="font-size: 18px;">
+                                    <b>Ultima modificacion:&nbsp; &nbsp; &nbsp;</b>{{filas[7]}}
                                 </p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="container" style="margin-bottom: 128px;">
-                        <div class="row">                            
-                            <div class="col s12 center-align">                                
-                                <a class="waves-effect waves-light btn-large blue"><i class="zmdi zmdi-notifications-active right"></i>Activar Notificaciones</a>
-                                <a class="waves-effect waves-light btn-large red"><i class="zmdi zmdi-notifications-off right"></i>Desactivar Notificaciones</a>
-                            </div>                            
+                    <div class="container">
+                        <div class="row">
+                            <div class="col s12 m6 center-align">
+
+                                <form method="POST" action="/adm412">
+                                    <input type="hidden" name="idDisp" id="idDisp" value="{{filas[0]}}">
+                                    <input type="hidden" name="nombre" id="nombre" value="{{filas[1]}}">
+                                    <input type="hidden" name="sistem" id="sistem" value="{{filas[2]}}">
+                                    <input type="hidden" name="locali" id="locali" value="{{filas[3]}}">
+                                    <input type="hidden" name="encarg" id="encarg" value="{{filas[4]}}">
+                                    <input type="hidden" name="contac" id="contac" value="{{filas[5]}}">
+                                    <input type="hidden" name="timeac" id="timeac" value="{{filas[6]}}">
+                                    <input type="hidden" name="timemo" id="timemo" value="{{filas[7]}}">                                    
+                                    <button class="btn-large purple waves-effect waves-light" type="submit" name="enviar" id="enviar"><i class="zmdi zmdi-edit right"></i>Modificar
+                                    </button>
+                                </form>
+
+                            </div>
+                            <div class="col s12 m6 center-align">
+                                
+                                {% if filas[8] == 2 %}
+                                <form method="POST" action="/adm411">
+                                    <input type="hidden" name="idDisp" id="idDisp" value="{{filas[0]}}">
+                                    <input type="hidden" name="email" id="email" value="{{email}}">
+                                    <button onclick="alertas(this.form);" class="btn-large blue waves-effect waves-light" type="submit" name="enviar" id="enviar"><i class="zmdi zmdi-notifications-active right"></i>Activar Notificaciones
+                                    </button>
+                                </form>
+                                {% endif %}
+
+                                {% if filas[8] == 1 %}
+                                <form method="POST" action="/adm411">
+                                    <input type="hidden" name="idDisp" id="idDisp" value="{{filas[0]}}">
+                                    <input type="hidden" name="email" id="email" value="{{email}}">
+                                    <button onclick="alertas(this.form);" class="btn-large red waves-effect waves-light" type="submit" name="enviar" id="enviar"><i class="zmdi zmdi-notifications-off right"></i>Desactivar Notificaciones
+                                    </button>
+                                </form>
+                                {% endif %}
+
+                            </div>                                                    
                         </div>
-                    </div>            
-                    
-
-                </div><br><br> 
-
+                    </div>                    
+                </div>
             </article>
         </div>        
-<!-- CONTENIDO -->        
+<!-- CONTENIDO -->
+
+<!-- Grafica -->
+
+    <div class="row">
+            <!-- Timeline -->
+            <article class="col s12">
+
+                <style type="text/css">
+                    #grafica{                
+                        height: 550px; 
+                        min-width: 300px; 
+                        max-width: 800px;
+                        margin: 0 auto;
+                        background: rgb(197,197,197);
+                    }
+                    #sliders{
+                        min-width: 200px; 
+                        max-width: 400px;                        
+                        margin: 0% 40%;
+                    }
+                </style>
+                
+                <script src="{{ url_for('static',filename='js/grafica1.js') }}"></script>
+                <script src="{{ url_for('static',filename='js/grafica2.js') }}"></script>                
+                <script src="{{ url_for('static',filename='js/grafica3.js') }}"></script>
+                <script src="{{ url_for('static',filename='js/grafica4.js') }}"></script>
+                
+                <script type="text/javascript">                    
+                    $(function () {
+                        //                         
+                        var chart = new Highcharts.Chart({
+                            chart: {
+                                renderTo: 'grafica',                                
+                                type: 'column',
+                                options3d: {
+                                    enabled: true,
+                                    alpha: 15,
+                                    beta: 0,
+                                    depth: 50,
+                                    viewDistance: 35
+                                }
+                            },
+                            title: {
+                                text: 'Reporte de paquetes {{filas[1]}}'
+                            },
+                            subtitle: {
+                                text: 'Con base en el escaneo SNMP'
+                            },
+                            plotOptions: {
+                                column: {
+                                    depth: 110
+                                }
+                            },
+                            series: [
+                            {
+                                data: [{{grafiquita[0]}}]//{{filas[9]}}
+                            },
+                            {
+                                data: [{{grafiquita[1]}}]//{{filas[10]}}
+                            }
+                            ]
+                        });
+
+                        function showValues() {
+                            $('#alpha-value').html(chart.options.chart.options3d.alpha);
+                            $('#beta-value').html(chart.options.chart.options3d.beta);
+                            $('#depth-value').html(chart.options.chart.options3d.depth);
+                        }
+
+                        // Activar los sliders
+                        $('#sliders input').on('input change', function () {
+                            chart.options.chart.options3d[this.id] = this.value;
+                            showValues();
+                            chart.redraw(false);
+                        });
+
+                        showValues();
+                    });
+                </script>
+                
+                <div id="grafica"></div>
+                <div id="sliders">
+                    <table>
+                        <tr>
+                            <td>Ángulo Horizontal</td>
+                            <td><input id="alpha" type="range" min="0" max="45" value="15"/> <span id="alpha-value" class="value"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Ángulo Vertical</td>
+                            <td><input id="beta" type="range" min="-45" max="45" value="15"/> <span id="beta-value" class="value"></span></td>
+                        </tr>
+                        <tr>
+                            <td>Produndidad</td>
+                            <td><input id="depth" type="range" min="20" max="100" value="50"/> <span id="depth-value" class="value"></span></td>
+                        </tr>
+                    </table>
+                </div>
+
+            </article>
+        </div>    
+<!-- Grafica -->
+
+    <br><br><br><br>
+<!-- Historial paquetes -->
+    <h2 class="center-align">Historial paquetes</h2>
+    <div class="container" style="margin-bottom: 15%;">
+        <div class="row">
+            <div class="col s12">
+                <table class="responsive-table highlight centered">
+                    <thead>
+                        <tr>
+                            <!-- <th data-field="Email">Email</th> -->
+                            <th data-field="Usuario">id Registro</th>
+                            <th data-field="Nombre">Dispositivo</th>
+                            <th data-field="Apellido1">Paquetes Enviados</th>
+                            <th data-field="Apellido2">Paquetes Perdidos</th>
+                            <th data-field="Modificar">Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if tablita != None %}
+                        {% for fila in tablita %}
+                        <tr>
+                            <td>{{fila[0]}}</td>
+                            <td>{{fila[1]}}</td>
+                            <td>{{fila[2]}}</td>
+                            <td>{{fila[3]}}</td>
+                            <td>{{fila[4]}}</td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+<!-- Historial paquetes -->
+
 {% endblock %}

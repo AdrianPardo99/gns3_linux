@@ -2,7 +2,17 @@
 {% block title %}.: Login :.{% endblock %}
 
 {% block content %}
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/login.css') }}">
+			<!-- Sweet Alert CSS -->
+	    <link rel="stylesheet" href="{{ url_for('static',filename='css/sweetalert1.css') }}">	    	   
+
+	    <!-- Sweet Alert JS -->
+	    <script src="{{ url_for('static',filename='js/sweetalert.min1.js') }}"></script>
+	    
+	    <!-- jQuery -->
+	    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	    <script>window.jQuery || document.write('<script src="{{ url_for('static',filename='js/jquery-2.2.0.min.js') }}"><\/script>')</script>
+
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='css/login.css') }}">		
 		<script>
 		$(document).ready(function() {
     		$(".button-collapse").sideNav(); //Menu del Header
@@ -38,14 +48,68 @@
 
 			$('.tooltipped').tooltip({delay: 50});//Mensajito en hover del boton
 
-			$('.materialboxed').materialbox();//Efecto zoom de imagenes
+			$('.materialboxed').materialbox();//Efecto zoom de imagenes					
+
   		});
+  		function traeValores(formulario){
+  			// swal("Normal");   			
+  			$("form").submit(function(e){//entro en la funcion submit
+                e.preventDefault();//Desactivo el envio automatico
+                swal({
+                    title: "Inicio de sesion",
+                    text: "El usuario:  "+formulario.usuario.value+ "  ¿Es correcto?",
+                    type: "warning", //Logo de cuidado :v
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B5F",
+                    confirmButtonText: "Si, entrar",
+                    cancelButtonText: "Cancelar",
+                    closeOnConfirm: false
+                    },
+                    function(){
+                        // formulario.submit();
+                        $.ajax({
+                                url: '/login',                                
+                                type: 'POST',
+                                data: {
+                                    usuario: formulario.usuario.value,
+                                    clave: formulario.clave.value                                    
+                                },
+                                cache:false,
+                                success: function(response){
+                                	if(response=="Administrador"){
+                                		swal({
+                                            title: "Bienvenid@",
+                                            text: response,
+                                            type: "success"
+                                        },
+                                        function(){
+                                            setTimeout(function(){location.href ="/adm0";},350);//Esperamos 0.35s para recargar la pagina
+                                        });
+                                	}else if(response=="Cliente"){
+                                		swal({
+                                            title: "Bienvenid@",
+                                            text: response,
+                                            type: "success"
+                                        },
+                                        function(){
+                                            setTimeout(function(){location.href ="/usr0";},350);//Esperamos 0.35s para recargar la pagina
+                                        });
+                                	}else if(response=="Invalido"){
+                                		swal("Credenciales invalidas",response,"error"); 
+                                	}
+                                }
+                            })
+                    }
+                );
+                
+            });
+  		}
 	</script>
 		<!-- Empieza SeccionLogin -->
 		<div class="section seccion login">
 			<div style="margin-top: 2%;">
 				<!-- <form method ="POST" action="alumno.html"> -->
-					<form method ="POST" action="/adm5">
+					<form method ="POST" action="/login">
 						<h2> Ingresar </h2>
 						<div class="row">
 							<div class="input-field col s11 blue-text">
@@ -63,7 +127,7 @@
 						</div>
 						
 						<div class="col s12  center"> 
-							<button class="btn-large pink darken-4 waves-effect waves-light" type="submit" id="enviar" name="enviar" value="Ingresar" >Acceder <i class="material-icons right">vpn_key</i></button>
+							<button class="btn-large pink darken-4 waves-effect waves-light" type="submit" id="enviar" name="enviar" value="Ingresar"  onclick="traeValores(this.form)">Acceder <i class="material-icons right">vpn_key</i></button>
 						</div>					
 					</form>
 				</div><br><br>

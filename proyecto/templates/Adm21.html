@@ -3,6 +3,59 @@
 
 {% block contenido %}
 <!-- CONTENIDO -->
+        <script type="text/javascript">
+        function ValorSelect(eve){
+        //alert('valor recibido: '+eve);
+        GeneroValor.value = eve;
+        }
+        function enviarLogin(form){
+            $("form").submit(function(e){//entro en la funcion submit
+                e.preventDefault();//Desactivo el envio automatico
+                //resto código   
+                if(form.pswd1.value != form.pswd2.value){
+                    swal("Las contraseñas no coinciden","","warning");
+                    $("#pswd1").focus();
+                }else{
+                    $.ajax({
+                        url: '/adm21',
+                        type: 'POST',
+                        data: {
+                            usr: form.usur.value,
+                            psw: form.pswd1.value,
+                            nom: form.nombre.value,
+                            ap1: form.ape1.value,
+                            ap2: form.ape2.value,                            
+                            gen: form.GeneroValor.value,
+                            ema: form.correo.value
+                        },
+                        cache:false,
+                        success: function(response){
+                            console.log(response);
+                            if(response=="Existe una persona con ese correo"){
+                                swal("Correo previamente registrado",response,"error");
+                            }else if(response=="Existe un administrador con ese usuario"){
+                                swal("Usuario previamente registrada",response,"error");
+                            }else if(response=="Existe un cliente con ese usuario"){
+                                swal("Usuario previamente registrado",response,"error");
+                            }else if(response=="Cliente registrado"){
+                                swal({
+                                    title: "Registro Exitoso :)",
+                                    text: response,
+                                    type: "success"
+                                    },
+                                    function(){
+                                        setTimeout(function(){location.href ="/adm22";},350);//Esperamos 0.35s para recargar la pagina
+                                });
+                            }else{
+                                swal("Error en la base de datos",response,"error");
+                            }
+                        }
+                    })
+                }
+            });
+        }
+    </script>
+
         <div class="row">
             <nav>
                 <div class="nav-wrapper grey darken-2">
@@ -21,17 +74,17 @@
                     <div class="row">
                         <div class="input-field col s8 offset-s2 m4">
                             <i class="zmdi zmdi-account-circle prefix"></i>
-                            <input id="usur" name="usur" type="text" class="validate" length="64" maxlength="64" minlength="8" required>
+                            <input id="usur" name="usur" type="text" class="validate" length="64" maxlength="64" minlength="3" required>
                             <label for="usur">Usuario</label>
                         </div>                              
                         <div class="input-field col s8 offset-s2 m4">
                             <i class="zmdi zmdi-lock-outline prefix"></i>
-                            <input id="pswd1" name="pswd1" type="password" class="validate" length="64" maxlength="64" minlength="8" required>
+                            <input id="pswd1" name="pswd1" type="password" class="validate" length="64" maxlength="64" minlength="3" required>
                             <label for="pswd1">Contraseña</label>
                         </div>
                         <div class="input-field col s8 offset-s2 m4">
                             <i class="zmdi zmdi-lock-outline prefix"></i>
-                            <input id="pswd2" name="pswd2" type="password" class="validate" length="64" maxlength="64" minlength="8" required>
+                            <input id="pswd2" name="pswd2" type="password" class="validate" length="64" maxlength="64" minlength="3" required>
                             <label for="pswd2">Verificar Contraseña</label>
                         </div>
                     </div>
@@ -53,12 +106,12 @@
                     </div>
                     <div class="row">
                         <div class="input-field col s8 offset-s2 m6">
-                            <i class="zmdi zmdi-time prefix"></i>
-                            <input id="edad" name="edad" type="number" step="1" min="14" max="99" list="Edades" class="validate" length="2" maxlength="2" required>
-                            <label for="edad">Edad</label>
+                            <i class="zmdi zmdi-email prefix"></i>
+                            <input id="correo" name="correo" type="email" class="validate" length="128" maxlength="128" minlength="6" required>
+                            <label for="correo">Correo Electrónico</label>
                         </div>
                         <div class="input-field col s8 offset-s2 m6">
-                            <select class="icons" required>
+                            <select class="icons" required name="Genero" id="Genero" onchange="ValorSelect(this.value);" required>
                                 <option value="-1" disabled selected>Selecciona una opción</option>
                                 <option value="1" data-icon="{{ url_for('static',filename='img/01Fem.png') }}" class="circle">Femenino</option>
                                 <option value="2" data-icon="{{ url_for('static',filename='img/02Mas.png') }}" class="circle">Masculino</option>
@@ -66,27 +119,16 @@
                             </select>
                             <label>Género</label>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="input-field col s8 offset-s2 m12">
-                            <i class="zmdi zmdi-email prefix"></i>
-                            <input id="correo" name="correo" type="email" class="validate" length="128" maxlength="128" minlength="6" required>
-                            <label for="correo">Correo Electrónico</label>
-                        </div>
+                        <!-- <input name="GeneroValor" id="GeneroValor" type="text" value=""> -->
+                        <input name="GeneroValor" id="GeneroValor" type="hidden">
                     </div>
                     <div class="row">
                         <div class="input-field col s5 offset-s4 m5 offset-m5">
-                            <button class="btn waves-effect waves-light" type="submit" name="enviar" id="enviar">Enviar&nbsp;&nbsp;<i class="zmdi zmdi-mail-send"></i>
+                            <button onclick="enviarLogin(this.form);" class="btn waves-effect waves-light" type="submit" name="enviar" id="enviar">Enviar&nbsp;&nbsp;<i class="zmdi zmdi-mail-send"></i>
                             </button>
                         </div>
                     </div>
                 </form>
-                <datalist id="Edades">                       
-                    <option value="18">
-                    <option value="19">
-                    <option value="20">
-                    <option value="21">
-                </datalist>
             </div>
         </div><br><br>
 <!-- CONTENIDO -->        

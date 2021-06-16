@@ -2,90 +2,31 @@
 {% block title %}.: Dispositivos Red :.{% endblock %}
 
 {% block contenido %}
-<!-- CONTENIDO --><br><br><br>
+<!-- CONTENIDO -->    
+    <br><br><br>
         <div class="row" style="margin-bottom: 15%;">
             <!-- Timeline -->
             <h2 class="center-align">Dispositivos de red</h2>
-            <article class="col s12">
+            <article class="col s12 m12">
 
                 <div class="full-width center-align" style="margin: 40px 0;">
-
-                    <a href="/adm12">
-                    <div class="tile">
-                        <div class="tile-icon"><i class="zmdi zmdi-group-work"></i></div>                        
-                        <div class="tile-caption">                            
-                            <span class="center-align">Nom1</span>
-                            <p class="center-align">Dispositivo Tal</p>        
+                {% if filas != None %}
+                    {% for fila in filas %}
+                    <form class="col s12 m6" method="POST" action="/adm41">
+                        <a>
+                        <div class="tile">
+                            <div class="tile-icon"><i class="zmdi zmdi-group-work"></i></div>                        
+                            <div class="tile-caption">                            
+                                <span class="center-align">{{fila[1]}}</span>
+                                <button class="btn waves-effect waves-light teal hola" type="submit" name="enviar" id="enviar"><i class="zmdi zmdi-eye"></i></button>
+                            </div>
+                            <input type="hidden" name="idDisp" id="idDisp" value="{{fila[0]}}">
+                            <a class="tile-link">Informacion de {{fila[1]}} &nbsp; <i class="zmdi zmdi-caret-right-circle"></i></a>
                         </div>
-                        <a href="/adm12" class="tile-link waves-effect waves-light">Ver Dispositivo Tal &nbsp; <i class="zmdi zmdi-caret-right-circle"></i></a>
-                    </div>
-                    </a>
-
-                    <a href="/adm12">
-                    <div class="tile">
-                        <div class="tile-icon"><i class="zmdi zmdi-group-work"></i></div>                        
-                        <div class="tile-caption">                            
-                            <span class="center-align">Nom2</span>
-                            <p class="center-align">Dispositivo Tal</p>        
-                        </div>
-                        <a href="/adm12" class="tile-link waves-effect waves-light">Ver Dispositivo Tal &nbsp; <i class="zmdi zmdi-caret-right-circle"></i></a>
-                    </div>
-                    </a>
-                    
-                    <a href="/adm12">
-                    <div class="tile">
-                        <div class="tile-icon"><i class="zmdi zmdi-group-work"></i></div>                        
-                        <div class="tile-caption">                            
-                            <span class="center-align">Nom3</span>
-                            <p class="center-align">Dispositivo Tal</p>        
-                        </div>
-                        <a href="/adm12" class="tile-link waves-effect waves-light">Ver Dispositivo Tal &nbsp; <i class="zmdi zmdi-caret-right-circle"></i></a>
-                    </div>
-                    </a>
-
-                    <a href="/adm12">
-                    <div class="tile">
-                        <div class="tile-icon"><i class="zmdi zmdi-group-work"></i></div>                        
-                        <div class="tile-caption">                            
-                            <span class="center-align">Nom4</span>
-                            <p class="center-align">Dispositivo Tal</p>        
-                        </div>
-                        <a href="/adm12" class="tile-link waves-effect waves-light">Ver Dispositivo Tal &nbsp; <i class="zmdi zmdi-caret-right-circle"></i></a>
-                    </div>
-                    </a>
-
-                    <a href="/adm12">
-                    <div class="tile">
-                        <div class="tile-icon"><i class="zmdi zmdi-group-work"></i></div>                        
-                        <div class="tile-caption">                            
-                            <span class="center-align">Nom5</span>
-                            <p class="center-align">Dispositivo Tal</p>        
-                        </div>
-                        <a href="/adm12" class="tile-link waves-effect waves-light">Ver Dispositivo Tal &nbsp; <i class="zmdi zmdi-caret-right-circle"></i></a>
-                    </div>
-                    </a>
-
-                    <a href="/adm12">
-                    <div class="tile">
-                        <div class="tile-icon"><i class="zmdi zmdi-group-work"></i></div>                        
-                        <div class="tile-caption">                            
-                            <span class="center-align">Nom6</span>
-                            <p class="center-align">Dispositivo Tal</p>        
-                        </div>
-                        <a href="/adm12" class="tile-link waves-effect waves-light">Ver Dispositivo Tal &nbsp; <i class="zmdi zmdi-caret-right-circle"></i></a>
-                    </div>
-                    </a>
-
-                    <a href="/adm12">
-                    <div class="tile">
-                        <div class="tile-icon"><i class="zmdi zmdi-group-work"></i></div>                        
-                        <div class="tile-caption">                            
-                            <span class="center-align">Nom7</span>
-                            <p class="center-align">Dispositivo Tal</p>        
-                        </div>
-                        <a href="/adm12" class="tile-link waves-effect waves-light">Ver Dispositivo Tal &nbsp; <i class="zmdi zmdi-caret-right-circle"></i></a>
-                    </div>
-                    </a>
+                        </a>
+                    </form>
+                    {% endfor %}
+                {% endif %}
 
                 </div><br><br> 
 
