@@ -90,21 +90,12 @@ def crea_tbs(conexion):
 		)
 	cursor_tb.execute(
 			"""
-				create table if not exists cat_actividades(
-					idActiv integer not null primary key,
-					descrip text not null
-				)
-			"""
-		)
-	cursor_tb.execute(
-			"""
 				create table if not exists rep_sistema(
 					idRepor integer not null primary key,
-					idActiv integer not null,
+					Actividad text not null,
 					email text not null,
 					fecha timestamp default current_timestamp,
-					foreign key(email) references persona(email),
-					foreign key(idActiv) references cat_actividades(idActiv)
+					foreign key(email) references persona(email)					
 				)
 			"""
 		)
@@ -135,11 +126,7 @@ def crea_tbs(conexion):
 
 	# Ingresamos los estados que tengran las alertas dentro del sistema
 	llena_cats(conexion,"edo_alerta","idEdoAler","1",[1,'No visto'],'idEdoAler,descrip')
-	llena_cats(conexion,"edo_alerta","idEdoAler","2",[2,'Visto'],'idEdoAler,descrip')
-	
-	# Ingresamos las acciones que se van a registrar dentro del sistema
-	llena_cats(conexion,"cat_actividades","idActiv","1",[1,'Escanea Topologia'],'idActiv,descrip')
-	llena_cats(conexion,"cat_actividades","idActiv","2",[2,'Muestra Topologia'],'idActiv,descrip')
+	llena_cats(conexion,"edo_alerta","idEdoAler","2",[2,'Visto'],'idEdoAler,descrip')	
 	
 	# Ingresamos los estados en los que se encontraran las alertas en el sistema
 	llena_cats(conexion,"edo_control","idEdoCo","1",[1,'Activada'],'idEdoCo,descrip')
