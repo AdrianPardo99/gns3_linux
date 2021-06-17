@@ -11,6 +11,9 @@ from scripts.dibujo import *
 
 def mapearRed(interface):
     res = scan_by_interface(interface,"admin","admin","1234")
+    print("\n\nDatos obtenidos al mapear Red:\n\n")
+    for element in res:
+        print(element)
     return res
 
 def dibujarRed(data):

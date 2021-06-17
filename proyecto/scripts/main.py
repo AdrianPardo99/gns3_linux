@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from pyvis.network import Network
-from module_scan import *
-from dibujo import *
+from scripts.module_scan import *
+from scripts.dibujo import *
 
 """
     @author:        Adrian González Pardo
@@ -22,6 +22,8 @@ general = res[0]
 interconexiones = res[1]
 routers = res[2]
 devices = res[3]
+ip_gateway=res[-1]
+interfaces_interconectadas=res[-2]
 
 net = construirDibujoTopologia(routers, interconexiones, devices, general)
 net.save_graph("temp.html")

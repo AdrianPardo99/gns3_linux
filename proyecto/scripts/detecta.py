@@ -208,6 +208,7 @@ def check_str_ip_in_arr_dict(arr,ip):
 """
 def verifica_conectividad(dict,arr_resp,dict_int):
     conexiones=[]
+    dict_conexiones=[]
     for i,j in dict.items():
         for k,v in dict.items():
             if k!=i:
@@ -223,7 +224,10 @@ def verifica_conectividad(dict,arr_resp,dict_int):
                             ip_r2=dict_int[k][r1].split("/")[0]
                             if (check_str_ip_in_arr_dict(arr_resp,ip_r1) and check_str_ip_in_arr_dict(arr_resp,ip_r2)):
                                 conexiones.append(f"{i}-{k}:{b}")
-    return conexiones
+                                diccio={"ip_1":ip_r2,"interface_1":r1,"host_1":k,
+                                    "ip_2":ip_r1,"interface_2":r2,"host_2":i}
+                                dict_conexiones.append(diccio)
+    return [conexiones,dict_conexiones]
 
 def verifica_index(arr,patern):
     c=0
