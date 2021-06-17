@@ -163,6 +163,19 @@
                 </div>
             </a>                    
             {% endif %}
+            {% if numAlertas==1 %}
+            <a href="/adm5" class="waves-effect Notification">
+                <div class="Notification-icon"><i class="zmdi zmdi-device-hub bg-primary"></i></div>
+                <div class="Notification-text">
+                    <p>
+                        <i class="zmdi zmdi-circle tooltipped" data-position="left" data-delay="50" data-tooltip="Notification as UnRead"></i>
+                        <strong>Alerta</strong> 
+                        <br>
+                        <small>Hay una alerta sin revisar</small>
+                    </p>
+                </div>
+            </a>
+            {% endif %}
             
         </section>
         <!-- Termina Area de Mensajes  -->
