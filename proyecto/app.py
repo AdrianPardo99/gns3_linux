@@ -680,11 +680,23 @@ def usr1():
         else:
             pass
 
+    mapeo = True
+    while mapeo:
+        try:
+            res = mapearRed("eth0")
+            dibujarRed(res)
+            mapeo = False
+            # conexion = conecta_db("Proyecto.db")
+            # respuesta = consulta_usur(conexion,2)
+            # numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
+        except Exception as e:
+            print("show_network(): error al mapear topologia, ", e)
+
 
     except Exception as e:
         return redirect(url_for("login"))
 
-    return render_template('Usr1.html')
+    return render_template('network2.html')
 
 @app.route('/usr2',methods = ['POST','GET'])
 def usr2():

@@ -1,12 +1,16 @@
 from pyvis.network import Network
 import json, ipaddress, os
 
-def cambiarEnlaces(net, out_net): #if para base_template 
+#0 admin, 1 user
+def cambiarEnlaces(net, out_net, tipo_user): #if para base_template 
 	fp = open(net, 'r')
 	fo = open(out_net, 'w')
 	for i in enumerate(fp):
 		if i[0] == 0:
-			fo.write('''{% extends "Base_Admin.html" %}\n''')
+			if tipo_user == 0:
+				fo.write('''{% extends "Base_Admin.html" %}\n''')
+			else:
+				fo.write('''{% extends "Base_Usr.html" %}\n''')
 		elif i[0] == 1:
 			fo.write('''{% block title %}.: Dibuja Topologia :.{% endblock %}\n''')
 		elif i[0] == 2:
