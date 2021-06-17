@@ -118,10 +118,14 @@ def adm0():
                     mapeo = True
                     while mapeo:
                         try:
-                            res = mapearRed("eth0")
-                            dibujarRed(res)
+                            # res = mapearRed("eth0")
+                            # dibujarRed(res)
+                            
+                            obtener_datos_inciales_dispositivos(res[0])
+
                             mapeo = False
                             conexion = conecta_db("Proyecto.db")
+                            alta_disp(conexion,list_data) #idDisp,nombre,sistem,locali,ip,contac
                             respuesta = consulta_usur(conexion,2)
                             numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
                         except Exception as e:

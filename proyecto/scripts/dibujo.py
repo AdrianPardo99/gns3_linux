@@ -1,6 +1,15 @@
 from pyvis.network import Network
 import json, ipaddress, os
 
+def obtener_datos_inciales_dispositivos(datos):
+	d0 = [{'hostname': 'R3', 'interfaces': [{'name': 'FastEthernet0/0', 'ip': '10.0.1.254', 'netmask': '255.255.255.0', 'idnet': '10.0.1.0/24'}, {'name': 'FastEthernet1/0', 'ip': '10.0.2.5', 'netmask': '255.255.255.252', 'idnet': '10.0.2.4/30'}, {'name': 'FastEthernet1/1', 'ip': '10.0.2.1', 'netmask': '255.255.255.252', 'idnet': '10.0.2.0/30'}, {'name': 'FastEthernet2/0', 'ip': '10.0.2.18', 'netmask': '255.255.255.252', 'idnet': '10.0.2.16/30'}, {'name': 'FastEthernet2/1', 'ip': '10.0.2.22', 'netmask': '255.255.255.252', 'idnet': '10.0.2.20/30'}]}, {'hostname': 'R5', 'interfaces': [{'name': 'FastEthernet0/0', 'ip': '10.0.5.254', 'netmask': '255.255.255.252', 'idnet': '10.0.5.252/30'}, {'name': 'FastEthernet1/0', 'ip': '10.0.2.6', 'netmask': '255.255.255.252', 'idnet': '10.0.2.4/30'}, {'name': 'FastEthernet1/1', 'ip': '10.0.2.13', 'netmask': '255.255.255.252', 'idnet': '10.0.2.12/30'}]}, {'hostname': 'R2', 'interfaces': [{'name': 'FastEthernet0/0', 'ip': '10.0.3.254', 'netmask': '255.255.255.252', 'idnet': '10.0.3.252/30'}, {'name': 'FastEthernet1/0', 'ip': '10.0.2.9', 'netmask': '255.255.255.252', 'idnet': '10.0.2.8/30'}, {'name': 'FastEthernet1/1', 'ip': '10.0.2.2', 'netmask': '255.255.255.252', 'idnet': '10.0.2.0/30'}]}, {'hostname': 'R1', 'interfaces': [{'name': 'FastEthernet0/0', 'ip': '10.0.4.254', 'netmask': '255.255.255.252', 'idnet': '10.0.4.252/30'}, {'name': 'FastEthernet1/0', 'ip': '10.0.2.10', 'netmask': '255.255.255.252', 'idnet': '10.0.2.8/30'}, {'name': 'FastEthernet2/0', 'ip': '10.0.2.17', 'netmask': '255.255.255.252', 'idnet': '10.0.2.16/30'}]}, {'hostname': 'R4', 'interfaces': [{'name': 'FastEthernet0/0', 'ip': '10.0.6.254', 'netmask': '255.255.255.252', 'idnet': '10.0.6.252/30'}, {'name': 'FastEthernet1/1', 'ip': '10.0.2.14', 'netmask': '255.255.255.252', 'idnet': '10.0.2.12/30'}, {'name': 'FastEthernet2/1', 'ip': '10.0.2.21', 'netmask': '255.255.255.252', 'idnet': '10.0.2.20/30'}]}]
+
+	for dispositivo in d0:
+		hostname = dispositivo["hostname"]
+		ip_int = dispositivo["interfaces"][0]["ip"]
+		print(hotname, ip_int)
+	return "xd"
+
 #0 admin, 1 user
 def cambiarEnlaces(net, out_net, tipo_user): #if para base_template 
 	fp = open(net, 'r')

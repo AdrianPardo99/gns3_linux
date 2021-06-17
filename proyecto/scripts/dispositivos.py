@@ -39,24 +39,22 @@ def obtener_datos_dispositivo(ip_dispositivo):
     id_dispositivo = ""
     nombre_disp = ""
     nombre_os = ""
-    encargado = ""
     contacto = ""
     lugar = ""
 
-    #res = g_snmp.obtain_router_data(ip_dispositivo)
-    res =  {'sysDescr': 'Cisco IOS Software, 7200 Software (C7200-A3JK9S-M), Version 12.4(25g), RELEASE SOFTWARE (fc1)\r\nTechnical Support: http://www.cisco.com/techsupport\r\nCopyright (c) 1986-2012 by Cisco Systems, Inc.\r\nCompiled Wed 22-Aug-12 11:45 by prod_rel_team', 'sysContact': '', 'sysName': 'R3.la-pandilla-mantequilla', 'sysLocation': '', 'hostname': 'R3'}
+    res = g_snmp.obtain_router_data(ip_dispositivo)
+    #res =  {'sysDescr': 'Cisco IOS Software, 7200 Software (C7200-A3JK9S-M), Version 12.4(25g), RELEASE SOFTWARE (fc1)\r\nTechnical Support: http://www.cisco.com/techsupport\r\nCopyright (c) 1986-2012 by Cisco Systems, Inc.\r\nCompiled Wed 22-Aug-12 11:45 by prod_rel_team', 'sysContact': '', 'sysName': 'R3.la-pandilla-mantequilla', 'sysLocation': '', 'hostname': 'R3'}
 
     nombre_disp = res['hostname']
-    #nombre_disp = res['hostname']
+    #nombre_disp = res['sysName']
     id_dispositivo = res["hostname"][1:]
     nombre_os = re.sub(' +', ' ', res["sysDescr"])
     nombre_os = re.sub('\r+', ' ', nombre_os)
     nombre_os = re.sub('\n+', ' ', nombre_os)
     contacto = res["sysContact"]
     lugar = res["sysLocation"]
-    #falta encargado, no viene en response de snmp
 
-    return [id_dispositivo, nombre_disp, nombre_os, encargado, contacto, lugar]
+    return [id_dispositivo, nombre_disp, nombre_os, contacto, lugar]
 
 
 #ip de alguna interfaz del dispositivo a obtener paquetes
@@ -67,14 +65,29 @@ def obtener_datos_dispositivo(ip_dispositivo):
     #numero total de paquetes recibidos: suma de paquetes de entrada en cada interfaz
 def obtener_paquetes_dispositivo(conexiones):
     #lev_snmp.init_configure("10.0.1.254")
-    #init_configure()
     total_paquetes_enviados = 0
-    total_paquetes_recibidos = 0
-    
+    total_paquetes_perdidos = 0
+    i = 0
     for conexion in conexiones:
         ip_int_1 = conexion
         ip_int_2 = conexiones[conexion]
-
+        print(ip_int_1," a ", ip_int_2)
+        lost1, lost2 = g_snmp.get_interfaces(ip_int_1), g_snmp.get_interfaces(ip_int_2)
+        lost1[3]["ip"]= ip_int_1
+        lost2[1]["ip"]= ip_int_2
+        snmp_res = g_snmp.check_lost_percentage(lost1[3],lost2[1], 50)
+        print(int(snmp_res[2]))
+        print(int(snmp_res[3]))
+        total_paquetes_enviados += int(snmp_res[2])
+        total_paquetes_perdidos += int(snmp_res[3])
+        i += 1
+    
+    print("Paquetes enviados:", total_paquetes_enviados)
+    print("Paquetes recibidos:", total_paquetes_perdidos)
+    
+    print("%", ((total_paquetes_enviados-total_paquetes_perdidos)/total_paquetes_enviados)*100, "paquetes pertidos" )
+    return total_paquetes_enviados, total_paquetes_perdidos
+        
     # print(json.dumps(g_snmp.obtain_router_data("10.0.2.1"),indent=4))
     # lost1, lost2 = g_snmp.get_interfaces(ip_int_1), g_snmp.get_interfaces(ip_int_2)
     # print(json.dumps(lost1,indent=4))
@@ -89,11 +102,11 @@ def obtener_paquetes_dispositivo(conexiones):
     #   Numero de paquetes perdidos: int
     #)
 
+#lev_snmp.init_configure("10.0.1.254")
+# print(obtener_datos_dispositivo("10.0.2.1"))
+# print("conexions del router 3 con los demas routers", obtener_conexiones_dispositivo('R3', d4))
 
-print(obtener_datos_dispositivo("10.0.2.1"))
-print("conexions del router 3 con los demas routers", obtener_conexiones_dispositivo('R3', d4))
-
-datos_dispositivo = obtener_datos_dispositivo("10.0.2.1")
-nom_disp = datos_dispositivo[1]
-conexiones = obtener_conexiones_dispositivo(nom_disp, d4)
-paquetes = obtener_paquetes_dispositivo(conexiones)
+# datos_dispositivo = obtener_datos_dispositivo("10.0.2.1")
+# nom_disp = datos_dispositivo[1]
+# conexiones = obtener_conexiones_dispositivo(nom_disp, d4)
+# paquetes = obtener_paquetes_dispositivo(conexiones)

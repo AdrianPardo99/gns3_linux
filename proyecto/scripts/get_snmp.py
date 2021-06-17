@@ -60,8 +60,19 @@ def get_if_inout(ip, n):
     return {
         "ifInOctets": snmp_query(ip, f"{INTERFACE_OID}.10.{n}"),
         "ifOutOctets": snmp_query(ip, f"{INTERFACE_OID}.16.{n}"),
+        
         "ifInUcastPkts": snmp_query(ip, f"{INTERFACE_OID}.11.{n}"),
-        "ifOutUcastPkts": snmp_query(ip, f"{INTERFACE_OID}.17.{n}"),
+        "ifInNUcastPkts": snmp_query(ip, f"{INTERFACE_OID}.16.{n}"),
+        "ifOutUcastPkts": snmp_query(ip, f"{INTERFACE_OID}.16.{n}"),
+        "ifOutNUcastPkts": snmp_query(ip, f"{INTERFACE_OID}.16.{n}"),
+        # #"ifInNUcastPkts": snmp_query(ip, f"{INTERFACE_OID}.12.{n}"),
+        # "ifInUcastPkts":snmp_query(ip, f"1.3.6.1.2.1.2.2.1.11.{n}"),
+        # "ifInMulticastPkts": snmp_query(ip, f"1.3.6.1.2.1.31.1.1.1.2.{n}"),
+        # "ifInBroadcastPkts": snmp_query(ip, f"1.3.6.1.2.1.31.1.1.1.3.{n}"),
+        # "ifOutUcastPkts": snmp_query(ip, f"1.3.6.1.2.1.2.2.1.17.{n}"),
+        # "ifOutMulticastPkts": snmp_query(ip, f"1.3.6.1.2.1.31.1.1.1.4.{n}"),
+        # "ifOutBroadcastPkts": snmp_query(ip, f"1.3.6.1.2.1.31.1.1.1.5.{n}"),
+        # "OTRO": snmp_query(ip, f"1.3.6.1.2.1.2.2.1.12.{n}"),
     }
 
 """
@@ -141,6 +152,13 @@ def check_lost_percentage(interface_source, interface_dest, percentage):
     info_source = get_if_inout(interface_source["ip"], interface_source["mibIndex"])
     print(info_dest, info_source)
     lost_packages = int(info_source["ifOutUcastPkts"]) - int(info_dest["ifInUcastPkts"])
+    
+    print("\npaquetes \tEnviados\tRecibidos")
+    print("unicast \t{}\t{}".format(info_source["ifOutUcastPkts"], info_dest["ifInUcastPkts"]))
+    print("multicast \t{}\t{}".format(info_source["ifOutMulticastPkts"], info_dest["ifInMulticastPkts"]))
+    print("broadcast \t{}\t{}".format(info_source["ifOutBroadcastPkts"], info_dest["ifInBroadcastPkts"]))
+    print("\n")
+
     lost_percentage = abs(lost_packages * 100 / int(info_source["ifOutUcastPkts"]))
     print(lost_packages, lost_percentage, percentage, info_source["ifOutUcastPkts"])
     """

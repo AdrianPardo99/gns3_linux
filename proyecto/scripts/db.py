@@ -296,7 +296,7 @@ def alta_disp(conexion,list_data):
 	cursor_tb = conexion.cursor()
 	valida = valida_disp(conexion,list_data[0])
 	if valida == 0:
-		sentencia = "insert into dispositivos(idDisp,nombre,sistem,locali,encarg,contac,timeac,timemo) values(?,?,?,?,?,?,?,?)"
+		sentencia = "insert into dispositivos(idDisp,nombre,sistem,locali,encarg,contac,timeac,timemo) values(?,?,?,?,?,?,'','')"
 		cursor_tb.execute(sentencia,list_data)
 		conexion.commit()
 		return "Registro exitoso"
@@ -319,7 +319,7 @@ def consulta_disp_esp(conexion,idDisp):
 
 def modifica_disp(conexion,list_data):
 	cursor_tb = conexion.cursor()
-	sentencia = "update dispositivos set sistem=?, locali=?, encarg=?, contac=?  where idDisp=?"
+	sentencia = "update dispositivos set sistem=?, locali=?, contac=?  where idDisp=?"
 	cursor_tb.execute(sentencia,list_data)
 	conexion.commit()
 	return "Dispositivo modificado"
