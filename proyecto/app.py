@@ -8,6 +8,7 @@ import scripts.down_protocols as down
 import scripts.levanta_eigrp as eigrp
 import scripts.levanta_ospf as ospf
 import scripts.levanta_rip as rip
+import scripts.redes_operaciones as redes_operaciones
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 app.config['SECRET_KEY'] = '12345'
@@ -67,12 +68,14 @@ def login():
             session["idTipoUsr"] = 1
             session["nom"] = regresa_nombre(conexion,usr)
             session["email"] = regresa_email(conexion,usr)
+            session["gateway"]= redes_operaciones.get_gateway()
             return respuesta            
         if respuesta == "Cliente":
             session["usr"] = usr
             session["idTipoUsr"] = 2
             session["nom"] = regresa_nombre(conexion,usr)
             session["email"] = regresa_email(conexion,usr)
+            session["gateway"]= redes_operaciones.get_gateway()
             return respuesta
         if respuesta == "Invalido":
             return respuesta
@@ -106,8 +109,9 @@ def adm0():
         else:
             if request.method == 'POST':
                 opc=request.form['opc']
-                #gateway = session["gateway"] 
-                gateway = '10.0.1.254'
+                gateway = session["gateway"] 
+                print(gateway)
+                #gateway = '10.0.1.254'
                 if(opc=='1'):
                     # Volver a escanear
                     print("Volver a escanear")
@@ -127,7 +131,7 @@ def adm0():
                     # RIP
                     #mandar llamar limpiar protcocolos
                     print("RIP")
-                    down.init_configure()
+                    down.init_configure(gateway)
                     rip.init_configure(gateway)
                     pass
                 elif(opc=='3'):
