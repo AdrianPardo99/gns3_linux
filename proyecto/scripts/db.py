@@ -462,7 +462,7 @@ def set_alertas_visto(conexion,email):
 
 # --------------- Testing area ---------------
 # # Crear BD
-# conexion = conecta_db("Proyecto.db")
+conexion = conecta_db("Proyecto.db")
 # cursor_tb = conexion.cursor()
 # respuesta = consulta_paquete_esp(conexion,1)
 # print(inserta_paquetes(conexion,1,'94874','1270'))
@@ -500,7 +500,7 @@ def set_alertas_visto(conexion,email):
 # 	print(fila)
 
 
-# # print(alta_usur(conexion,'hola1@hola.com','usr1','123','USR01','02','02','M',1))
+print(alta_usur(conexion,'hola1@hola.com','usr1','123','USR01','02','02','M',1))
 # # print(alta_usur(conexion,'hola2@hola.com','usr2','123','USR02','02','02','F',2))
 # # print(alta_usur(conexion,'hola3@hola.com','usr3','123','USR03','03','03','M',2))
 # # print(cambio_usur(conexion,'usr1','12','usr1','01','01','M'))

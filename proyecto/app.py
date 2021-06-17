@@ -3,6 +3,7 @@ from flask_mail import Mail, Message
 from flask import request, render_template, url_for, redirect, flash, session, jsonify
 from scripts.scanner import *
 from scripts.correos import *
+from scripts.db import *
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 app.config['SECRET_KEY'] = '12345'
@@ -443,7 +444,7 @@ def adm3():
             mapeo = False
         except Exception as e:
             print("show_network(): error al mapear topologia, ", e)
-    return render_template('Adm3.html')
+    return render_template('Adm3.html', nombrecito=session["nom"], numAlertas=numalertas[0])
 
 """
     Dispositivos - Muestra dispositivos
