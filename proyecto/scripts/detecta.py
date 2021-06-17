@@ -192,9 +192,21 @@ def scan_range(ips,broadcast):
 
 """
     @args:
+        <arr> es el arreglo que contiene los diccionarios de respuesta
+        <ip> es la direccion ip en formato de string el cual verificara si esta
+            no en las respuestas
+"""
+def check_str_ip_in_arr_dict(arr,ip):
+    for i in arr:
+        if ip in i.keys():
+            return True
+    return False
+
+"""
+    @args:
         <dict> es el diccionario de routers para ver las interconexiones que hay entre ellos
 """
-def verifica_conectividad(dict):
+def verifica_conectividad(dict,arr_resp,dict_int):
     conexiones=[]
     for i,j in dict.items():
         for k,v in dict.items():
@@ -202,7 +214,15 @@ def verifica_conectividad(dict):
                 for a,b in v.items():
                     if b in j.values():
                         if (f"{i}-{k}:{b}" not in conexiones) and (f"{k}-{i}:{b}" not in conexiones):
-                            conexiones.append(f"{i}-{k}:{b}")
+                            r1=a.split("-sub")[0]
+                            r2=""
+                            for c,d in j.items():
+                                if d==b:
+                                    r2=c.split("-sub")[0]
+                            ip_r1=dict_int[i][r2].split("/")[0]
+                            ip_r2=dict_int[k][r1].split("/")[0]
+                            if (check_str_ip_in_arr_dict(arr_resp,ip_r1) and check_str_ip_in_arr_dict(arr_resp,ip_r2)):
+                                conexiones.append(f"{i}-{k}:{b}")
     return conexiones
 
 def verifica_index(arr,patern):
@@ -212,3 +232,11 @@ def verifica_index(arr,patern):
             break
         c+=1
     return c
+
+def create_wildcard(net):
+    wildcard=[]
+    for i in range(4):
+        wildcard.append(net[i]-255)
+        if wildcard[i]<0:
+            wildcard[i]=-wildcard[i]
+    return wildcard

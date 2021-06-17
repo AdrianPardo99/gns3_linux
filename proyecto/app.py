@@ -4,6 +4,10 @@ from flask import request, render_template, url_for, redirect, flash, session, j
 from scripts.scanner import *
 from scripts.correos import *
 from scripts.db import *
+import scripts.down_protocols as down
+import scripts.levanta_eigrp as eigrp
+import scripts.levanta_ospf as ospf
+import scripts.levanta_rip as rip
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 app.config['SECRET_KEY'] = '12345'
@@ -102,6 +106,8 @@ def adm0():
         else:
             if request.method == 'POST':
                 opc=request.form['opc']
+                #gateway = session["gateway"] 
+                gateway = '10.0.1.254'
                 if(opc=='1'):
                     # Volver a escanear
                     print("Volver a escanear")
@@ -121,14 +127,20 @@ def adm0():
                     # RIP
                     #mandar llamar limpiar protcocolos
                     print("RIP")
+                    down.init_configure()
+                    rip.init_configure(gateway)
                     pass
                 elif(opc=='3'):
                     # OSPF
                     print("OSPF")
+                    down.init_configure(gateway)
+                    ospf.init_configure(gateway)
                     pass
                 elif(opc=='4'):
                     # EIGRP
                     print("EIGRP")
+                    down.init_configure(gateway)
+                    eogrp.init_configure(gateway)
                     pass
             conexion = conecta_db("Proyecto.db")
             numalertas = cantidad_alertas_NoVistas(conexion,session["email"])

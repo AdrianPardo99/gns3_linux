@@ -53,9 +53,6 @@ def crea_tbs(conexion):
 				)
 			"""
 		)
-	# obtain_router_data(host) en get_snmp.py 
-	# actualizar def set_information(index,host,value): en set_snmp>
-	# obtener datos paquetes def check_lost_percentage(interface_source, interface_dest, percentage)  get_snmp.py
 	cursor_tb.execute(
 			"""
 				create table if not exists edo_alerta(
@@ -479,10 +476,10 @@ conexion = conecta_db("Proyecto.db")
 # for i in respuesta:
 # 	print(i)
 # conexion = conecta_db("Proyecto.db")
-# print(regis_alerta(conexion,4,'elias@alumno.com','ALERTA PRUEBA COMO NO'))
+#print(regis_alerta(conexion,1,'hola1@hola.com','ALERTA PRUEBA COMO NO'))
 # crea_tbs(conexion)
-# lista = [1,'R1','SO','Localidad','Encargado','Contacto','Tiempo Activo','Tiempo Ultima Modificacion']
-# print(alta_disp(conexion,lista))
+#lista = [1,'R1','SO','Localidad','Encargado','Contacto','Tiempo Activo','Tiempo Ultima Modificacion']
+#print(alta_disp(conexion,lista))
 # lista = [2,'R2','SO','Localidad','Encargado','Contacto','Tiempo Activo','Tiempo Ultima Modificacion']
 # print(alta_disp(conexion,lista))
 # lista = [3,'R3','SO','Localidad','Encargado','Contacto','Tiempo Activo','Tiempo Ultima Modificacion']
