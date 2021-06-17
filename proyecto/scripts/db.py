@@ -53,6 +53,9 @@ def crea_tbs(conexion):
 				)
 			"""
 		)
+	# obtain_router_data(host) en get_snmp.py 
+	# actualizar def set_information(index,host,value): en set_snmp>
+	# obtener datos paquetes def check_lost_percentage(interface_source, interface_dest, percentage)  get_snmp.py
 	cursor_tb.execute(
 			"""
 				create table if not exists edo_alerta(
