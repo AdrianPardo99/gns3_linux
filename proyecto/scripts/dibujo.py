@@ -6,26 +6,34 @@ def cambiarEnlaces(net, out_net): #if para base_template
 	fo = open(out_net, 'w')
 	for i in enumerate(fp):
 		if i[0] == 0:
-			fo.write('''{% extends "base_template.html" %}\n''')
+			fo.write('''{% extends "Base_Admin.html" %}\n''')
 		elif i[0] == 1:
-			fo.write('''{% block title %}Topologia{% endblock %}\n''')
+			fo.write('''{% block title %}.: Dibuja Topologia :.{% endblock %}\n''')
 		elif i[0] == 2:
-			fo.write("{%block css %}<link rel='stylesheet' href='../static/css/vis.css' type='text/css' />{% endblock %}\n")
+			fo.write('''{% block css%}<link rel='stylesheet' href="{{ url_for('static',filename='css/vis.css') }}" type='text/css' />{% endblock %} \n''')
 		elif i[0] == 3:
-			fo.write("{%block js %}<script type='text/javascript' src='../static/js/vis-network.min.js'></script>{% endblock %}\n")	
+			fo.write('''{% block js%}<script type='text/javascript' src="{{ url_for('static',filename='js/vis-network.min.js') }}"></script>{% endblock %}\n''')
+			fo.write("{% block contenido %}\n")	
 		elif i[0] == 4:
-			fo.write("{% block content %}\n")
-			fo.write(i[1])
+			fo.write('''<!-- CONTENIDO --><br><br><br><div class="row" style="margin-bottom: 5%;"><!-- Timeline --><h2 class="center-align">Topología</h2></div>''')
+		elif i[0] == 5 or i[0] == 6:
+			fo.write("\n")		
 		elif i[0] == 14:
 			fo.write("\t\twidth: 900px;\n")
 		elif i[0] == 15:
-			fo.write("\t\theight: 900px;\n")
+			fo.write("\t\theight: 750px;\n") 
 		elif i[0] == 17:
+			fo.write('''display: inline-block;\nmargin: 0 auto;\npadding: 3px;\nposition: relative;''')
+		elif i[0] == 18:
+			fo.write("\n")
+		elif i[0] == 19:	
 			fo.write("\n")
 		elif i[0] == 29:
 			fo.write("\n")
 		elif i[0] == 31:
-			fo.write("\n")	
+			fo.write("\n")
+		elif i[0] == 32:
+			fo.write('''<center><div id = "mynetwork"></div></center>''')
 		elif i[0] == 106:
 			fo.write("{% endblock %}\n")
 		elif i[0] == 107:
@@ -113,18 +121,17 @@ def construirDibujoTopologia(routers, interconexiones, devices, general):
 	#nodos de cada router
 	for router in routers_dic:
 		print("anadiendo nodo router {}".format(router))
-		net.add_node(routers_dic[router], "{}".format(router), physics=False,mass=1, level=1, shape="image", title="interfaces:", image="../static/icons/blue/router.svg")
+		net.add_node(routers_dic[router], "{}".format(router), physics=False,mass=1, level=1, shape="image", title="", image="/static/icons/blue/router.svg")
 
 	#conexiones entre routers
 	for (edge, red) in zip(edges, redes):
 		print("anadiendo edge router {}".format(edge))
 		net.add_edge(*edge, title=red)
 
-
 	#nodos de cada cliente
 	for client, id_cli in clients_id.items():
 		print("anadiendo nodo cli {}".format(client))
-		net.add_node(id_cli, "{}".format(client), physics=False, mass=1, level=3, shape="image", title="{}".format(clients_dic[client]), image="../static/icons/blue/client.svg")
+		net.add_node(id_cli, "{}".format(client), physics=False, mass=1, level=3, shape="image", title="{}".format(clients_dic[client]), image="/static/icons/blue/client.svg")
 
 	#conexiones de clientes
 	for (edge, red) in zip(edges_cli, redes_cli):
