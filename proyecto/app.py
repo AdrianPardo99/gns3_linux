@@ -442,9 +442,13 @@ def adm3():
             #res = mapearRed("eth0")
             #dibujarRed(res)
             mapeo = False
+            conexion = conecta_db("Proyecto.db")
+            respuesta = consulta_usur(conexion,2)
+            numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
         except Exception as e:
             print("show_network(): error al mapear topologia, ", e)
-    return render_template('Adm3.html', nombrecito=session["nom"], numAlertas=numalertas[0])
+
+    return render_template('Adm3.html',nombrecito=session["nom"],numAlertas=numalertas[0])
 
 """
     Dispositivos - Muestra dispositivos
