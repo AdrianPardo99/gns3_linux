@@ -37,7 +37,7 @@ def mac(raw_str):
     Modifica la salida de la interfaz de red
 """
 def translate_to_flask(interface_name):
-    return interface_name.replace("/", "-")
+    return interface_name.replace("/", "/")
 
 """
     Obtiene la informacion de un router a partir de su direccion ip
@@ -131,6 +131,10 @@ def snmp_query(host, oid):
         Para un mejor performance mandar llamar esta funcion con un hilo que se ejecute
         cada cierto tiempo y asi no se ejecute en secuencia, y se ejecute en paralelo
         y asi se monitore en un intervalo de tiempo
+    interface_source/interface_dest:
+        Es el diccionario que retorna la funcion get_interfaces, pero hay que
+        aniadir la direccion IP de la interfaz
+        con la que deseamos trabajar
 """
 def check_lost_percentage(interface_source, interface_dest, percentage):
     info_dest = get_if_inout(interface_dest["ip"], interface_dest["mibIndex"])
@@ -139,7 +143,50 @@ def check_lost_percentage(interface_source, interface_dest, percentage):
     lost_packages = int(info_source["ifOutUcastPkts"]) - int(info_dest["ifInUcastPkts"])
     lost_percentage = abs(lost_packages * 100 / int(info_source["ifOutUcastPkts"]))
     print(lost_packages, lost_percentage, percentage, info_source["ifOutUcastPkts"])
-    return (lost_percentage >= percentage, lost_percentage)
+    """
+        Posicion 0 verdadero o falso si se hace una alerta
+        Posicion 1 porcentaje de perdida
+        Posicion 2 paquetes enviados
+        Posicion 3 paquetes perdidos (en valor absoluto por aquello de retransmision)
+    """
+    return (lost_percentage >= percentage, lost_percentage,info_source["ifOutUcastPkts"],abs(lost_packages))
+
+
+def relaciona_interfaces(ip,conexiones):
+    name=""
+    for i in conexiones:
+        for k,v in i.items():
+            if v==ip:
+                name=k.split("_")[1]
+                name=int(name)
+                interfaz=i[f"interface_{name}"]
+                if(name==1):
+                    ip_2=i["ip_2"]
+                    interfaz_2=i["interface_2"]
+                else:
+                    ip_2=i["ip_1"]
+                    interfaz_2=i["interface_1"]
+                break
+    interface_1=get_interfaces(ip)
+    interface_2=get_interfaces(ip_2)
+    for i in range(len(interface_1)):
+        if interface_1[i]["ifDescr"]==interfaz:
+            interface_1[i]["ip"]=ip
+            index_1=i
+            break
+    for i in range(len(interface_2)):
+        if interface_2[i]["ifDescr"]==interfaz_2:
+            interface_2[i]["ip"]=ip_2
+            index_2=i
+            break
+    print(f"interfaz:{interfaz}\nip:{ip}\ninterfaz 2:{interfaz_2}\nip 2:{ip_2}")
+    return [interface_1[index_1],interface_2[index_2]]
+
+def para_levantar_alertas(conexiones):
+    arr=[]
+    for i in conexiones:
+        arr.append(relaciona_interfaces(i["ip_1"],conexiones))
+    return arr
 #print(json.dumps(obtain_router_data("10.0.1.254"),indent=4))
 #lost1,lost2=get_interfaces("10.0.1.254"),get_interfaces("10.0.2.253")
 #print(json.dumps(lost1,indent=4))
@@ -147,3 +194,54 @@ def check_lost_percentage(interface_source, interface_dest, percentage):
 #lost1[3]["ip"]="10.0.1.254"
 #lost2[1]["ip"]="10.0.2.253"
 #print(check_lost_percentage(lost1[3],lost2[1],50))
+#datos=[
+#    {
+#        "ip_1": "10.0.2.6",
+#        "interface_1": "FastEthernet1/0",
+#        "host_1": "R5",
+#        "ip_2": "10.0.2.5",
+#        "interface_2": "FastEthernet1/0",
+#        "host_2": "R3"
+#    },
+#    {
+#        "ip_1": "10.0.2.2",
+#        "interface_1": "FastEthernet1/1",
+#        "host_1": "R2",
+#        "ip_2": "10.0.2.1",
+#        "interface_2": "FastEthernet1/1",
+#        "host_2": "R3"
+#    },
+#    {
+#        "ip_1": "10.0.2.17",
+#        "interface_1": "FastEthernet2/0",
+#        "host_1": "R1",
+#        "ip_2": "10.0.2.18",
+#        "interface_2": "FastEthernet2/0",
+#        "host_2": "R3"
+#    },
+#    {
+#        "ip_1": "10.0.2.21",
+#        "interface_1": "FastEthernet2/1",
+#        "host_1": "R4",
+#        "ip_2": "10.0.2.22",
+#        "interface_2": "FastEthernet2/1",
+#        "host_2": "R3"
+#    },
+#    {
+#        "ip_1": "10.0.2.14",
+#        "interface_1": "FastEthernet1/1",
+#        "host_1": "R4",
+#        "ip_2": "10.0.2.13",
+#        "interface_2": "FastEthernet1/1",
+#        "host_2": "R5"
+#    },
+#    {
+#        "ip_1": "10.0.2.10",
+#        "interface_1": "FastEthernet1/0",
+#        "host_1": "R1",
+#        "ip_2": "10.0.2.9",
+#        "interface_2": "FastEthernet1/0",
+#        "host_2": "R2"
+#    }
+#]
+#print(json.dumps(para_levantar_alertas(datos),indent=4))
