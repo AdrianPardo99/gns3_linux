@@ -1,8 +1,8 @@
 
 
 
-import get_snmp as g_snmp 
-import levanta_snmp as lev_snmp
+import scripts.get_snmp as g_snmp 
+import scripts.levanta_snmp as lev_snmp
 import json, re
 
 
@@ -16,7 +16,13 @@ d4 = [{'ip_1': '10.0.2.6', 'interface_1': 'FastEthernet1/0', 'host_1': 'R5', 'ip
 
 d5 = '10.0.1.254'
 
-
+def obtener_datos_inciales_dispositivos(datos):
+	es = []
+	for dispositivo in datos:
+		hostname = dispositivo["hostname"]
+		ip_int = dispositivo["interfaces"][0]["ip"]
+		res.append([hostname, ip_int])
+	return res
 
 def obtener_conexiones_dispositivo(nombre_disp, conexiones_dic):
     conexiones = {}

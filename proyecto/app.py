@@ -9,6 +9,9 @@ import scripts.levanta_eigrp as eigrp
 import scripts.levanta_ospf as ospf
 import scripts.levanta_rip as rip
 import scripts.redes_operaciones as redes_operaciones
+from  scripts.dispositivos import * 
+from  scripts.get_snmp import * 
+from  scripts.set_snmp import * 
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 app.config['SECRET_KEY'] = '12345'
@@ -118,11 +121,11 @@ def adm0():
                     mapeo = True
                     while mapeo:
                         try:
-                            # res = mapearRed("eth0")
-                            # dibujarRed(res)
+                            res = mapearRed("eth0")
+                            dibujarRed(res)
                             
-                            obtener_datos_inciales_dispositivos(res[0])
-
+                            datos_dips = obtener_datos_inciales_dispositivos(res[0])
+                            print(datos_dips)
                             mapeo = False
                             conexion = conecta_db("Proyecto.db")
                             alta_disp(conexion,list_data) #idDisp,nombre,sistem,locali,ip,contac

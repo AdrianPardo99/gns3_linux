@@ -3,5 +3,5 @@
 
 from correos import *
 #habilitar_internet()
-from scripts.dibujo import *
+from dispositivos import *
 obtener_datos_inciales_dispositivos("res[0]")

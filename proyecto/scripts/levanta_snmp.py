@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from netmiko import ConnectHandler
-from detecta import *
+from scripts.detecta import *
 import netifaces as ni
 user = 'admin'
 password = 'admin'
