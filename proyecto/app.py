@@ -105,9 +105,21 @@ def adm0():
                 if(opc=='1'):
                     # Volver a escanear
                     print("Volver a escanear")
+                    mapeo = True
+                    while mapeo:
+                        try:
+                            res = mapearRed("eth0")
+                            dibujarRed(res)
+                            mapeo = False
+                            conexion = conecta_db("Proyecto.db")
+                            respuesta = consulta_usur(conexion,2)
+                            numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
+                        except Exception as e:
+                            print("show_network(): error al mapear topologia, ", e)
                     pass
                 elif(opc=='2'):
                     # RIP
+                    #mandar llamar limpiar protcocolos
                     print("RIP")
                     pass
                 elif(opc=='3'):
@@ -436,19 +448,14 @@ def adm23():
 #  ------------------------------ Topologia ----------------------------
 @app.route('/adm3',methods = ['POST','GET'])
 def adm3():
-    mapeo = True
-    while mapeo:
-        try:
-            res = mapearRed("eth0")
-            dibujarRed(res)
-            mapeo = False
-            conexion = conecta_db("Proyecto.db")
-            respuesta = consulta_usur(conexion,2)
-            numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
-        except Exception as e:
-            print("show_network(): error al mapear topologia, ", e)
-
-    return render_template('network.html',nombrecito=session["nom"],numAlertas=numalertas[0])
+    try:
+        conexion = conecta_db("Proyecto.db")
+        respuesta = consulta_usur(conexion,2)
+        numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
+        return render_template('network.html',nombrecito=session["nom"],numAlertas=numalertas[0])
+    except Exception as e:
+        print(e)
+        return redirect(url_for("login")) 
 
 """
     Dispositivos - Muestra dispositivos
@@ -678,25 +685,18 @@ def usr1():
         if(usr!=2):
             return redirect(url_for("login"))
         else:
-            pass
-
-    mapeo = True
-    while mapeo:
+            pass 
+        
         try:
-            res = mapearRed("eth0")
-            dibujarRed(res)
-            mapeo = False
-            # conexion = conecta_db("Proyecto.db")
-            # respuesta = consulta_usur(conexion,2)
-            # numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
+            conexion = conecta_db("Proyecto.db")
+            respuesta = consulta_usur(conexion,2)
+            numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
+            return render_template('network2.html',nombrecito=session["nom"],numAlertas=numalertas[0])
         except Exception as e:
-            print("show_network(): error al mapear topologia, ", e)
-
-
+            print(e)
+            return redirect(url_for("login")) 
     except Exception as e:
         return redirect(url_for("login"))
-
-    return render_template('network2.html')
 
 @app.route('/usr2',methods = ['POST','GET'])
 def usr2():
