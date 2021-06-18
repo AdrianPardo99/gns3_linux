@@ -565,7 +565,13 @@ def adm41():
                 datos.append(respuesta[0]) #datos[8] = edo_alertas         
                 try:
                     #paquetes
-                    conexiones_dispositivos = session['conexiones-{}'.format(datos[1])]
+                    #conexiones_dispositivos = session['conexiones-{}'.format(datos[1])]
+                    conexiones = None
+                    with open('data.json') as json_file:
+                        conexiones = json.load(json_file)
+  
+                    # Print the type of data variable
+                    print(conexiones[nombre])
                     # paqEnviados, paqPerdidos = obtener_paquetes_dispositivo(conexiones)
                     # print(paqEnviados, paqPerdidos)
                     # inserta_paquetes(conexion, int(dispositivo[0][1:]), paqEnviados, paqPerdidos)
