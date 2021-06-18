@@ -2,7 +2,8 @@
 
 
 import scripts.get_snmp as g_snmp 
-#import levanta_snmp as lev_snmp
+import scripts.levanta_snmp as lev_snmp
+import scripts.set_snmp as s_snmp
 import json, re
 
 
@@ -15,6 +16,23 @@ d3 = [{'10.0.1.1': 'Unix-OS 0'}, {'10.0.1.2': 'Unix-OS 0'}, {'10.0.1.254': 'Cisc
 d4 = [{'ip_1': '10.0.2.6', 'interface_1': 'FastEthernet1/0', 'host_1': 'R5', 'ip_2': '10.0.2.5', 'interface_2': 'FastEthernet1/0', 'host_2': 'R3'}, {'ip_1': '10.0.2.2', 'interface_1': 'FastEthernet1/1', 'host_1': 'R2', 'ip_2': '10.0.2.1', 'interface_2': 'FastEthernet1/1', 'host_2': 'R3'}, {'ip_1': '10.0.2.17', 'interface_1': 'FastEthernet2/0', 'host_1': 'R1', 'ip_2': '10.0.2.18', 'interface_2': 'FastEthernet2/0', 'host_2': 'R3'}, {'ip_1': '10.0.2.21', 'interface_1': 'FastEthernet2/1', 'host_1': 'R4', 'ip_2': '10.0.2.22', 'interface_2': 'FastEthernet2/1', 'host_2': 'R3'}, {'ip_1': '10.0.2.10', 'interface_1': 'FastEthernet1/0', 'host_1': 'R1', 'ip_2': '10.0.2.9', 'interface_2': 'FastEthernet1/0', 'host_2': 'R2'}]
 
 d5 = '10.0.1.254'
+
+
+def actualizar_datos_dispositivo(conexiones, nombre, localizacion, contacto, os): #nombre, locali, contac, sistem
+    host = ""
+    for c in conexiones:
+        print(c)
+        host = c
+        break
+    print("cambiando informacion de nombre...")
+    s_snmp.set_information(0,host, nombre)
+    print("cambiando informacion de os...")
+    #s_snmp.set_information(1,host, os)
+    print("cambiando informacion de contacto...")
+    s_snmp.set_information(2,host, contacto)
+    print("cambiando informacion de localizacion...")
+    s_snmp.set_information(3,host, localizacion)
+    print("informacion cambiada...")
 
 def obtener_datos_inciales_dispositivos(datos):
 	res = []

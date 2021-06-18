@@ -25,6 +25,8 @@ app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
 
+conexiones_global = {}
+
 @app.route('/send-email', methods=['GET'])
 def send_email():
     if request.method == "GET":
@@ -130,7 +132,11 @@ def adm0():
 
                             mapeo = False
                             conexion = conecta_db("Proyecto.db")
+                            
+                            global conexiones_global
+                            con_local = {}
                             for dispositivo in datos_dips:
+                                
                                 datos_snmp = obtener_datos_dispositivo(dispositivo[1])
 
                                 lista_datos = [int(dispositivo[0][1:]), dispositivo[0], datos_snmp[2], datos_snmp[4], dispositivo[1], datos_snmp[3]]
@@ -138,12 +144,23 @@ def adm0():
 
                                 #Conexiones de dispositivo
                                 conexiones = obtener_conexiones_dispositivo(dispositivo[0], res[4])
+                                session['conexiones-{}'.format(dispositivo[0])] = conexiones
 
-                                #paquetes
-                                paqEnviados, paqPerdidos = obtener_paquetes_dispositivo(conexiones)
-                                print(paqEnviados, paqPerdidos)
-                                inserta_paquetes(conexion, int(dispositivo[0][1:]), paqEnviados, paqPerdidos)
+                                con_local[dispositivo[0]] = conexiones
                                 
+                                
+
+                                # try:
+                                #     #paquetes
+                                #     paqEnviados, paqPerdidos = obtener_paquetes_dispositivo(conexiones)
+                                #     print(paqEnviados, paqPerdidos)
+                                #     inserta_paquetes(conexion, int(dispositivo[0][1:]), paqEnviados, paqPerdidos)
+                                # except Exception as e:
+                                #     print(e)    
+
+                            with open('data.json', 'w') as file:
+                                json.dump(con_local, file, indent=4)
+
                             respuesta = consulta_usur(conexion,2)
                             numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
                         except Exception as e:
@@ -508,6 +525,7 @@ def adm4():
         else:
             conexion = conecta_db("Proyecto.db")
             respuesta = consulta_disp(conexion)
+
             numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
             return render_template('Adm4.html',filas=respuesta,nombrecito=session["nom"],numAlertas=numalertas[0])
 
@@ -544,7 +562,17 @@ def adm41():
                     datos.append(elemento[6]) #timeac
                     datos.append(elemento[7]) #timemo
                 respuesta = alertas_activas(conexion,elemento[0],session["email"])
-                datos.append(respuesta[0]) #datos[8] = edo_alertas              
+                datos.append(respuesta[0]) #datos[8] = edo_alertas         
+                try:
+                    #paquetes
+                    conexiones_dispositivos = session['conexiones-{}'.format(datos[1])]
+                    # paqEnviados, paqPerdidos = obtener_paquetes_dispositivo(conexiones)
+                    # print(paqEnviados, paqPerdidos)
+                    # inserta_paquetes(conexion, int(dispositivo[0][1:]), paqEnviados, paqPerdidos)
+                    
+                    
+                except Exception as e:
+                    print(e)
                 historial = consulta_paquetes(conexion,idDisp)
                 for elemento in historial:                  
                     paque.append(elemento)
@@ -601,6 +629,7 @@ def adm412():
             return redirect(url_for("login"))
         else:
             if request.method == 'POST':
+
                 datos = list()
                 idDisp=request.form['idDisp']
                 nombre=request.form['nombre']
@@ -608,8 +637,8 @@ def adm412():
                 locali=request.form['locali']
                 encarg=request.form['encarg']
                 contac=request.form['contac']
-                timeac=request.form['timeac']
-                timemo=request.form['timemo']
+                timeac=""
+                timemo=""
                 datos.append(idDisp)
                 datos.append(nombre)
                 datos.append(sistem)
@@ -646,14 +675,36 @@ def adm413():
                 idDisp=request.form['idDisp']
                 datos.append(sistem)
                 datos.append(locali)
-                datos.append(encarg)
                 datos.append(contac)
                 datos.append(idDisp) #El id va al final
+                 #conexion a snmp
                 conexion = conecta_db("Proyecto.db")
                 respuesta = modifica_disp(conexion,datos)
+                print("conexion exitosa")
                 close_db(conexion)
+                try:
+                    # global conexiones_global
+                    # print(conexiones_global)
+                    conexiones_dispositivos = None
+                    with open('data.json') as json_file:
+                        conexiones_dispositivos = json.load(json_file)
+  
+                    # Print the type of data variable
+                    print(conexiones_dispositivos[nombre])
+
+                    actualizar_datos_dispositivo(conexiones_dispositivos[nombre], nombre, locali, contac, sistem)
+                    prinf("actualizar datos snmp")
+
+                    
+                    return respuesta
+                except Exception as e:
+                    print("413:",e)
+                    pass
+
+                
                 # Poner Funcion que modifique estos parametros en el router 'nombre'
                 return respuesta
+                
 
     except Exception as e:
         print(e)
