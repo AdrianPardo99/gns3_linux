@@ -584,6 +584,15 @@ def adm41():
                     paque.append(elemento)
                 grafica = consulta_paquete_esp(conexion,idDisp)             
                 numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
+
+                # Area de alertas
+                pregunta_alertas = consult_edo_alertas(conexion,idDisp,session["email"]).fetchone()
+                if (pregunta_alertas!=None):    
+                    if(pregunta_alertas[0]==1):
+                        print(regis_alerta(conexion,idDisp,session["email"],'Los paquetes del Router {} han sido actualizados para su visualizacion'.format(idDisp)))
+                        # aqui ponemos el email
+                                                
+
                 close_db(conexion)
                 return render_template('Adm41.html',filas=datos,tablita=paque,grafiquita=grafica,nombrecito=session["nom"],email=session["email"],numAlertas=numalertas[0])
 
