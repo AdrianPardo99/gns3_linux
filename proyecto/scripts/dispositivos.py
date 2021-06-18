@@ -1,8 +1,8 @@
 
 
 
-import scripts.get_snmp as g_snmp 
-import scripts.levanta_snmp as lev_snmp
+import get_snmp as g_snmp 
+#import levanta_snmp as lev_snmp
 import json, re
 
 
@@ -17,7 +17,7 @@ d4 = [{'ip_1': '10.0.2.6', 'interface_1': 'FastEthernet1/0', 'host_1': 'R5', 'ip
 d5 = '10.0.1.254'
 
 def obtener_datos_inciales_dispositivos(datos):
-	es = []
+	res = []
 	for dispositivo in datos:
 		hostname = dispositivo["hostname"]
 		ip_int = dispositivo["interfaces"][0]["ip"]
@@ -84,14 +84,16 @@ def obtener_paquetes_dispositivo(conexiones):
         snmp_res = g_snmp.check_lost_percentage(lost1[3],lost2[1], 50)
         print(int(snmp_res[2]))
         print(int(snmp_res[3]))
-        total_paquetes_enviados += int(snmp_res[2])
-        total_paquetes_perdidos += int(snmp_res[3])
+        if(int(snmp_res[2]) != 0 and int(snmp_res[3])):
+            total_paquetes_enviados += int(snmp_res[2])
+            total_paquetes_perdidos += int(snmp_res[3])
         i += 1
     
     print("Paquetes enviados:", total_paquetes_enviados)
     print("Paquetes recibidos:", total_paquetes_perdidos)
-    
-    print("%", ((total_paquetes_enviados-total_paquetes_perdidos)/total_paquetes_enviados)*100, "paquetes pertidos" )
+    if total_paquetes_enviados == 0:
+        total_paquetes_enviados +=1
+    print("%", ((total_paquetes_enviados-total_paquetes_perdidos)/total_paquetes_enviados)*100, "paquetes perdidos" )
     return total_paquetes_enviados, total_paquetes_perdidos
         
     # print(json.dumps(g_snmp.obtain_router_data("10.0.2.1"),indent=4))
@@ -112,7 +114,9 @@ def obtener_paquetes_dispositivo(conexiones):
 # print(obtener_datos_dispositivo("10.0.2.1"))
 # print("conexions del router 3 con los demas routers", obtener_conexiones_dispositivo('R3', d4))
 
-# datos_dispositivo = obtener_datos_dispositivo("10.0.2.1")
-# nom_disp = datos_dispositivo[1]
-# conexiones = obtener_conexiones_dispositivo(nom_disp, d4)
-# paquetes = obtener_paquetes_dispositivo(conexiones)
+datos_dispositivo = obtener_datos_dispositivo("10.0.2.1")
+nom_disp = datos_dispositivo[1]
+conexiones = obtener_conexiones_dispositivo(nom_disp, d4)
+paquetes,dos = obtener_paquetes_dispositivo(conexiones)
+
+#5253 3608

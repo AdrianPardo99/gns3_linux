@@ -60,19 +60,12 @@ def get_if_inout(ip, n):
     return {
         "ifInOctets": snmp_query(ip, f"{INTERFACE_OID}.10.{n}"),
         "ifOutOctets": snmp_query(ip, f"{INTERFACE_OID}.16.{n}"),
-        
         "ifInUcastPkts": snmp_query(ip, f"{INTERFACE_OID}.11.{n}"),
-        "ifInNUcastPkts": snmp_query(ip, f"{INTERFACE_OID}.16.{n}"),
-        "ifOutUcastPkts": snmp_query(ip, f"{INTERFACE_OID}.16.{n}"),
-        "ifOutNUcastPkts": snmp_query(ip, f"{INTERFACE_OID}.16.{n}"),
-        # #"ifInNUcastPkts": snmp_query(ip, f"{INTERFACE_OID}.12.{n}"),
-        # "ifInUcastPkts":snmp_query(ip, f"1.3.6.1.2.1.2.2.1.11.{n}"),
-        # "ifInMulticastPkts": snmp_query(ip, f"1.3.6.1.2.1.31.1.1.1.2.{n}"),
-        # "ifInBroadcastPkts": snmp_query(ip, f"1.3.6.1.2.1.31.1.1.1.3.{n}"),
-        # "ifOutUcastPkts": snmp_query(ip, f"1.3.6.1.2.1.2.2.1.17.{n}"),
-        # "ifOutMulticastPkts": snmp_query(ip, f"1.3.6.1.2.1.31.1.1.1.4.{n}"),
-        # "ifOutBroadcastPkts": snmp_query(ip, f"1.3.6.1.2.1.31.1.1.1.5.{n}"),
-        # "OTRO": snmp_query(ip, f"1.3.6.1.2.1.2.2.1.12.{n}"),
+        "ifInNUcastPkts": snmp_query(ip, f"1.3.6.1.2.1.2.2.1.12.{n}"),
+        "ifOutUcastPkts": snmp_query(ip, f"1.3.6.1.2.1.2.2.1.17.{n}"),
+        "ifOutNUcastPkts": snmp_query(ip, f"1.3.6.1.2.1.2.2.1.18.{n}"),
+        "ifInErrors": snmp_query(ip, f"1.3.6.1.2.1.2.2.1.14.{n}"),
+        
     }
 
 """
@@ -150,24 +143,28 @@ def snmp_query(host, oid):
 def check_lost_percentage(interface_source, interface_dest, percentage):
     info_dest = get_if_inout(interface_dest["ip"], interface_dest["mibIndex"])
     info_source = get_if_inout(interface_source["ip"], interface_source["mibIndex"])
-    print(info_dest, info_source)
+    #print(info_source, info_dest)
+    paquetes_enviados = int(info_source["ifOutUcastPkts"]) + int(info_source["ifOutNUcastPkts"])
+    paquetes_recibidos = int(info_dest["ifInUcastPkts"]) + int(info_dest["ifInNUcastPkts"])
+    #print("Paquetes de origen> ",paquetes_enviados, paquetes_recibidos)
+    print("ifOutUcastPkts de origen:", int(info_source["ifOutUcastPkts"]))
+    print("ifInUcastPkts de destino", int(info_dest["ifInUcastPkts"]))
     lost_packages = int(info_source["ifOutUcastPkts"]) - int(info_dest["ifInUcastPkts"])
+    lost_percentage = 0
+    if int(info_source["ifOutUcastPkts"]) == 0:
+        lost_percentage = abs(lost_packages * 100 / 1)
+    else:
+        lost_percentage = abs(lost_packages * 100 / int(info_source["ifOutUcastPkts"]))
     
-    print("\npaquetes \tEnviados\tRecibidos")
-    print("unicast \t{}\t{}".format(info_source["ifOutUcastPkts"], info_dest["ifInUcastPkts"]))
-    print("multicast \t{}\t{}".format(info_source["ifOutMulticastPkts"], info_dest["ifInMulticastPkts"]))
-    print("broadcast \t{}\t{}".format(info_source["ifOutBroadcastPkts"], info_dest["ifInBroadcastPkts"]))
-    print("\n")
-
-    lost_percentage = abs(lost_packages * 100 / int(info_source["ifOutUcastPkts"]))
-    print(lost_packages, lost_percentage, percentage, info_source["ifOutUcastPkts"])
+    
+    #print(lost_packages, lost_percentage, percentage, info_source["ifOutUcastPkts"])
     """
         Posicion 0 verdadero o falso si se hace una alerta
         Posicion 1 porcentaje de perdida
         Posicion 2 paquetes enviados
         Posicion 3 paquetes perdidos (en valor absoluto por aquello de retransmision)
     """
-    return (lost_percentage >= percentage, lost_percentage,info_source["ifOutUcastPkts"],abs(lost_packages))
+    return (lost_percentage >= percentage, lost_percentage, paquetes_enviados, abs(paquetes_enviados - paquetes_recibidos))
 
 
 def relaciona_interfaces(ip,conexiones):

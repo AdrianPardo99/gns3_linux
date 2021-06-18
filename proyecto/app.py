@@ -126,9 +126,24 @@ def adm0():
                             
                             datos_dips = obtener_datos_inciales_dispositivos(res[0])
                             print(datos_dips)
+                            
+
                             mapeo = False
                             conexion = conecta_db("Proyecto.db")
-                            alta_disp(conexion,list_data) #idDisp,nombre,sistem,locali,ip,contac
+                            for dispositivo in datos_dips:
+                                datos_snmp = obtener_datos_dispositivo(dispositivo[1])
+
+                                lista_datos = [int(dispositivo[0][1:]), dispositivo[0], datos_snmp[2], datos_snmp[4], dispositivo[1], datos_snmp[3]]
+                                alta_disp(conexion,lista_datos) #idDisp,nombre,sistem,locali,ip,contac
+
+                                #Conexiones de dispositivo
+                                conexiones = obtener_conexiones_dispositivo(dispositivo[0], res[4])
+
+                                #paquetes
+                                paqEnviados, paqPerdidos = obtener_paquetes_dispositivo(conexiones)
+                                print(paqEnviados, paqPerdidos)
+                                inserta_paquetes(conexion, int(dispositivo[0][1:]), paqEnviados, paqPerdidos)
+                                
                             respuesta = consulta_usur(conexion,2)
                             numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
                         except Exception as e:
