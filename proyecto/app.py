@@ -237,6 +237,7 @@ def adm11():
                 ema=request.form['ema']
                 conexion = conecta_db("Proyecto.db")
                 respuesta = alta_usur(conexion,ema,usr,psw,nom,ap1,ap2,gen,1)
+                print(inserta_bitacora(conexion,'Administrador Registrado',session["email"]))
                 close_db(conexion)
                 return respuesta
 
@@ -310,7 +311,8 @@ def adm122():
                 gen=request.form['gen']
                 ema=request.form['ema']
                 conexion = conecta_db("Proyecto.db")
-                respuesta = cambio_usur(conexion,usr,psw,nom,ap1,ap2,gen)               
+                respuesta = cambio_usur(conexion,usr,psw,nom,ap1,ap2,gen)
+                print(inserta_bitacora(conexion,'Administrador Modificado',session["email"]))
                 close_db(conexion)
                 return respuesta
 
@@ -353,6 +355,7 @@ def adm131():
                 usr=request.form['usr']
                 conexion = conecta_db("Proyecto.db")
                 respuesta = elimina_usur(conexion,usr)
+                print(inserta_bitacora(conexion,'Persona Eliminada',session["email"]))
                 close_db(conexion)
                 return respuesta
 
@@ -402,6 +405,7 @@ def adm21():
                 ema=request.form['ema']
                 conexion = conecta_db("Proyecto.db")
                 respuesta = alta_usur(conexion,ema,usr,psw,nom,ap1,ap2,gen,2)
+                print(inserta_bitacora(conexion,'Cliente Registrado',session["email"]))
                 close_db(conexion)
                 return respuesta
 
@@ -475,7 +479,8 @@ def adm222():
                 gen=request.form['gen']
                 ema=request.form['ema']
                 conexion = conecta_db("Proyecto.db")
-                respuesta = cambio_usur(conexion,usr,psw,nom,ap1,ap2,gen)               
+                respuesta = cambio_usur(conexion,usr,psw,nom,ap1,ap2,gen)
+                print(inserta_bitacora(conexion,'Cliente Modificado',session["email"]))
                 close_db(conexion)
                 return respuesta
 
@@ -510,6 +515,7 @@ def adm3():
         conexion = conecta_db("Proyecto.db")
         respuesta = consulta_usur(conexion,2)
         numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
+        print(inserta_bitacora(conexion,'Consulto Topologia',session["email"]))
         return render_template('network.html',nombrecito=session["nom"],numAlertas=numalertas[0])
     except Exception as e:
         print(e)
@@ -530,6 +536,7 @@ def adm4():
             respuesta = consulta_disp(conexion)
 
             numalertas = cantidad_alertas_NoVistas(conexion,session["email"])
+            print(inserta_bitacora(conexion,'Consulto Dispositivos',session["email"]))
             return render_template('Adm4.html',filas=respuesta,nombrecito=session["nom"],numAlertas=numalertas[0])
 
     except Exception as e:
@@ -605,7 +612,7 @@ def adm41():
                         print("topologia habilitada")
                         # aqui ponemos el email
                                                 
-
+                print(inserta_bitacora(conexion,'Actualizo Paquetes de un Router',session["email"]))
                 close_db(conexion)
                 return render_template('Adm41.html',filas=datos,tablita=paque,grafiquita=grafica,nombrecito=session["nom"],email=session["email"],numAlertas=numalertas[0])
 
@@ -739,6 +746,7 @@ def adm413():
                             # habilitar_topologia()
                             # print("topologia habilitada")
 
+                    print(inserta_bitacora(conexion,'Modificacion SNMP a un Router',session["email"]))
                     close_db(conexion)
                     return respuesta
                 except Exception as e:
@@ -776,7 +784,8 @@ def adm5():
                     dato.append(i)
             else:
                 alertas = None          
-        
+            
+            print(inserta_bitacora(conexion,'El Usuario Vio Sus Alertas',session["email"]))
             print(set_alertas_visto(conexion,session["email"]))
             return render_template('Adm5.html',nombrecito=session["nom"],Alertas=numalertas,numAlertas=respuesta,datitos=dato)
 
