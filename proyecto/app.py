@@ -4,6 +4,7 @@ from flask import request, render_template, url_for, redirect, flash, session, j
 from scripts.scanner import *
 from scripts.correos import *
 from scripts.db import *
+from os import system
 import scripts.down_protocols as down
 import scripts.levanta_eigrp as eigrp
 import scripts.levanta_ospf as ospf
@@ -571,7 +572,7 @@ def adm41():
                         conexiones = json.load(json_file)
   
                     # Print the type of data variable
-                    print(conexiones[nombre])
+                    print(conexiones[datos[1]])
                     # paqEnviados, paqPerdidos = obtener_paquetes_dispositivo(conexiones)
                     # print(paqEnviados, paqPerdidos)
                     # inserta_paquetes(conexion, int(dispositivo[0][1:]), paqEnviados, paqPerdidos)
@@ -590,6 +591,16 @@ def adm41():
                 if (pregunta_alertas!=None):    
                     if(pregunta_alertas[0]==1):
                         print(regis_alerta(conexion,idDisp,session["email"],'Los paquetes del Router {} han sido actualizados para su visualizacion'.format(idDisp)))
+                        destinatario = session['email']
+                        asunto = "Alerta: Actualizacion de paquetes del Router {} ".format(idDisp)
+                        cuerpo = "Se ha actualizado el porcentaje de paquetes perdidos del Router {}".format(idDisp)
+                        habilitar_internet()
+                        print("internet habilitado")
+                        correo = crear_correo("redes.proyecto920@gmail.com", destinatario, asunto, cuerpo)
+                        mail.send(correo)
+                        print("correo enviado")
+                        habilitar_topologia()
+                        print("topologia habilitada")
                         # aqui ponemos el email
                                                 
 
@@ -696,7 +707,7 @@ def adm413():
                 conexion = conecta_db("Proyecto.db")
                 respuesta = modifica_disp(conexion,datos)
                 print("conexion exitosa")
-                close_db(conexion)
+                
                 try:
                     # global conexiones_global
                     # print(conexiones_global)
@@ -708,9 +719,28 @@ def adm413():
                     print(conexiones_dispositivos[nombre])
 
                     actualizar_datos_dispositivo(conexiones_dispositivos[nombre], nombre, locali, contac, sistem)
-                    prinf("actualizar datos snmp")
-
-                    
+                    print("actualizar datos snmp")
+                    # Area de alertas
+                    pregunta_alertas = consult_edo_alertas(conexion,idDisp,session["email"]).fetchone()
+                    if (pregunta_alertas!=None):    
+                        if(pregunta_alertas[0]==1):
+                            print(regis_alerta(conexion,idDisp,session["email"],'Se realizo un cambio en el router {} via SNMP'.format(nombre)))
+                            destinatario = session["email"]
+                            print(destinatario)
+                            asunto = "Alerta: Se realizo un cambio en el router {} via SNMP".format(nombre)
+                            cuerpo = "Se han hecho algunos cambios en el router {}".format(nombre)
+                            print(os.system("ifconfig | grep 'inet'"))
+                            habilitar_internet()
+                            
+                            print("internet habilitado 413")
+                            correo = crear_correo("redes.proyecto920@gmail.com", destinatario, asunto, cuerpo)
+                            print(os.system("ifconfig | grep 'inet'"))
+                            mail.send(correo)
+                            print("correo enviado 413")
+                            habilitar_topologia()
+                            print("topologia habilitada 413")
+                            # aqui ponemos el email
+                    close_db(conexion)
                     return respuesta
                 except Exception as e:
                     print("413:",e)
