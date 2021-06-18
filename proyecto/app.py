@@ -5,6 +5,7 @@ from scripts.scanner import *
 from scripts.correos import *
 from scripts.db import *
 from os import system
+import time
 import scripts.down_protocols as down
 import scripts.levanta_eigrp as eigrp
 import scripts.levanta_ospf as ospf
@@ -25,6 +26,7 @@ app.config['MAIL_PASSWORD'] = "X3egGemSD2qmZB2"
 app.config['MAIL_USE_TLS'] = False
 app.config['MAIL_USE_SSL'] = True
 mail = Mail(app)
+mail2 = Mail(app)
 
 conexiones_global = {}
 
@@ -724,22 +726,17 @@ def adm413():
                     pregunta_alertas = consult_edo_alertas(conexion,idDisp,session["email"]).fetchone()
                     if (pregunta_alertas!=None):    
                         if(pregunta_alertas[0]==1):
-                            print(regis_alerta(conexion,idDisp,session["email"],'Se realizo un cambio en el router {} via SNMP'.format(nombre)))
-                            destinatario = session["email"]
-                            print(destinatario)
-                            asunto = "Alerta: Se realizo un cambio en el router {} via SNMP".format(nombre)
-                            cuerpo = "Se han hecho algunos cambios en el router {}".format(nombre)
-                            print(os.system("ifconfig | grep 'inet'"))
+                            print(regis_alerta(conexion,idDisp,session["email"],'Informacion del router {} ha sido actualizada'.format(idDisp)))
+                            destinatario = session['email']
+                            asunto = "Alerta: Actualizacion Informacion del router {} ".format(idDisp)
+                            cuerpo = "Se ha se han actualizado algunos campos SNMP del router {}".format(idDisp)
                             habilitar_internet()
-                            
-                            print("internet habilitado 413")
+                            print("internet habilitado")
                             correo = crear_correo("redes.proyecto920@gmail.com", destinatario, asunto, cuerpo)
-                            print(os.system("ifconfig | grep 'inet'"))
-                            mail.send(correo)
-                            print("correo enviado 413")
+                            mail2.send(correo)
+                            print("correo enviado")
                             habilitar_topologia()
-                            print("topologia habilitada 413")
-                            # aqui ponemos el email
+                            print("topologia habilitada")
                     close_db(conexion)
                     return respuesta
                 except Exception as e:
