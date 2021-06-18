@@ -1,7 +1,7 @@
 
 
 
-import get_snmp as g_snmp 
+import scripts.get_snmp as g_snmp 
 #import levanta_snmp as lev_snmp
 import json, re
 
@@ -114,9 +114,9 @@ def obtener_paquetes_dispositivo(conexiones):
 # print(obtener_datos_dispositivo("10.0.2.1"))
 # print("conexions del router 3 con los demas routers", obtener_conexiones_dispositivo('R3', d4))
 
-datos_dispositivo = obtener_datos_dispositivo("10.0.2.1")
-nom_disp = datos_dispositivo[1]
-conexiones = obtener_conexiones_dispositivo(nom_disp, d4)
-paquetes,dos = obtener_paquetes_dispositivo(conexiones)
+# datos_dispositivo = obtener_datos_dispositivo("10.0.2.1")
+# nom_disp = datos_dispositivo[1]
+# conexiones = obtener_conexiones_dispositivo(nom_disp, d4)
+# paquetes,dos = obtener_paquetes_dispositivo(conexiones)
 
 #5253 3608
