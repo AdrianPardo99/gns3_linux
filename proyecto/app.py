@@ -727,6 +727,7 @@ def adm413():
                     if (pregunta_alertas!=None):    
                         if(pregunta_alertas[0]==1):
                             print(regis_alerta(conexion,idDisp,session["email"],'Informacion del router {} ha sido actualizada'.format(idDisp)))
+
                             # destinatario = session['email']
                             # asunto = "Alerta: Actualizacion Informacion del router {} ".format(idDisp)
                             # cuerpo = "Se ha se han actualizado algunos campos SNMP del router {}".format(idDisp)
@@ -737,6 +738,7 @@ def adm413():
                             # print("correo enviado")
                             # habilitar_topologia()
                             # print("topologia habilitada")
+
                     close_db(conexion)
                     return respuesta
                 except Exception as e:
