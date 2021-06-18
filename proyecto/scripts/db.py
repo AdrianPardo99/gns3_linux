@@ -95,7 +95,7 @@ def crea_tbs(conexion):
 					Actividad text not null,
 					email text not null,
 					fecha timestamp default current_timestamp,
-					foreign key(email) references persona(email)					
+					foreign key(email) references persona(email)
 				)
 			"""
 		)
@@ -425,7 +425,7 @@ def consul_alertas(conexion,email):
 	cursor_tb = conexion.cursor()
 	sentencia = "select * from alertas where email=? order by idAlert desc"
 	respuesta = cursor_tb.execute(sentencia,(email,))
-	return respuesta	
+	return respuesta
 
 def cantidad_alertas(conexion,email):
 	cursor_tb = conexion.cursor()	
@@ -446,10 +446,40 @@ def set_alertas_visto(conexion,email):
 	conexion.commit()
 	return "Alertas dejadas en visto"
 
+def inserta_bitacora(conexion,Actividad,email):
+	cursor_tb = conexion.cursor()
+	respuesta = cursor_tb.execute("select max(idRepor) from rep_sistema")				
+	idReg = respuesta.fetchone()[0]
+	if(idReg==None):
+		idRegistro=1
+	else:
+		idRegistro = int(idReg)
+		idRegistro = idRegistro+1	
+	sentencia = "insert into rep_sistema(idRepor,Actividad,email) values(?,?,?)"
+	cursor_tb.execute(sentencia,(idRegistro,Actividad,email))
+	conexion.commit()
+	return "Bitacora insertada"
+
+def consulta_bitacora(conexion):
+	cursor_tb = conexion.cursor()	
+	cursor_tb = conexion.cursor()	
+	respuesta = cursor_tb.execute("select * from rep_sistema order by idRepor desc")
+	return respuesta
+
 
 # --------------- Testing area ---------------
 # # Crear BD
-conexion = conecta_db("Proyecto.db")
+# conexion = conecta_db("Proyecto.db")
+# crea_tbs(conexion)
+# lista = [1,'R1','SO','Localidad','Encargado','Contacto']
+# print(alta_disp(conexion,lista))
+# print(inserta_paquetes(conexion,1,'356','450'))
+# print(alta_usur(conexion,'elias@alumno.com','usr1','123','Elias','Muñoz','Primero','1',1))
+# print(inserta_bitacora(conexion,'Pruebita','elias@alumno.com'))
+
+
+
+
 # cursor_tb = conexion.cursor()
 # respuesta = consulta_paquete_esp(conexion,1)
 # print(inserta_paquetes(conexion,1,'94874','1270'))
@@ -487,7 +517,7 @@ conexion = conecta_db("Proyecto.db")
 # 	print(fila)
 
 
-print(alta_usur(conexion,'hola1@hola.com','usr1','123','USR01','02','02','M',1))
+# print(alta_usur(conexion,'hola1@hola.com','usr1','123','USR01','02','02','1',1))
 # # print(alta_usur(conexion,'hola2@hola.com','usr2','123','USR02','02','02','F',2))
 # # print(alta_usur(conexion,'hola3@hola.com','usr3','123','USR03','03','03','M',2))
 # # print(cambio_usur(conexion,'usr1','12','usr1','01','01','M'))
