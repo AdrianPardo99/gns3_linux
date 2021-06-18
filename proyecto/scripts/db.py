@@ -398,6 +398,13 @@ def config_alertas(conexion,idDisp,email):
 	else:
 		return "No existe el dispositivo"
 
+def consult_edo_alertas(conexion,idDisp,email):
+	cursor_tb = conexion.cursor()	
+	sentencia = "select idEdoCo from control_alertas where idDisp=? and email=?"
+	respuesta = cursor_tb.execute(sentencia,(idDisp,email))	
+	return respuesta
+
+
 def regis_alerta(conexion,idDisp,email,descrip):
 	cursor_tb = conexion.cursor()
 	exis_dispo = valida_disp(conexion,idDisp)
@@ -474,7 +481,8 @@ def consulta_bitacora(conexion):
 # lista = [1,'R1','SO','Localidad','Encargado','Contacto']
 # print(alta_disp(conexion,lista))
 # print(inserta_paquetes(conexion,1,'356','450'))
-# print(alta_usur(conexion,'elias@alumno.com','usr1','123','Elias','Muñoz','Primero','1',1))
+# print(alta_usur(conexion,'elias@alumno.com','usr1','123','Elias','Muñoz','Primero','2',1))
+# print(alta_usur(conexion,'dev.fnicosg@gmail.com','usr2','123','Francisco Nicolas','Sanchez','Garcia','2',1))
 # print(inserta_bitacora(conexion,'Pruebita','elias@alumno.com'))
 
 
