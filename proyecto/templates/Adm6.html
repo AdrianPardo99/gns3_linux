@@ -1,0 +1,51 @@
+{% extends "Base_Admin.html" %}
+{% block title %}.: Dispositivos Red :.{% endblock %}
+
+{% block contenido %}
+<!-- CONTENIDO -->
+    <!-- Timeline -->
+    <br><br><br>
+    <div class="row" style="margin-bottom: 15%;">
+        <h2 class="center-align">Historial bitacora</h2>
+        <article class="col s12">
+            <div class="full-width center-align" style="margin: 40px 0; padding: 0;">
+                <div class="container" style="margin-bottom: 15%;">
+                    <div class="row">
+                        <div class="col s12">
+                            <table class="responsive-table highlight centered">
+                                <thead>
+                                    <tr>
+                                        <!-- <th data-field="Email">Email</th> -->
+                                        <th data-field="Usuario">id Registro</th>
+                                        <th data-field="Nombre">Actividad</th>
+                                        <th data-field="Apellido1">Email Responsable</th>
+                                        <th data-field="Modificar">Fecha</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                {% if tablita != None %}
+                                    {% for fila in tablita %}
+                                    <tr>
+                                        <td>{{fila[0]}}</td>
+                                        <td>{{fila[1]}}</td>
+                                        <td>{{fila[2]}}</td>
+                                        <td>{{fila[3]}}</td>
+                                        <td>{{fila[4]}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>        
+<!-- CONTENIDO -->
+    
+<!-- Historial paquetes -->
+    
+<!-- Historial paquetes -->
+
+{% endblock %}

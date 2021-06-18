@@ -784,7 +784,38 @@ def adm5():
     except Exception as e:
         print(e)
         return redirect(url_for("login"))
-    
+
+
+"""
+    Dispositivos - Historial bitacoras
+"""
+@app.route('/adm6',methods = ['POST','GET'])
+def adm6():
+
+    try:
+        usr = session["idTipoUsr"]
+        if(usr!=1):
+            return redirect(url_for("login"))
+        else:
+            dato = list()
+            conexion = conecta_db("Proyecto.db")
+            respuesta = (cantidad_alertas_NoVistas(conexion,session["email"]))[0]
+            numalertas = (cantidad_alertas(conexion,session["email"]))[0]
+            if(numalertas!=0):
+                alertas = consul_alertas(conexion,session["email"])
+                for i in alertas:
+                    dato.append(i)
+            else:
+                alertas = None
+
+            bitacoras = consulta_bitacora(conexion)
+
+            return render_template('Adm6.html',nombrecito=session["nom"],Alertas=numalertas,numAlertas=respuesta,datitos=dato,tablita=bitacoras)
+
+
+    except Exception as e:
+        print(e)
+        return redirect(url_for("login"))    
 
 # --------------------------------------------------------------------------------
 
