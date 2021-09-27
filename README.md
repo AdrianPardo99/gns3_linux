@@ -369,6 +369,22 @@ Entonces generalizando esto quedaria:
   wr
 ```
 
+#### EIGRP
+Es un protocolo de encaminamiento de vector distancia, propiedad de Cisco Systems, que ofrece lo mejor de los algoritmos de Vector de distancias. Se considera un protocolo avanzado que se basa en las características normalmente asociadas con los protocolos del estado de enlace. Algunas de las mejores funciones de OSPF, como las actualizaciones parciales y la detección de vecinos, se usan de forma similar con EIGRP. Aunque no garantiza el uso de la mejor ruta, es bastante usado porque EIGRP es algo más fácil de configurar que OSPF. EIGRP mejora las propiedades de convergencia y opera con mayor eficiencia que IGRP. Esto permite que una red tenga una arquitectura mejorada y pueda mantener las inversiones actuales en IGRP.
+
+La ventaja de este protocolo es que puede ser trabajado tanto con mascaras de red y wildcards haciendo un poco más sencillo el enrutamiento
+
+```bash
+  conf t
+    router eigrp 20 # Se puede asignar mismo identificador
+      net <id_de_red_generalizado_normal> <wildcard>
+      net <id_de_red_generalizado_normal> <netmask>
+      
+      end
+```
+
+
+
 ## Compartiendo protocolos de enrutamiento dinámico
 En algunos casos o en modelos de desarrollo practico sera necesario el poder trabajar con distintos tipos de enrutamiento en nuestros dispositivos, los cuales al enfrentarse con otro protocolo, no prodran comunicarse, para ello solo es necesario, reconfigurar el protocolo principal e indicar que vamos a utilizar redireccionamiento con otros protocolos:
 
